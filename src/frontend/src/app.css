@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* global.css */
+:root {
+  --dialog-width: 90% !important;
+  --dialog-max-width: 600px !important;
+  --dialog-min-height: 100px !important;
+  --dialog-height: auto !important;
+  --dialog-max-height: 80vh !important;
+  --dialog-border-radius: 1px !important;
+}
+
+.default-header {
+  @apply text-xl font-semibold text-white;
+}
+
+.default-sub-header {
+  @apply text-lg font-bold;
+}
+
+.times-button {
+  @apply text-white text-3xl;
+}
+
+.selection-panel {
+  @apply flex-1 w-full rounded-md sm:text-sm shadow-sm hover:text-BrandGray focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center;
+}
+
+.selected-panel {
+  @apply bg-BrandPositive hover:bg-BrandPositive px-3 py-2;
+}
+
+.select-panel {
+  @apply bg-BrandPurple hover:bg-BrandPurple p-3 text-white;
+}
+
+.fg-button {
+  background-color: #393a3e;
+  color: white;
+}
+
+.button-hover {
+  @apply bg-white text-black hover:bg-BrandPositive hover:text-BrandGray;
+}
+
+.bg-panel {
+  @apply bg-panel-color w-full;
+}
+
+.bg-panel-color {
+  @apply bg-BrandDarkGray rounded border-BrandGray;
+}
+
+.active-tab {
+  @apply border-b border-b-BrandPositive;
+}
+
+.brand-button {
+  @apply bg-BrandPurple hover:bg-BrandPurpleDark disabled:opacity-50 disabled:bg-gray-300 text-white px-2 py-1 rounded;
+}
+
+.brand-cancel-button {
+  @apply bg-BrandNegative text-white p-2 rounded;
+}
+
+.brand-button-disabled {
+  @apply bg-BrandDisabled text-white p-2 rounded;
+}
+
+.brand-select {
+  @apply bg-BrandDarkGray text-white border border-BrandDarkGray rounded-lg focus:ring focus:ring-BrandLightGray text-sm p-2;
+}
+
+.brand-input {
+  @apply bg-BrandDarkGray text-white border border-BrandDarkGray rounded-lg focus:ring focus:ring-BrandLightGray text-sm p-2;
+}
+
+.brand-dropdown {
+  @apply text-black rounded;
+}
+
+.stake-input {
+  @apply text-sm w-20 p-1 text-black border rounded;
+}
+
+.dropdown-link {
+  @apply block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100;
+}

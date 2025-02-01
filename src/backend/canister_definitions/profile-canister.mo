@@ -12,12 +12,13 @@ import Iter "mo:base/Iter";
 import T "../types/app_types";
 import Base "../types/base_types";
 import BettingTypes "../types/betting_types";
-import ResponseDTOs "../dtos/response_DTOs";
-import RequestDTOs "../dtos/request_DTOs";
 import Environment "../environment";
 
 import FPLLedger "../utilities/ledger";
 import Utilities "../utilities/utilities";
+import DTOs "../dtos/dtos";
+import AppCommands "../cqrs/app_commands";
+import BettingCommands "../cqrs/betting_commands";
 
 actor class _ProfileCanister() {
   
@@ -99,7 +100,7 @@ actor class _ProfileCanister() {
     return #ok();
   };
 
-  public shared ({caller }) func getProfile(userPrincipalId: Base.PrincipalId) : async Result.Result<ResponseDTOs.ProfileDTO, T.Error>{
+  public shared ({caller }) func getProfile(userPrincipalId: Base.PrincipalId) : async Result.Result<DTOs.ProfileDTO, T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
@@ -140,7 +141,7 @@ actor class _ProfileCanister() {
             };
             
             var accountBalance: Nat64 = Nat64.fromNat(tokens);
-            let response: ResponseDTOs.ProfileDTO = {
+            let response: DTOs.ProfileDTO = {
               accountBalance = accountBalance;
               accountOnPause = profile.accountOnPause;
               maxBetLimit = profile.maxBetLimit;
@@ -265,7 +266,7 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({caller }) func updateUsername(dto: RequestDTOs.UpdateUsernameDTO) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func updateUsername(dto: AppCommands.UpdateUsernameDTO) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
@@ -313,7 +314,7 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({caller }) func updateProfilePicture(dto: RequestDTOs.UpdateProfilePictureDTO) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePictureDTO) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
@@ -361,7 +362,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func updateWithdrawalAddress(dto: RequestDTOs.UpdateWithdrawalAddressDTO) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddressDTO) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
@@ -409,7 +410,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func pauseAccount(dto: RequestDTOs.PauseAccountDTO) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func pauseAccount(dto: BettingCommands.PauseAccountDTO) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
@@ -461,59 +462,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func setMaxBetLimit(dto: RequestDTOs.SetMaxBetLimit) : async Result.Result<(), T.Error>{
-    assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
-        groupEntry.0 == dto.principalId;
-    });
-    switch(profileGroupEntry){
-      case (?profileGroup){
-        let profileResult = getProfileFromGroup(dto.principalId, profileGroup.1);
-        switch(profileResult){
-          case (?profile){
-
-            if(Time.now() < (profile.maxBetLimitSet + (Utilities.getDay() * 30))){
-              return #err(#NotAllowed);
-            };
-
-            let updatedProfile: T.Profile = {
-              accountOnPause = true;
-              bets = profile.bets;
-              maxBetLimit = dto.maxBetLimit;
-              maxBetLimitSet = Time.now();
-              monthlyBetLimit = profile.monthlyBetLimit;
-              monthlyBetLimitSet = profile.monthlyBetLimitSet;
-              monthlyBetTotals = profile.monthlyBetTotals;
-              monthlyProfitLoss = profile.monthlyProfitLoss;
-              pauseEndDate = profile.pauseEndDate;
-              principalId = profile.principalId;
-              profilePicture = profile.profilePicture;
-              profilePictureExtension = profile.profilePictureExtension;
-              termsAcceptedDate = profile.termsAcceptedDate;
-              username = profile.username;
-              withdrawalAddress = profile.withdrawalAddress;
-              joinedDate = profile.joinedDate;
-              kycApprovalDate = profile.kycApprovalDate;
-              kycRef = profile.kycRef;
-              kycSubmissionDate = profile.kycSubmissionDate;
-              kycComplete = profile.kycComplete;
-            };
-            updateProfile(updatedProfile, profileGroup.1);
-            return #ok();
-          };
-          case (null){
-            return #err(#NotFound);
-          }
-        };
-      };
-      case (null){
-        return #err(#NotFound);
-      }
-    };
-  };
-  
-  public shared ({caller }) func setMonthlyBetLimit(dto: RequestDTOs.SetMonthlyBetLimitDTO) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func setMonthlyBetLimit(dto: BettingCommands.SetMonthlyBetLimitDTO) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
@@ -565,7 +514,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func placeBet(dto: RequestDTOs.SubmitBetslipDTO) : async Result.Result<BettingTypes.BetSlip, T.Error>{
+  public shared ({caller }) func placeBet(dto: BettingCommands.SubmitBetslipDTO) : async Result.Result<BettingTypes.BetSlip, T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     //private function to update monthly bet totals should be added when a bet is placed
     //take the money
@@ -573,7 +522,7 @@ actor class _ProfileCanister() {
     return #err(#NotFound);
   };
   
-  public shared ({caller }) func getBets(dto: RequestDTOs.GetBetsDTO) : async Result.Result<[BettingTypes.BetSlip], T.Error>{
+  public shared ({caller }) func getBets(dto: BettingCommands.GetBetsDTO) : async Result.Result<[BettingTypes.BetSlip], T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     return #err(#NotFound);
   };
@@ -1613,9 +1562,9 @@ actor class _ProfileCanister() {
 
 
 
-  public shared ({caller }) func getAllAuditUsers () : async [ResponseDTOs.UserDTO] {
+  public shared ({caller }) func getAllAuditUsers () : async [DTOs.UserDTO] {
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let allProfilesBuffer = Buffer.fromArray<ResponseDTOs.UserDTO>([]);
+    let allProfilesBuffer = Buffer.fromArray<DTOs.UserDTO>([]);
 
     for(i in Iter.range(1,50)){
       var currentProfiles: [T.Profile] = [];

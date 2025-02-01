@@ -3,44 +3,10 @@ import FootballTypes "../types/football_types";
 import Base "../types/base_types";
 import BettingTypes "../types/betting_types";
 
-module RequestDTOs {
-
-  public type UpdateAppStatusDTO = {
-    onHold : Bool;
-    version: Text;
-  };
-
-  public type ClubFilterDTO = {
-    leagueId: FootballTypes.LeagueId;
-    clubId: FootballTypes.ClubId;
-  };
-
-  public type GetFixturesDTO = {
-    leagueId: FootballTypes.LeagueId;
-    seasonId: FootballTypes.SeasonId;
-  };
-
-  public type PaginationFiltersDTO = {
-    limit : Nat;
-    offset : Nat;
-  };
-
-
-  public type SubmitBetslipDTO = {
-    principalId: Base.PrincipalId;
-    leagueId: FootballTypes.LeagueId;
-    seasonId: FootballTypes.SeasonId;
-    totalStake: Nat64;
-    expectedReturn: Nat64;
-  };
+module BettingQueries {
 
   public type GetBetsDTO = {
     principalId: Base.PrincipalId;
-  };
-
-  public type UpdateUsernameDTO = {
-    principalId: Base.PrincipalId;
-    username: Text;
   };
 
   public type UpdateProfilePictureDTO = {
@@ -59,7 +25,7 @@ module RequestDTOs {
     pauseDays: Nat;
   };
 
-  public type SetMaxBetLimit = {
+  public type SetDailyBetLimit = {
     principalId: Base.PrincipalId;
     maxBetLimit: Nat64;
   };

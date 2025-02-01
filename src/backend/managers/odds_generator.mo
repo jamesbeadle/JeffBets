@@ -1,5 +1,4 @@
 import BettingTypes "../types/betting_types";
-import ResponseDTOs "../dtos/response_DTOs";
 import BaseOdds "../utilities/BaseOdds";
 import Float "mo:base/Float";
 import Array "mo:base/Array";
@@ -7,39 +6,40 @@ import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 import FootballTypes "../types/football_types";
+import DTOs "../dtos/dtos";
 
 module {
 
   public class OddsGenerator() {
 
-    public func getCorrectResultOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO) : BettingTypes.TeamSelectionOdds{
+    public func getCorrectResultOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO) : BettingTypes.TeamSelectionOdds{
 
-      let finalisedHomeFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let finalisedHomeFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         entry.status == #Finalised and
         (entry.homeClubId == bettingFixture.homeClubId or entry.awayClubId == bettingFixture.homeClubId)
       });
 
-      let finalisedAwayFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let finalisedAwayFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         entry.status == #Finalised and
         (entry.homeClubId == bettingFixture.awayClubId or entry.awayClubId == bettingFixture.awayClubId)
       });
 
-      let homeWins = Array.filter<ResponseDTOs.FixtureDTO>(finalisedHomeFixtures, func(homeEntry: ResponseDTOs.FixtureDTO){
+      let homeWins = Array.filter<DTOs.FixtureDTO>(finalisedHomeFixtures, func(homeEntry: DTOs.FixtureDTO){
         (homeEntry.homeGoals > homeEntry.awayGoals and homeEntry.homeClubId == bettingFixture.homeClubId) or
         (homeEntry.homeGoals < homeEntry.awayGoals and homeEntry.awayClubId == bettingFixture.homeClubId);
       });
 
-      let awayWins = Array.filter<ResponseDTOs.FixtureDTO>(finalisedAwayFixtures, func(awayEntry: ResponseDTOs.FixtureDTO){
+      let awayWins = Array.filter<DTOs.FixtureDTO>(finalisedAwayFixtures, func(awayEntry: DTOs.FixtureDTO){
         (awayEntry.homeGoals > awayEntry.awayGoals and awayEntry.homeClubId == bettingFixture.awayClubId) or
         (awayEntry.homeGoals < awayEntry.awayGoals and awayEntry.awayClubId == bettingFixture.awayClubId);
       });
 
-      let homeDraws = Array.filter<ResponseDTOs.FixtureDTO>(finalisedHomeFixtures, func(homeEntry: ResponseDTOs.FixtureDTO){
+      let homeDraws = Array.filter<DTOs.FixtureDTO>(finalisedHomeFixtures, func(homeEntry: DTOs.FixtureDTO){
         (homeEntry.homeGoals == homeEntry.awayGoals and homeEntry.homeClubId == bettingFixture.homeClubId) or
         (homeEntry.homeGoals == homeEntry.awayGoals and homeEntry.awayClubId == bettingFixture.homeClubId);
       });
 
-      let awayDraws = Array.filter<ResponseDTOs.FixtureDTO>(finalisedAwayFixtures, func(awayEntry: ResponseDTOs.FixtureDTO){
+      let awayDraws = Array.filter<DTOs.FixtureDTO>(finalisedAwayFixtures, func(awayEntry: DTOs.FixtureDTO){
         (awayEntry.homeGoals == awayEntry.awayGoals and awayEntry.homeClubId == bettingFixture.awayClubId) or
         (awayEntry.homeGoals == awayEntry.awayGoals and awayEntry.awayClubId == bettingFixture.awayClubId);
       });
@@ -76,11 +76,11 @@ module {
       }
     };
     
-    public func getFirstAssistOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO, player: ResponseDTOs.PlayerDTO) : Float{
+    public func getFirstAssistOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO, player: DTOs.PlayerDTO) : Float{
 
       var odds_factor: Float = 1;
 
-      let recentFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let recentFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         (entry.homeClubId == player.clubId or entry.awayClubId == player.clubId) and
         entry.gameweek < bettingFixture.gameweek and
         entry.gameweek > bettingFixture.gameweek - 7
@@ -111,11 +111,11 @@ module {
           odds_factor := odds_factor * 0.90;
       };
 
-      let playerHomeWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerHomeWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.homeGoals > entry.awayGoals and entry.homeClubId == player.clubId;
       });
 
-      let playerAwayWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerAwayWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.awayGoals > entry.homeGoals and entry.awayClubId == player.clubId;
       });
 
@@ -160,10 +160,10 @@ module {
       return 0;
     };
     
-    public func getAnytimeAssistOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO, player: ResponseDTOs.PlayerDTO) : Float{
+    public func getAnytimeAssistOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO, player: DTOs.PlayerDTO) : Float{
       var odds_factor: Float = 1;
 
-      let recentFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let recentFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         (entry.homeClubId == player.clubId or entry.awayClubId == player.clubId) and
         entry.gameweek < bettingFixture.gameweek and
         entry.gameweek > bettingFixture.gameweek - 7
@@ -194,11 +194,11 @@ module {
           odds_factor := odds_factor * 0.90;
       };
 
-      let playerHomeWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerHomeWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.homeGoals > entry.awayGoals and entry.homeClubId == player.clubId;
       });
 
-      let playerAwayWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerAwayWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.awayGoals > entry.homeGoals and entry.awayClubId == player.clubId;
       });
 
@@ -243,10 +243,10 @@ module {
       return 0;
     };
     
-    public func getLastAssistOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO, player: ResponseDTOs.PlayerDTO) : Float{
+    public func getLastAssistOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO, player: DTOs.PlayerDTO) : Float{
       var odds_factor: Float = 1;
 
-      let recentFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let recentFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         (entry.homeClubId == player.clubId or entry.awayClubId == player.clubId) and
         entry.gameweek < bettingFixture.gameweek and
         entry.gameweek > bettingFixture.gameweek - 7
@@ -277,11 +277,11 @@ module {
           odds_factor := odds_factor * 0.90;
       };
 
-      let playerHomeWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerHomeWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.homeGoals > entry.awayGoals and entry.homeClubId == player.clubId;
       });
 
-      let playerAwayWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerAwayWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.awayGoals > entry.homeGoals and entry.awayClubId == player.clubId;
       });
 
@@ -326,10 +326,10 @@ module {
       return 0;
     };
     
-    public func getAnytimeScorerOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO, player: ResponseDTOs.PlayerDTO) : Float{
+    public func getAnytimeScorerOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO, player: DTOs.PlayerDTO) : Float{
       var odds_factor: Float = 1;
 
-      let recentFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let recentFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         (entry.homeClubId == player.clubId or entry.awayClubId == player.clubId) and
         entry.gameweek < bettingFixture.gameweek and
         entry.gameweek > bettingFixture.gameweek - 7
@@ -360,11 +360,11 @@ module {
           odds_factor := odds_factor * 0.95;
       };
 
-      let playerHomeWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerHomeWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.homeGoals > entry.awayGoals and entry.homeClubId == player.clubId;
       });
 
-      let playerAwayWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerAwayWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.awayGoals > entry.homeGoals and entry.awayClubId == player.clubId;
       });
 
@@ -409,10 +409,10 @@ module {
       return 0;
     };
     
-    public func getFirstGoalscorerOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO, player: ResponseDTOs.PlayerDTO) : Float{
+    public func getFirstGoalscorerOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO, player: DTOs.PlayerDTO) : Float{
       var odds_factor: Float = 1;
 
-      let recentFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let recentFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         (entry.homeClubId == player.clubId or entry.awayClubId == player.clubId) and
         entry.gameweek < bettingFixture.gameweek and
         entry.gameweek > bettingFixture.gameweek - 7
@@ -443,11 +443,11 @@ module {
           odds_factor := odds_factor * 0.95;
       };
 
-      let playerHomeWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerHomeWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.homeGoals > entry.awayGoals and entry.homeClubId == player.clubId;
       });
 
-      let playerAwayWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerAwayWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.awayGoals > entry.homeGoals and entry.awayClubId == player.clubId;
       });
 
@@ -492,10 +492,10 @@ module {
       return 0;
     };
     
-    public func getLastScorerOdds(fixtures: [ResponseDTOs.FixtureDTO], bettingFixture: ResponseDTOs.FixtureDTO, player: ResponseDTOs.PlayerDTO) : Float{
+    public func getLastScorerOdds(fixtures: [DTOs.FixtureDTO], bettingFixture: DTOs.FixtureDTO, player: DTOs.PlayerDTO) : Float{
       var odds_factor: Float = 1;
 
-      let recentFixtures = Array.filter<ResponseDTOs.FixtureDTO>(fixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let recentFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(entry: DTOs.FixtureDTO){
         (entry.homeClubId == player.clubId or entry.awayClubId == player.clubId) and
         entry.gameweek < bettingFixture.gameweek and
         entry.gameweek > bettingFixture.gameweek - 7
@@ -526,11 +526,11 @@ module {
           odds_factor := odds_factor * 0.95;
       };
 
-      let playerHomeWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerHomeWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.homeGoals > entry.awayGoals and entry.homeClubId == player.clubId;
       });
 
-      let playerAwayWins = Array.filter<ResponseDTOs.FixtureDTO>(recentFixtures, func(entry: ResponseDTOs.FixtureDTO){
+      let playerAwayWins = Array.filter<DTOs.FixtureDTO>(recentFixtures, func(entry: DTOs.FixtureDTO){
         entry.awayGoals > entry.homeGoals and entry.awayClubId == player.clubId;
       });
 
@@ -586,7 +586,7 @@ module {
       return Float.nearest((baseOdds * odds_factor) * 4) / 4;
     };
     
-    public func getScoresBraceOdds(player: ResponseDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getScoresBraceOdds(player: DTOs.PlayerDTO, onHomeTeam: Bool) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -620,7 +620,7 @@ module {
       return 0;
     };
     
-    public func getScoreHatrickOdds(player: ResponseDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getScoreHatrickOdds(player: DTOs.PlayerDTO, onHomeTeam: Bool) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -654,7 +654,7 @@ module {
       return 0;
     };
     
-    public func getMissesPenaltyOdds(player: ResponseDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getMissesPenaltyOdds(player: DTOs.PlayerDTO, onHomeTeam: Bool) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -688,7 +688,7 @@ module {
       return 0;
     };
     
-    public func getYellowCardsOdds(player: ResponseDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getYellowCardsOdds(player: DTOs.PlayerDTO, onHomeTeam: Bool) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -722,7 +722,7 @@ module {
       return 0;
     };
     
-    public func getRedCardsOdds(player: ResponseDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getRedCardsOdds(player: DTOs.PlayerDTO, onHomeTeam: Bool) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){

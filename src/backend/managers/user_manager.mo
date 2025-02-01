@@ -20,8 +20,6 @@ import T "../types/app_types";
 import Base "../types/base_types";
 import BettingTypes "../types/betting_types";
 import FootballTypes "../types/football_types";
-import RequestDTOs "../dtos/request_DTOs";
-import ResponseDTOs "../dtos/response_DTOs";
 import ProfileCanister "../canister_definitions/profile-canister";
 
 import BettingUtilities "../utilities/betting_utilities";
@@ -32,6 +30,9 @@ import SNSToken "../utilities/ledger";
 import Utilities "../utilities/utilities";
 import AppTypes "../types/app_types";
 import ShuftiTypes "../types/shufti_types";
+import DTOs "../dtos/dtos";
+import AppCommands "../cqrs/app_commands";
+import BettingCommands "../cqrs/betting_commands";
 
 module {
 
@@ -42,7 +43,7 @@ module {
     private var activeProfileCanisterId = "";
     private var usernames: [(Base.PrincipalId, Text)] = [];
     
-    public func getProfile(principalId : Text, kycProfile: ?AppTypes.KYCProfile) : async Result.Result<ResponseDTOs.ProfileDTO, T.Error> {
+    public func getProfile(principalId : Text, kycProfile: ?AppTypes.KYCProfile) : async Result.Result<DTOs.ProfileDTO, T.Error> {
       await checkOrCreateProfile(principalId);
       let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Base.PrincipalId, Base.CanisterId)) : Bool {
         profileCanisterEntry.0 == principalId;
@@ -51,7 +52,7 @@ module {
       switch(profileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            getProfile : (principalId : Text) -> async Result.Result<ResponseDTOs.ProfileDTO, T.Error>;
+            getProfile : (principalId : Text) -> async Result.Result<DTOs.ProfileDTO, T.Error>;
           };
           let profileResult = await profile_canister.getProfile(principalId);
 
@@ -138,7 +139,7 @@ module {
       };
     };
       
-    public func updateUsername(dto: RequestDTOs.UpdateUsernameDTO) : async Result.Result<(), T.Error> {
+    public func updateUsername(dto: AppCommands.UpdateUsernameDTO) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
       if(not Utilities.validUsername(dto.username)){
         return #err(#NotAllowed);
@@ -154,7 +155,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            updateUsername : (dto: RequestDTOs.UpdateUsernameDTO) -> async Result.Result<(), T.Error>;
+            updateUsername : (dto: AppCommands.UpdateUsernameDTO) -> async Result.Result<(), T.Error>;
           };
           return await profile_canister.updateUsername(dto);
         };
@@ -164,7 +165,7 @@ module {
       };
     };
 
-    public func updateProfilePicture(dto: RequestDTOs.UpdateProfilePictureDTO) : async Result.Result<(), T.Error> {
+    public func updateProfilePicture(dto: AppCommands.UpdateProfilePictureDTO) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
       if(not Utilities.validProfilePicture(dto.profilePicture)){
         return #err(#NotAllowed);
@@ -176,7 +177,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            updateProfilePicture : (dto: RequestDTOs.UpdateProfilePictureDTO) -> async Result.Result<(), T.Error>;
+            updateProfilePicture : (dto: AppCommands.UpdateProfilePictureDTO) -> async Result.Result<(), T.Error>;
           };
           return await profile_canister.updateProfilePicture(dto);
         };
@@ -186,7 +187,7 @@ module {
       };
     };
 
-    public func updateWithdrawalAddress(dto: RequestDTOs.UpdateWithdrawalAddressDTO) : async Result.Result<(), T.Error> {
+    public func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddressDTO) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
       if(not validWithdrawalAddress(dto.withdrawalAddress)){
         return #err(#NotAllowed);
@@ -198,7 +199,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            updateWithdrawalAddress : (dto: RequestDTOs.UpdateWithdrawalAddressDTO) -> async Result.Result<(), T.Error>;
+            updateWithdrawalAddress : (dto: AppCommands.UpdateWithdrawalAddressDTO) -> async Result.Result<(), T.Error>;
           };
           return await profile_canister.updateWithdrawalAddress(dto);
         };
@@ -208,7 +209,7 @@ module {
       }
     };
 
-    public func pauseAccount(dto: RequestDTOs.PauseAccountDTO) : async Result.Result<(), T.Error> {
+    public func pauseAccount(dto: BettingCommands.PauseAccountDTO) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
       let userProfileCanisterId = Array.find<(Base.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Base.PrincipalId, Base.CanisterId)) : Bool {
         entry.0 == dto.principalId;
@@ -217,7 +218,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            pauseAccount : (dto: RequestDTOs.PauseAccountDTO) -> async Result.Result<(), T.Error>;
+            pauseAccount : (dto: BettingCommands.PauseAccountDTO) -> async Result.Result<(), T.Error>;
           };
           return await profile_canister.pauseAccount(dto);
         };
@@ -227,7 +228,7 @@ module {
       };
     };
 
-    public func setMaxBetLimit(dto: RequestDTOs.SetMaxBetLimit) : async Result.Result<(), T.Error> {
+    public func setDailyBetLimit(dto: BettingCommands.SetDailyBetLimitDTO) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
       let userProfileCanisterId = Array.find<(Base.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Base.PrincipalId, Base.CanisterId)) : Bool {
         entry.0 == dto.principalId;
@@ -236,7 +237,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            setMaxBetLimit : (dto: RequestDTOs.SetMaxBetLimit) -> async Result.Result<(), T.Error>;
+            setMaxBetLimit : (dto: BettingCommands.SetDailyBetLimitDTO) -> async Result.Result<(), T.Error>;
           };
           return await profile_canister.setMaxBetLimit(dto);
         };
@@ -246,7 +247,7 @@ module {
       };
     };
 
-    public func setMonthlyBetLimit(dto: RequestDTOs.SetMonthlyBetLimitDTO) : async Result.Result<(), T.Error> {
+    public func setMonthlyBetLimit(dto: BettingCommands.SetMonthlyBetLimitDTO) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
       let userProfileCanisterId = Array.find<(Base.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Base.PrincipalId, Base.CanisterId)) : Bool {
         entry.0 == dto.principalId;
@@ -255,7 +256,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            setMonthlyBetLimit : (dto: RequestDTOs.SetMonthlyBetLimitDTO) -> async Result.Result<(), T.Error>;
+            setMonthlyBetLimit : (dto: BettingCommands.SetMonthlyBetLimitDTO) -> async Result.Result<(), T.Error>;
           };
           return await profile_canister.setMonthlyBetLimit(dto);
         };
@@ -265,7 +266,7 @@ module {
       };
     };
 
-    public func placeBet(dto: RequestDTOs.SubmitBetslipDTO) : async Result.Result<BettingTypes.BetSlip, T.Error> {
+    public func placeBet(dto: BettingCommands.SubmitBetslipDTO) : async Result.Result<BettingTypes.BetSlip, T.Error> {
       await checkOrCreateProfile(dto.principalId);
       let userProfileCanisterId = Array.find<(Base.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Base.PrincipalId, Base.CanisterId)) : Bool {
         entry.0 == dto.principalId;
@@ -274,7 +275,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            placeBet : (dto: RequestDTOs.SubmitBetslipDTO) -> async Result.Result<BettingTypes.BetSlip, T.Error>;
+            placeBet : (dto: BettingCommands.SubmitBetslipDTO) -> async Result.Result<BettingTypes.BetSlip, T.Error>;
           };
           return await profile_canister.placeBet(dto);
         };
@@ -284,7 +285,7 @@ module {
       };
     };
 
-    public func getBets(dto: RequestDTOs.GetBetsDTO) : async Result.Result<[BettingTypes.BetSlip], T.Error>{
+    public func getBets(dto: BettingCommands.GetBetsDTO) : async Result.Result<[BettingTypes.BetSlip], T.Error>{
       await checkOrCreateProfile(dto.principalId);
       let userProfileCanisterId = Array.find<(Base.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Base.PrincipalId, Base.CanisterId)) : Bool {
         entry.0 == dto.principalId;
@@ -293,7 +294,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            getBets : (dto: RequestDTOs.GetBetsDTO) -> async Result.Result<[BettingTypes.BetSlip], T.Error>;
+            getBets : (dto: BettingCommands.GetBetsDTO) -> async Result.Result<[BettingTypes.BetSlip], T.Error>;
           };
           return await profile_canister.getBets(dto);
         };
@@ -306,7 +307,7 @@ module {
     public func settleBet(unsettledBetslip: BettingTypes.BetSlip) : async () {
       
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-        getBetslipFixtures : shared query (dto: RequestDTOs.GetBetslipFixturesDTO) -> async Result.Result<[ResponseDTOs.FixtureDTO], T.Error>;
+        getBetslipFixtures : shared query (dto: BettingCommands.GetBetslipFixturesDTO) -> async Result.Result<[DTOs.FixtureDTO], T.Error>;
       };
       let fixturesResult = await data_canister.getBetslipFixtures({
         selections = unsettledBetslip.selections;
@@ -317,7 +318,7 @@ module {
 
           let updatedSelectionBuffer = Buffer.fromArray<BettingTypes.Selection>([]);
           label selectionLoop for(selection in Iter.fromArray(unsettledBetslip.selections)){
-            let fixtureResult = Array.find<ResponseDTOs.FixtureDTO>(betFixtures, func (fixture: ResponseDTOs.FixtureDTO) : Bool {
+            let fixtureResult = Array.find<DTOs.FixtureDTO>(betFixtures, func (fixture: DTOs.FixtureDTO) : Bool {
               fixture.id == selection.fixtureId;
             });
 
@@ -1118,18 +1119,18 @@ module {
       usernames := stable_usernames;
     };
 
-    public func getAllAuditUsers(offset: Nat) : async [ResponseDTOs.UserDTO] {
+    public func getAllAuditUsers(offset: Nat) : async [DTOs.UserDTO] {
       
-      let allUsersBuffer = Buffer.fromArray<ResponseDTOs.UserDTO>([]);
+      let allUsersBuffer = Buffer.fromArray<DTOs.UserDTO>([]);
       for(canisterId in Iter.fromArray(uniqueProfileCanisterIds)){
         let profile_canister = actor (canisterId) : actor {
-          getAllAuditUsers : () -> async [ResponseDTOs.UserDTO];
+          getAllAuditUsers : () -> async [DTOs.UserDTO];
         };
         let users = await profile_canister.getAllAuditUsers();
         allUsersBuffer.append(Buffer.fromArray(users));
       };
-      let droppedEntries = List.drop<ResponseDTOs.UserDTO>(List.fromArray(Buffer.toArray(allUsersBuffer)), offset);
-      return List.toArray(List.take<ResponseDTOs.UserDTO>(droppedEntries, 100));
+      let droppedEntries = List.drop<DTOs.UserDTO>(List.fromArray(Buffer.toArray(allUsersBuffer)), offset);
+      return List.toArray(List.take<DTOs.UserDTO>(droppedEntries, 100));
     };
 
     public func verifyBettingAccount(principalId: Base.PrincipalId) : async (){

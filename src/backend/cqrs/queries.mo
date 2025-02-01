@@ -1,10 +1,13 @@
+
 import FootballTypes "../types/football_types";
 import Base "../types/base_types";
+import AppTypes "../types/app_types";
+import DTOs "../dtos/dtos";
 import BettingTypes "../types/betting_types";
 
-module ResponseDTOs {
+module Queries {
 
-  public type SystemStateDTO = {
+    public type SystemStateDTO = {
     onHold : Bool;
     version: Text;
   };
@@ -248,7 +251,5 @@ module ResponseDTOs {
     kycApprovalDate: Int;
     kycRef: Text;
   }
-  
-
 
 };

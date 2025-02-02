@@ -6,7 +6,7 @@
     import BadgeIcon from "$lib/icons/BadgeIcon.svelte";
     import TableIcon from "$lib/icons/TableIcon.svelte";
     import OddsIcon from "$lib/icons/OddsIcon.svelte";
-    import Betslip from "$lib/components/bettings/betslip.svelte";
+    import Betslip from "$lib/components/betting/betslip.svelte";
     import ArrowUp from "$lib/icons/ArrowUp.svelte";
     import ArrowDown from "$lib/icons/ArrowDown.svelte";
     import BetSelectedIcon from "$lib/icons/BetSelectedIcon.svelte";
@@ -31,12 +31,16 @@
       MissPenaltyOdds,
       OverUnderSelectionOdds,
       HalfTimeFullTimeOdds,
-      ResultAndYesNoSelectionOdds
+      ResultAndYesNoSelectionOdds,
+
+      Category,
+
+      SelectionDetail
+
+
     } from "../../../../declarations/backend/backend.did";
   
     import type {
-      Category,
-      SelectionDetail,
       ClubDTO,
       FixtureDTO,
       PlayerDTO,

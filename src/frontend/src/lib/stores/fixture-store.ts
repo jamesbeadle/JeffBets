@@ -1,14 +1,9 @@
 import { writable } from "svelte/store";
 import { FixtureService } from "../services/fixture-service";
 import { DataHashService } from "../services/data-hash-service";
-import type {
-  FixtureDTO,
-  MoveFixtureDTO,
-  PostponeFixtureDTO,
-  SubmitFixtureDataDTO,
-} from "../../../../declarations/backend/backend.did";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
+import type { FixtureDTO } from "../../../../declarations/data_canister/data_canister.did";
 
 function createFixtureStore() {
   const { subscribe, update } = writable<Record<number, FixtureDTO[]>>({});
@@ -78,40 +73,9 @@ function createFixtureStore() {
     return new FixtureService().getFixtures(leagueId);
   }
 
-  async function moveFixture(dto: MoveFixtureDTO): Promise<any> {
-    return new FixtureService().moveFixture(dto);
-  }
-
-  async function postponeFixture(dto: PostponeFixtureDTO): Promise<any> {
-    return new FixtureService().postponeFixture(dto);
-  }
-
-  async function submitFixtureData(dto: SubmitFixtureDataDTO): Promise<any> {
-    return new FixtureService().submitFixtureData(dto);
-  }
-
-  async function getPostponedFixtures(): Promise<FixtureDTO[]> {
-    return new FixtureService().getPostponedFixtures();
-  }
-
-  function getFixturesByLeagueId(leagueId: number): FixtureDTO[] | undefined {
-    let data: Record<number, FixtureDTO[]> = {};
-    const unsubscribe = subscribe((value) => {
-      data = value;
-    });
-    unsubscribe();
-
-    return data[leagueId];
-  }
-
   return {
     syncFixtures,
     getFixtures,
-    getPostponedFixtures,
-    moveFixture,
-    postponeFixture,
-    submitFixtureData,
-    getFixturesByLeagueId,
   };
 }
 

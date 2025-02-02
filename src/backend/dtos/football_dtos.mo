@@ -1,16 +1,8 @@
-
 import FootballTypes "../types/football_types";
 import Base "../types/base_types";
-import AppTypes "../types/app_types";
-import DTOs "../dtos/dtos";
 import BettingTypes "../types/betting_types";
 
-module Queries {
-
-    public type SystemStateDTO = {
-    onHold : Bool;
-    version: Text;
-  };
+module DTOs {
 
   public type LeagueStatusDTO = {
     leagueId: FootballTypes.LeagueId;
@@ -139,14 +131,6 @@ module Queries {
     fixtureId : FootballTypes.FixtureId;
   };
 
-  public type LeaderboardEntryDTO = {
-    position : Int;
-    positionText : Text;
-    username : Text;
-    principalId : Text;
-    points : Int16;
-  };
-
   public type SeasonDTO = {
     id : FootballTypes.SeasonId;
     name : Text;
@@ -167,9 +151,7 @@ module Queries {
     events : [FootballTypes.PlayerEventData];
   };
 
-
-
-  public type FootballLeagueDTO = {
+  public type LeagueDTO = {
     id: FootballTypes.LeagueId;
     name: Text;
     abbreviation: Text;
@@ -191,65 +173,5 @@ module Queries {
     abbreviatedName : Text;
     shirtType : FootballTypes.ShirtType;
   };
-
-  public type CountryDTO = {
-    id : Base.CountryId;
-    name : Text;
-    code : Text;
-  };
-
-  public type DataHashDTO = {
-    category : Text;
-    hash : Text;
-  };
   
-  public type MatchOddsDTO = {
-    leagueId: FootballTypes.LeagueId;
-    fixtureId: FootballTypes.FixtureId;
-    correctResults: BettingTypes.TeamSelectionOdds;
-    correctScores: [BettingTypes.ScoreSelectionOdds];
-    halfTimeScores: [BettingTypes.ScoreSelectionOdds];
-    firstGoalscorers: [BettingTypes.PlayerSelectionOdds];
-    lastGoalscorers: [BettingTypes.PlayerSelectionOdds];
-    anytimeScorers: [BettingTypes.PlayerSelectionOdds];
-    yellowCards: [BettingTypes.PlayerSelectionOdds];
-    redCards: [BettingTypes.PlayerSelectionOdds];
-    penaltyMissed: BettingTypes.MissPenaltyOdds;
-    penaltyMissers: [BettingTypes.PlayerSelectionOdds];
-    firstAssisters: [BettingTypes.PlayerSelectionOdds];
-    lastAssist: [BettingTypes.PlayerSelectionOdds];
-    anytimeAssist: [BettingTypes.PlayerSelectionOdds];
-    scoresBrace: [BettingTypes.PlayerSelectionOdds];
-    scoresHatTrick: [BettingTypes.PlayerSelectionOdds];
-    goalsOverUnder: BettingTypes.OverUnderSelectionOdds;
-    bothTeamsToScore: BettingTypes.YesNoSelectionOdds;
-    halfTimeFullTimeResult: [BettingTypes.HalfTimeFullTimeOdds];
-    bothTeamsToScoreAndWinner: [BettingTypes.ResultAndYesNoSelectionOdds];
-  };
-
-  public type HomePageFixtureDTO = {
-    leagueId: FootballTypes.LeagueId;
-    gameweek: FootballTypes.GameweekNumber;
-    fixtureId: FootballTypes.FixtureId;
-    homeOdds: Float;
-    drawOdds: Float;
-    awayOdds: Float;
-  };
-
-  public type UserAuditDTO = {
-    date: Int;
-    users: [UserDTO];
-    offset: Nat;
-  };
-
-  public type UserDTO = {
-    principalId: Base.PrincipalId;
-    joinedDate: Int;
-    termsAcceptedDate: Int;
-    kycComplete: Bool;
-    kycSubmissionDate: Int;
-    kycApprovalDate: Int;
-    kycRef: Text;
-  }
-
 };

@@ -1,14 +1,10 @@
 import { writable } from "svelte/store";
-import type {
-  ClubDTO,
-  CreateClubDTO,
-  LeagueId,
-  RemoveClubDTO,
-} from "../../../../declarations/backend/backend.did";
+import type { LeagueId } from "../../../../declarations/backend/backend.did";
 import { ClubService } from "../services/club-service";
 import { DataHashService } from "../services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
+import type { ClubDTO } from "../../../../declarations/data_canister/data_canister.did";
 
 function createClubStore() {
   const { subscribe, update } = writable<Record<number, ClubDTO[]>>({});
@@ -78,18 +74,8 @@ function createClubStore() {
     return new ClubService().getClubs(leagueId);
   }
 
-  async function createClub(dto: CreateClubDTO): Promise<any> {
-    return new ClubService().createClub(dto);
-  }
-
-  async function removeClub(dto: RemoveClubDTO): Promise<any> {
-    return new ClubService().removeClub(dto);
-  }
-
   return {
     getClubs,
-    createClub,
-    removeClub,
     syncClubs,
   };
 }

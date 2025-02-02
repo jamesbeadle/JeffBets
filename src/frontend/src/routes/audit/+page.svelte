@@ -7,11 +7,11 @@
     import { authStore } from "$lib/stores/auth-store";
     import { auditStore } from "$lib/stores/audit-store";
     import { userStore } from "$lib/stores/user-store";
-    import type { UserAuditDTO } from "../../../../declarations/backend/backend.did";
     import { formatUnixDateToSmallReadable, formatUnixTimeToTime } from "$lib/utils/helpers";
+    import type { UserAuditList } from "../../../../declarations/backend/backend.did";
   
     let isLoading = true;
-    let auditData: UserAuditDTO | undefined = undefined;
+    let auditData: UserAuditList | undefined = undefined;
     
   
     onMount(async () => {
@@ -26,7 +26,7 @@
             }
         });
 
-        let isAuditor = await userStore.isAuditor();
+        let isAuditor = false//TODO await userStore.isAuditor();
         if(!isAuditor){
             goto('/');
             return;

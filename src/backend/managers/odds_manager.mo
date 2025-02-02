@@ -13,9 +13,10 @@ import Nat16 "mo:base/Nat16";
 import Nat "mo:base/Nat";
 import Environment "../environment";
 import OddsGenerator "odds_generator";
-import Queries "../cqrs/queries";
-import DTOs "../dtos/dtos";
 import SHA224 "../utilities/SHA224";
+import AppDTOs "../dtos/app_dtos";
+import BettingQueries "../cqrs/queries/betting_queries";
+import FootballDTOs "../dtos/football_dtos";
 
 module {
 
@@ -24,7 +25,7 @@ module {
     private var matchOddsCache: [(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])] = [];
     private let oddsGenerator = OddsGenerator.OddsGenerator();
   
-    public func getHomepageLeagueFixtures(leagueId: FootballTypes.LeagueId) : [Queries.HomePageFixtureDTO] {
+    public func getHomepageLeagueFixtures(leagueId: FootballTypes.LeagueId) : [AppDTOs.HomePageFixtureDTO] {
  
       let matchOddsResult = Array.find<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(matchOddsCacheEntry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])) : Bool {
         matchOddsCacheEntry.0 == leagueId;
@@ -32,7 +33,7 @@ module {
 
       switch(matchOddsResult){
         case (?foundMatchOdds){
-          return Array.map<(FootballTypes.FixtureId, BettingTypes.MatchOdds), Queries.HomePageFixtureDTO>(foundMatchOdds.1, func (oddsEntry: (FootballTypes.FixtureId, BettingTypes.MatchOdds)) {
+          return Array.map<(FootballTypes.FixtureId, BettingTypes.MatchOdds), AppDTOs.HomePageFixtureDTO>(foundMatchOdds.1, func (oddsEntry: (FootballTypes.FixtureId, BettingTypes.MatchOdds)) {
             let matchOdds = oddsEntry.1;
             return {
               leagueId = matchOdds.leagueId;
@@ -50,7 +51,7 @@ module {
       };
     };
     
-    public func getMatchOdds(leagueId: FootballTypes.LeagueId, fixtureId: FootballTypes.FixtureId) : Result.Result<Queries.MatchOddsDTO, T.Error> {
+    public func getMatchOdds(leagueId: FootballTypes.LeagueId, fixtureId: FootballTypes.FixtureId) : Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
       
       let leagueOddsCache = Array.find<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, 
           func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])) : Bool {
@@ -76,8 +77,8 @@ module {
 
     public func recalculate(leagueId: FootballTypes.LeagueId) : async () {
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-        getFixtures : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[DTOs.FixtureDTO], T.Error>;
-        getPlayers : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[DTOs.PlayerDTO], T.Error>;
+        getFixtures : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
+        getPlayers : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[FootballDTOs.PlayerDTO], T.Error>;
       };
       let fixturesResult = await data_canister.getFixtures(leagueId);
       let playersResult = await data_canister.getPlayers(leagueId);
@@ -92,7 +93,7 @@ module {
       
       switch(fixturesResult){
         case (#ok fixtures){
-          let futureFixtures = Array.filter<DTOs.FixtureDTO>(fixtures, func(fixtureEntry: DTOs.FixtureDTO){
+          let futureFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(fixtureEntry: FootballDTOs.FixtureDTO){
             fixtureEntry.status == #Unplayed and fixtureEntry.kickOff > Time.now();
           }); 
           switch(playersResult){
@@ -100,7 +101,7 @@ module {
   
               for(fixture in Iter.fromArray(futureFixtures)){
 
-                let fixturePlayers = Array.filter<DTOs.PlayerDTO>(players, func(player: DTOs.PlayerDTO){
+                let fixturePlayers = Array.filter<FootballDTOs.PlayerDTO>(players, func(player: FootballDTOs.PlayerDTO){
                   player.clubId == fixture.homeClubId or player.clubId == fixture.awayClubId
                 });
                 
@@ -337,7 +338,7 @@ module {
       }
     };
     
-    public func getDataHashes() : Result.Result<[DTOs.DataHashDTO], T.Error> {
+    public func getDataHashes() : Result.Result<[AppDTOs.DataHashDTO], T.Error> {
       return #ok(dataHashes)
     };
 

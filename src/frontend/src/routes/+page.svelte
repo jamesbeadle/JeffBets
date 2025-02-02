@@ -5,7 +5,7 @@
   import Layout from "./Layout.svelte";
   import LocalSpinner from "$lib/components/shared/local-spinner.svelte";
   import FullScreenSpinner from "$lib/components/shared/full-screen-spinner.svelte";
-  import Betslip from "$lib/components/bettings/betslip.svelte";
+  import Betslip from "$lib/components/betting/betslip.svelte";
 
   import ArrowDown from "$lib/icons/ArrowDown.svelte";
   import ArrowUp from "$lib/icons/ArrowUp.svelte";
@@ -26,19 +26,17 @@
   import { convertDateToReadable } from "$lib/utils/helpers";
 
   import type {
-    FootballLeagueDTO,
-    FixtureDTO,
-    ClubDTO,
     FixtureId,
     LeagueId,
     GameweekNumber,
     Category,
     SelectionDetail
-  } from "../../../declarations/data_canister/data_canister.did";
+  } from "../../../declarations/backend/backend.did";
 
   import type { HomePageFixtureDTO } from "../../../declarations/backend/backend.did";
   import { betSlipDataStore } from "$lib/stores/bet-slip-data-store";
   import { buildBetUiDescription } from "$lib/utils/buildBetUiDescription";
+    import type { ClubDTO, FixtureDTO, FootballLeagueDTO } from "../../../declarations/data_canister/data_canister.did";
 
   let isLoading = true;
   let isBetSlipExpanded = false;

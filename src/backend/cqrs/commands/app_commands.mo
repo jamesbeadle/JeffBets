@@ -1,25 +1,21 @@
-import Base "../types/base_types";
+import Base "../../types/base_types";
 
 module AppCommands {
 
-  public type UpdateAppStatusDTO = {
-    onHold : Bool;
-    version: Text;
-  };
-
-  public type UpdateUsernameDTO = {
+  public type UpdateUsername = {
     principalId: Base.PrincipalId;
     username: Text;
   };
 
-  public type UpdateProfilePictureDTO = {
+  public type UpdateProfilePicture = {
     principalId: Base.PrincipalId;
     profilePicture: Blob;
     profilePictureExtension: Text;
   };
 
-  public type UpdateWithdrawalAddressDTO = {
+  public type UpdateWithdrawalAddress = {
     principalId: Base.PrincipalId;
     withdrawalAddress: Text;
   };
+  
 };

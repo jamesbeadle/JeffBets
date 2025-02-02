@@ -29,9 +29,13 @@ import ProfileCanister "canister_definitions/profile-canister";
 import AppTypes "types/app_types";
 import KYCManager "managers/kyc_manager";
 import ShuftiTypes "types/shufti_types";
-import DTOs "dtos/dtos";
-import AppCommands "cqrs/app_commands";
-import BettingCommands "cqrs/betting_commands";
+import AppDTOs "dtos/app_dtos";
+import FootballDTOs "dtos/football_dtos";
+import AppCommands "cqrs/commands/app_commands";
+import UserCommands "cqrs/commands/user_commands";
+import BettingQueries "cqrs/queries/betting_queries";
+import BettingCommands "cqrs/commands/betting_commands";
+import AuditQueries "cqrs/queries/audit_queries";
 
 actor Self {
 
@@ -47,13 +51,13 @@ actor Self {
 
   /* Application functions */
 
-  public shared query func getDataHashes(): async Result.Result<[DTOs.DataHashDTO], T.Error> {
+  public shared query func getDataHashes(): async Result.Result<[AppDTOs.DataHashDTO], T.Error> {
     return oddsManager.getDataHashes();
   };
 
   /* User management functions */
 
-  public shared ({ caller }) func getProfile() : async Result.Result<DTOs.ProfileDTO, T.Error> {
+  public shared ({ caller }) func getProfile() : async Result.Result<FootballDTOs.ProfileDTO, T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     let kycProfile = kycManager.getKYCProfile(principalId);
@@ -67,42 +71,42 @@ actor Self {
     return await userManager.agreeTerms(principalId);
   };
 
-  public shared ({ caller }) func updateUsername(dto: AppCommands.UpdateUsernameDTO) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.updateUsername(dto);
   };
 
-  public shared ({ caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePictureDTO) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.updateProfilePicture(dto);
   };
 
-  public shared ({ caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddressDTO) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.updateWithdrawalAddress(dto);
   };
 
-  public shared ({ caller }) func pauseAccount(dto: BettingCommands.PauseAccountDTO) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.pauseAccount(dto);
   };
 
-  public shared ({ caller }) func setDailyBetLimit(dto: BettingCommands.SetDailyBetLimitDTO) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func setDailyBetLimit(dto: UserCommands.SetDailyBetLimit) : async Result.Result<(), T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.setDailyBetLimit(dto);
   };
 
-  public shared ({ caller }) func setMonthlyBetLimit(dto: BettingCommands.SetMonthlyBetLimitDTO) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), T.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
@@ -111,15 +115,15 @@ actor Self {
 
   /* Betting functions */
 
-  public shared query func getBettableHomepageFixtures(leagueId: FootballTypes.LeagueId) : async Result.Result<[DTOs.HomePageFixtureDTO], T.Error> {
+  public shared query func getBettableHomepageFixtures(leagueId: FootballTypes.LeagueId) : async Result.Result<[AppDTOs.HomePageFixtureDTO], T.Error> {
     return #ok(oddsManager.getHomepageLeagueFixtures(leagueId));
   };
 
-  public shared query func getMatchOdds(leagueId: FootballTypes.LeagueId, fixtureId: FootballTypes.FixtureId) : async Result.Result<DTOs.MatchOddsDTO, T.Error> {
+  public shared query func getMatchOdds(leagueId: FootballTypes.LeagueId, fixtureId: FootballTypes.FixtureId) : async Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
     return oddsManager.getMatchOdds(leagueId, fixtureId);
   };
   
-  public shared ({ caller }) func placeBet(dto: BettingCommands.SubmitBetslipDTO) : async Result.Result<BettingTypes.BetSlip, T.Error>{
+  public shared ({ caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, T.Error>{
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
@@ -161,14 +165,14 @@ actor Self {
     }
   };
 
-  public shared ({ caller }) func getBets(dto: BettingCommands.GetBetsDTO) : async Result.Result<[BettingTypes.BetSlip], T.Error>{
+  public shared ({ caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, T.Error>{
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
-    return await userManager.getBets(dto);
+    return await userManager.getUserBets(dto);
   };
 
-  private func validateBetslip(dto: BettingCommands.SubmitBetslipDTO) : Bool {
+  private func validateBetslip(dto: BettingCommands.SubmitBetslip) : Bool {
 
     //for the accumulator type
       //calculate the expected returns of each row and ensure what they expect from each users submission
@@ -337,14 +341,11 @@ actor Self {
     return #ok(checkAuditor(Principal.toText(caller)));
   };
 
-  public shared ({ caller }) func getUserAudit(offset: Nat) : async Result.Result<DTOs.UserAuditDTO, T.Error> {
+  public shared ({ caller }) func getUserAudit(dto: AuditQueries.GetUserAudit) : async Result.Result<AuditQueries.UserAuditList, T.Error> {
     assert checkAuditor(Principal.toText(caller));
-    let allAuditUsers = await userManager.getAllAuditUsers(offset); 
-    return #ok({
-      date = Time.now();
-      users = allAuditUsers;
-      offset = offset;
-    });
+    return #err(#NotFound);
+
+    //return #ok(await userManager.getUserAuditList(dto)); 
   };
   
   private func checkAuditor(principalId: Text) : Bool {

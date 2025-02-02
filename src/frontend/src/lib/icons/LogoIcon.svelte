@@ -1,6 +1,5 @@
 <script>
   export let className = "";
-  export let fill = "white";
 </script>
 
 <svg

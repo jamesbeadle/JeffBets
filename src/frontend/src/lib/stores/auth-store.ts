@@ -17,7 +17,7 @@ let authClient: AuthClient | undefined | null;
 
 const NNS_IC_ORG_ALTERNATIVE_ORIGIN = "https://jeffbets.com";
 const NNS_IC_APP_DERIVATION_ORIGIN =
-  "https://43loz-3yaaa-aaaal-qbxrq-cai.icp0.io";
+  "https://hqy24-byaaa-aaaal-qshpq-cai.icp0.io";
 
 const isNnsAlternativeOrigin = () => {
   return window.location.origin === NNS_IC_ORG_ALTERNATIVE_ORIGIN;

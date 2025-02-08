@@ -71,4 +71,5 @@ module DTOs {
     category : Text;
     hash : Text;
   };
+
 };

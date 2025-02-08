@@ -1,11 +1,9 @@
 import { countryStore } from "../stores/country-store";
-import { betSlipStore } from "../stores/bet-slip-store";
 import { playerStore } from "../stores/player-store";
 import { clubStore } from "../stores/club-store";
 import { leagueStore } from "../stores/league-store";
 import { fixtureStore } from "../stores/fixture-store";
 import { seasonStore } from "../stores/season-store";
-import { playerEventsStore } from "../stores/player-events-store";
 
 import { DataHashService } from "../services/data-hash-service";
 import { CountryService } from "../services/country-service";
@@ -15,12 +13,7 @@ import { ClubService } from "../services/club-service";
 import { PlayerService } from "../services/player-service";
 import { SeasonService } from "../services/season-service";
 import { PlayerEventsService } from "../services/player-events-service";
-import {
-  isError,
-  replacer,
-  serializeData,
-  deserializeData,
-} from "../utils/helpers";
+import { replacer } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
 
 class StoreManager {
@@ -40,7 +33,7 @@ class StoreManager {
     "fixtures",
     "league_status",
     "seasons",
-    //"player_events",
+    "player_events",
   ];
 
   constructor() {

@@ -1,8 +1,4 @@
 import * as FlagIcons from "svelte-flag-icons";
-import type {
-  PlayerEventType,
-  PlayerPosition,
-} from "../../../../declarations/data_canister/data_canister.did";
 
 export function uint8ArrayToBase64(bytes: Uint8Array): string {
   const binary = Array.from(bytes)
@@ -614,55 +610,6 @@ export function getMonthFromNumber(month: number): string {
   }
 
   return "";
-}
-
-enum PlayerEvent {
-  Appearance,
-  Goal,
-  GoalAssisted,
-  GoalConceded,
-  KeeperSave,
-  CleanSheet,
-  PenaltySaved,
-  PenaltyMissed,
-  YellowCard,
-  RedCard,
-  OwnGoal,
-  HighestScoringPlayer,
-}
-
-export function convertEvent(playerEvent: PlayerEventType): PlayerEvent {
-  if ("Appearance" in playerEvent) return PlayerEvent.Appearance;
-  if ("Goal" in playerEvent) return PlayerEvent.Goal;
-  if ("GoalAssisted" in playerEvent) return PlayerEvent.GoalAssisted;
-  if ("GoalConceded" in playerEvent) return PlayerEvent.GoalConceded;
-  if ("KeeperSave" in playerEvent) return PlayerEvent.KeeperSave;
-  if ("CleanSheet" in playerEvent) return PlayerEvent.CleanSheet;
-  if ("PenaltySaved" in playerEvent) return PlayerEvent.PenaltySaved;
-  if ("PenaltyMissed" in playerEvent) return PlayerEvent.PenaltyMissed;
-  if ("YellowCard" in playerEvent) return PlayerEvent.YellowCard;
-  if ("RedCard" in playerEvent) return PlayerEvent.RedCard;
-  if ("OwnGoal" in playerEvent) return PlayerEvent.OwnGoal;
-  if ("HighestScoringPlayer" in playerEvent)
-    return PlayerEvent.HighestScoringPlayer;
-  return PlayerEvent.Appearance;
-}
-
-enum Position {
-  GOALKEEPER,
-  DEFENDER,
-  MIDFIELDER,
-  FORWARD,
-}
-
-export function convertPlayerPosition(
-  playerPosition: PlayerPosition,
-): Position {
-  if ("Goalkeeper" in playerPosition) return Position.GOALKEEPER;
-  if ("Defender" in playerPosition) return Position.DEFENDER;
-  if ("Midfielder" in playerPosition) return Position.MIDFIELDER;
-  if ("Forward" in playerPosition) return Position.FORWARD;
-  return Position.GOALKEEPER;
 }
 
 export function getImageURL(blob: any): string {

@@ -1,9 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import GovernanceIcon from "$lib/icons/side-nav/governance-icon.svelte";
     import HomeIcon from "$lib/icons/side-nav/home-icon.svelte";
-    import PlayersIcon from "$lib/icons/side-nav/players-icon.svelte";
-    import LeaguesIcon from "$lib/icons/side-nav/leagues-icon.svelte";
     import LogoIcon from "$lib/icons/LogoIcon.svelte";
     import CollapseIcon from "$lib/icons/side-nav/collapse-icon.svelte";
     import ExpandIcon from "$lib/icons/side-nav/expand-icon.svelte";
@@ -15,7 +12,6 @@
     import Disconnect from "$lib/icons/Disconnect.svelte";
     import { goto } from "$app/navigation";
     import { userStore } from "$lib/stores/user-store";
-    import Terms from "../terms/terms.svelte";
     import FullScreenSpinner from "./full-screen-spinner.svelte";
     import ProfileIcon from "$lib/icons/ProfileIcon.svelte";
 
@@ -27,10 +23,7 @@
     let isLoading = true;
 
     const menuItems = [
-        { icon: HomeIcon, title: "Home", route: "/" },
-        { icon: GovernanceIcon, title: "Governance", route: "/governance" },
-        { icon: PlayersIcon, title: "Players", route: "/players" },
-        { icon: LeaguesIcon, title: "Leagues", route: "/leagues" },
+        { icon: HomeIcon, title: "Home", route: "/" }
     ];
 
     onMount( async () => {

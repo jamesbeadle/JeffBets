@@ -47,7 +47,6 @@ actor Self {
   private stable var openBets: [BettingTypes.BetSlip] = [];
   private stable var totalBetsStaked: Nat64 = 0;
   private stable var totalPotentialPayout: Nat64 = 0;
-  
 
   /* Application functions */
 

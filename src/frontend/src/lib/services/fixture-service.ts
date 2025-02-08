@@ -10,7 +10,7 @@ export class FixtureService {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_CANISTER_ID ?? "",
+        process.env.DATA_CANISTER_ID ?? "",
       );
     const result = await identityActor.getFixturesHash(leagueId);
     if (isError(result)) throw new Error("Failed to fetch fixtures hash");
@@ -21,7 +21,7 @@ export class FixtureService {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_CANISTER_ID ?? "",
+        process.env.DATA_CANISTER_ID ?? "",
       );
     const result = await identityActor.getPostponedFixtures(leagueId);
     if (isError(result)) throw new Error("Failed to fetch postponed fixtures");
@@ -32,7 +32,7 @@ export class FixtureService {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_CANISTER_ID ?? "",
+        process.env.DATA_CANISTER_ID ?? "",
       );
     const result = await identityActor.getFixtures(leagueId, seasonId);
     if (isError(result)) throw new Error("Failed to fetch fixtures");

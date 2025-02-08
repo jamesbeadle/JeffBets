@@ -14,7 +14,7 @@ export class PlayerService {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_CANISTER_ID ?? "",
+        process.env.DATA_CANISTER_ID ?? "",
       );
 
     const result = await identityActor.getPlayers(leagueId);
@@ -26,7 +26,7 @@ export class PlayerService {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_CANISTER_ID ?? "",
+        process.env.DATA_CANISTER_ID ?? "",
       );
     const result = await identityActor.getLoanedPlayers(leagueId);
     if (isError(result)) throw new Error("Failed to fetch players");

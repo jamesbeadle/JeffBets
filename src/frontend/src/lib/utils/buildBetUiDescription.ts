@@ -80,7 +80,6 @@ export function buildBetUiDescription(
       : "Both Teams to Score: No";
   } else if ("HalfTimeFullTimeResult" in detail) {
     const d = detail.HalfTimeFullTimeResult as HalfTimeFullTimeResultDetail;
-    console.log(d);
     let ht = Object.keys(d.halfTimeResult)[0];
     let ft = Object.keys(d.fullTimeResult)[0];
     if (ht === "HomeWin") ht = "Home Win";

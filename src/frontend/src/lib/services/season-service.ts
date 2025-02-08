@@ -10,7 +10,7 @@ export class SeasonService {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_CANISTER_ID ?? "",
+        process.env.DATA_CANISTER_ID ?? "",
       );
     const result = await identityActor.getSeasons(leagueId);
     if (isError(result)) throw new Error("Failed to fetch seasons");

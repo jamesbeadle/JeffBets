@@ -79,7 +79,7 @@
     try {
       
       const leagueStatus = await leagueStore.getLeagueStatus(leagueId);
-      leagueFixtures[leagueId] = await fixtureStore.getFixtures(leagueId);
+      leagueFixtures[leagueId] = await fixtureStore.getFixtures(leagueId, leagueStatus.activeSeasonId);
       await fetchClubs(leagueId);
       selectedGameweeks[leagueId] = leagueStatus.unplayedGameweek;
       leagueTotalGameweeks[leagueId] = leagueStatus.totalGameweeks;

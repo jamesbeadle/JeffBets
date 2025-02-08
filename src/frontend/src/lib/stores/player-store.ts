@@ -3,11 +3,11 @@ import type {
   PlayerDTO,
   CreatePlayerDTO,
   LeagueId,
-  PlayerId,
   LoanPlayerDTO,
   SetFreeAgentDTO,
   TransferPlayerDTO,
   UpdatePlayerDTO,
+  RecallPlayerDTO,
 } from "../../../../declarations/data_canister/data_canister.did";
 import { PlayerService } from "../services/player-service";
 import { DataHashService } from "../services/data-hash-service";
@@ -85,66 +85,10 @@ function createPlayerStore() {
     return new PlayerService().getLoanedPlayers(leagueId);
   }
 
-  async function transferPlayer(
-    leagueId: LeagueId,
-    dto: TransferPlayerDTO,
-  ): Promise<any> {
-    return new PlayerService().transferPlayer(leagueId, dto);
-  }
-
-  async function setFreeAgent(
-    leagueId: LeagueId,
-    dto: SetFreeAgentDTO,
-  ): Promise<any> {
-    return new PlayerService().setFreeAgent(leagueId, dto);
-  }
-
-  async function loanPlayer(
-    leagueId: LeagueId,
-    dto: LoanPlayerDTO,
-  ): Promise<any> {
-    return new PlayerService().loanPlayer(leagueId, dto);
-  }
-
-  async function createPlayer(
-    leagueId: LeagueId,
-    dto: CreatePlayerDTO,
-  ): Promise<any> {
-    return new PlayerService().createPlayer(leagueId, dto);
-  }
-
-  async function updatePlayer(
-    leagueId: LeagueId,
-    dto: UpdatePlayerDTO,
-  ): Promise<any> {
-    return new PlayerService().updatePlayer(leagueId, dto);
-  }
-
-  async function recallLoan(
-    recallFromLeagueId: LeagueId,
-    recallPlayerId: PlayerId,
-  ): Promise<any> {
-    return new PlayerService().recallLoan(recallFromLeagueId, recallPlayerId);
-  }
-
-  async function updatePlayerValue(
-    playerId: PlayerId,
-    updatedValue: Number,
-  ): Promise<any> {
-    return new PlayerService().updatePlayerValue(playerId, updatedValue);
-  }
-
   return {
     getPlayers,
-    transferPlayer,
-    setFreeAgent,
-    loanPlayer,
-    createPlayer,
-    updatePlayer,
     syncPlayers,
     getLoanedPlayers,
-    recallLoan,
-    updatePlayerValue,
   };
 }
 

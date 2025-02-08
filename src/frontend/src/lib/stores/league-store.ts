@@ -1,14 +1,14 @@
 import { writable } from "svelte/store";
 import { LeagueService } from "../services/league-service";
 import { DataHashService } from "$lib/services/data-hash-service";
-import type {
-  CreateLeagueDTO,
-  UpdateLeagueDTO,
-  FootballLeagueDTO,
-  LeagueStatus,
-} from "../../../../declarations/backend/backend.did";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
+import type {
+  CreateLeagueDTO,
+  FootballLeagueDTO,
+  LeagueStatus,
+  UpdateLeagueDTO,
+} from "../../../../declarations/data_canister/data_canister.did";
 
 function createLeagueStore() {
   const { subscribe, update } = writable<Record<number, FootballLeagueDTO>>({});
@@ -17,13 +17,15 @@ function createLeagueStore() {
 
   let leagueCacheOrder: number[] = [];
 
-  async function syncLeagues(toggledLeagueId?: number) {
+  async function syncLeagues(toggledLeagueId: number) {
     try {
       const localHashKey = "leagues_hash";
       const localLeaguesKey = "leagues";
 
       const localHash = localStorage.getItem(localHashKey);
-      const leagueHash = await new DataHashService().getLeaguesHash();
+      const leagueHash = await new DataHashService().getLeaguesHash(
+        toggledLeagueId,
+      );
 
       let leagues: FootballLeagueDTO[];
 
@@ -185,36 +187,15 @@ function createLeagueStore() {
     return new LeagueService().getLeagues();
   }
 
-  async function createLeague(dto: CreateLeagueDTO): Promise<any> {
-    return new LeagueService().createLeague(dto);
-  }
-
-  async function updateLeague(dto: UpdateLeagueDTO): Promise<any> {
-    return new LeagueService().updateLeague(dto);
-  }
-
   async function getLeagueStatus(leagueId: number): Promise<LeagueStatus> {
     return new LeagueService().getLeagueStatus(leagueId);
-  }
-
-  function getLeagueById(leagueId: number): FootballLeagueDTO | undefined {
-    let data: Record<number, FootballLeagueDTO> = {};
-    const unsubscribe = subscribe((value) => {
-      data = value;
-    });
-    unsubscribe();
-
-    return data[leagueId]; // Directly access the league by its id
   }
 
   return {
     subscribe,
     syncLeagues,
     getLeagues,
-    createLeague,
-    updateLeague,
     getLeagueStatus,
-    getLeagueById,
     syncLeagueStatus,
     subscribeLeagueStatus,
   };

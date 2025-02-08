@@ -380,5 +380,65 @@ actor Self {
     };
     return #err(#NotFound);
   };
+
+  //Data canister notification callback functions
+
+  public shared ({ caller }) func notifyAppsOfLoan(playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    //TODO
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfLoanExpired(playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    
+    //TODO
+
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfTransfer(playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    //TODO
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfRetirement(playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+
+    //TODO
+
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfPositionChange(playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    //TODO
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfGameweekStarting(seasonId: FootballTypes.SeasonId, gameweek: FootballTypes.GameweekNumber) : async Result.Result<(), T.Error> {
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    //TODO
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfFixtureFinalised(seasonId: FootballTypes.SeasonId, gameweek: FootballTypes.GameweekNumber) : async Result.Result<(), T.Error> {
+    
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    //TODO
+    
+    return #ok();
+  };
+
+  public shared ({ caller }) func notifyAppsOfSeasonComplete(seasonId: FootballTypes.SeasonId) : async Result.Result<(), T.Error> {
+    
+    assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
+    
+    //TODO
+    
+    return #ok();
+  };
+
    
 };

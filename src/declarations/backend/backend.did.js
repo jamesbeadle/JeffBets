@@ -273,11 +273,11 @@ export const idlFactory = ({ IDL }) => {
     ShuftiAcceptedResponse: ShuftiAcceptedResponse,
     ShuftiRejectedResponse: ShuftiRejectedResponse,
   });
+  const SeasonId = IDL.Nat16;
   const PauseAccount = IDL.Record({
     pauseDays: IDL.Nat,
     principalId: PrincipalId,
   });
-  const SeasonId = IDL.Nat16;
   const SubmitBetslip = IDL.Record({
     expectedReturn: IDL.Nat64,
     seasonId: SeasonId,
@@ -317,6 +317,22 @@ export const idlFactory = ({ IDL }) => {
     getUserBets: IDL.Func([GetUserBets], [Result_3], []),
     isAuditor: IDL.Func([], [Result_2], []),
     kycVerificationCallback: IDL.Func([ShuftiResponse], [Result], []),
+    notifyAppsOfFixtureFinalised: IDL.Func(
+      [SeasonId, GameweekNumber],
+      [Result],
+      [],
+    ),
+    notifyAppsOfGameweekStarting: IDL.Func(
+      [SeasonId, GameweekNumber],
+      [Result],
+      [],
+    ),
+    notifyAppsOfLoan: IDL.Func([PlayerId], [Result], []),
+    notifyAppsOfLoanExpired: IDL.Func([PlayerId], [Result], []),
+    notifyAppsOfPositionChange: IDL.Func([PlayerId], [Result], []),
+    notifyAppsOfRetirement: IDL.Func([PlayerId], [Result], []),
+    notifyAppsOfSeasonComplete: IDL.Func([SeasonId], [Result], []),
+    notifyAppsOfTransfer: IDL.Func([PlayerId], [Result], []),
     pauseAccount: IDL.Func([PauseAccount], [Result], []),
     placeBet: IDL.Func([SubmitBetslip], [Result_1], []),
     setDailyBetLimit: IDL.Func([SetDailyBetLimit], [Result], []),

@@ -7,15 +7,12 @@ import Array "mo:base/Array";
 import Option "mo:base/Option";
 import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
-import Debug "mo:base/Debug";
 import Time "mo:base/Time";
-import Nat16 "mo:base/Nat16";
 import Nat "mo:base/Nat";
 import Environment "../environment";
 import OddsGenerator "odds_generator";
 import SHA224 "../utilities/SHA224";
 import AppDTOs "../dtos/app_dtos";
-import BettingQueries "../cqrs/queries/betting_queries";
 import FootballDTOs "../dtos/football_dtos";
 
 module {
@@ -75,12 +72,12 @@ module {
       return #err(#NotFound);
     };
 
-    public func recalculate(leagueId: FootballTypes.LeagueId) : async () {
+    public func recalculate(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) : async () {
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-        getFixtures : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
+        getFixtures : shared query (leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
         getPlayers : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[FootballDTOs.PlayerDTO], T.Error>;
       };
-      let fixturesResult = await data_canister.getFixtures(leagueId);
+      let fixturesResult = await data_canister.getFixtures(leagueId, seasonId);
       let playersResult = await data_canister.getPlayers(leagueId);
 
       matchOddsCache := Array.map<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)]), (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])){

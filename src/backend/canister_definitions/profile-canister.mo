@@ -252,8 +252,8 @@ actor class _ProfileCanister() {
               withdrawalAddress = profile.withdrawalAddress;
               joinedDate = profile.joinedDate;
               kycApprovalDate = Time.now();
-              kycRef = profile.kycRef;  //TODO need to set for auditing
-              kycSubmissionDate = profile.kycSubmissionDate;  //TODO need to set for auditing
+              kycRef = profile.kycRef;
+              kycSubmissionDate = profile.kycSubmissionDate;
               kycComplete = true;
             };
             updateProfile(updatedProfile, profileGroup.1);
@@ -520,6 +520,7 @@ actor class _ProfileCanister() {
   
   public shared ({caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
+    //TODO
     //private function to update monthly bet totals should be added when a bet is placed
     //take the money
     //ensure they have the money
@@ -541,7 +542,7 @@ actor class _ProfileCanister() {
   
   public shared ({caller }) func canisterFull() : async Bool{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    return false; //TODO
+    return profileCount == MAX_PROFILES_PER_CANISTER;
   };
   
   public shared ({caller }) func voidBet(betslip: BettingTypes.BetSlip) : async (){

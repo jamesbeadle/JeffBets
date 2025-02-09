@@ -334,7 +334,6 @@ export interface _SERVICE {
   setDailyBetLimit: ActorMethod<[SetDailyBetLimit], Result>;
   setMonthlyBetLimit: ActorMethod<[SetMonthlyBetLimit], Result>;
   storeKYCReference: ActorMethod<[string], undefined>;
-  updateBettingOdds: ActorMethod<[LeagueId], Result>;
   updateProfilePicture: ActorMethod<[UpdateProfilePicture], Result>;
   updateUsername: ActorMethod<[UpdateUsername], Result>;
   updateWithdrawalAddress: ActorMethod<[UpdateWithdrawalAddress], Result>;

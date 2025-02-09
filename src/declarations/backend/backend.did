@@ -405,7 +405,6 @@ service : {
   setDailyBetLimit: (SetDailyBetLimit) -> (Result);
   setMonthlyBetLimit: (SetMonthlyBetLimit) -> (Result);
   storeKYCReference: (text) -> ();
-  updateBettingOdds: (LeagueId) -> (Result);
   updateProfilePicture: (UpdateProfilePicture) -> (Result);
   updateUsername: (UpdateUsername) -> (Result);
   updateWithdrawalAddress: (UpdateWithdrawalAddress) -> (Result);

@@ -338,7 +338,6 @@ export const idlFactory = ({ IDL }) => {
     setDailyBetLimit: IDL.Func([SetDailyBetLimit], [Result], []),
     setMonthlyBetLimit: IDL.Func([SetMonthlyBetLimit], [Result], []),
     storeKYCReference: IDL.Func([IDL.Text], [], []),
-    updateBettingOdds: IDL.Func([LeagueId], [Result], []),
     updateProfilePicture: IDL.Func([UpdateProfilePicture], [Result], []),
     updateUsername: IDL.Func([UpdateUsername], [Result], []),
     updateWithdrawalAddress: IDL.Func([UpdateWithdrawalAddress], [Result], []),

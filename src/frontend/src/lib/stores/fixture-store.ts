@@ -84,10 +84,6 @@ function createFixtureStore() {
     return new FixtureService().getFixtures(leagueId, seasonId);
   }
 
-  async function getPostponedFixtures(leagueId: number): Promise<FixtureDTO[]> {
-    return new FixtureService().getPostponedFixtures(leagueId);
-  }
-
   function getFixturesByLeagueId(leagueId: number): FixtureDTO[] | undefined {
     let data: Record<number, FixtureDTO[]> = {};
     const unsubscribe = subscribe((value) => {
@@ -101,7 +97,6 @@ function createFixtureStore() {
   return {
     syncFixtures,
     getFixtures,
-    getPostponedFixtures,
     getFixturesByLeagueId,
   };
 }

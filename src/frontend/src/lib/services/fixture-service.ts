@@ -34,7 +34,12 @@ export class FixtureService {
         authStore,
         process.env.DATA_CANISTER_ID ?? "",
       );
+    console.log("getting fixtures");
+    console.log(leagueId);
+    console.log(seasonId);
+    console.log(process.env.DATA_CANISTER_ID);
     const result = await identityActor.getFixtures(leagueId, seasonId);
+    console.log("complete");
     if (isError(result)) throw new Error("Failed to fetch fixtures");
     return result.ok;
   }

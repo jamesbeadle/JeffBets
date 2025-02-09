@@ -10,12 +10,9 @@ import Buffer "mo:base/Buffer";
 import Float "mo:base/Float";
 import Iter "mo:base/Iter";
 import Time "mo:base/Time";
-import Debug "mo:base/Debug";
-import Nat16 "mo:base/Nat16";
 
 import T "types/app_types";
 import Base "types/base_types";
-import Countries "types/Countries";
 import FootballTypes "types/football_types";
 import Environment "environment";
 
@@ -355,11 +352,18 @@ actor Self {
 
   //Callback Functions
   
-  public shared ({ caller }) func updateBettingOdds(leagueId: FootballTypes.LeagueId) : async Result.Result<(), T.Error> {
+
+
+  /*
+
+  //Todo this should be called by the notification callback functions
+  
+  public shared ({ caller }) func updateBettingOdds(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
-    await oddsManager.recalculate(leagueId);
+    await oddsManager.recalculate(leagueId, seasonId);
     return #ok();
   };
+  */
   
   public shared ({ caller }) func storeKYCReference(kycReference: Text) : async (){
     assert not Principal.isAnonymous(caller);

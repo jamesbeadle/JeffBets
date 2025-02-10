@@ -4,42 +4,7 @@
   import ArrowUp from "$lib/icons/ArrowUp.svelte";
 
   const settledBets = [
-    {
-      id: 1,
-      status: 'unsettled',
-      stake: 20,
-      returns: 0,
-      date: 'Feb 01 2025',
-      selections: [
-        {
-          match: 'Chelsea vs West Ham',
-          league: 'Premier League',
-          pick: 'Over 3.5 goals',
-          odds: 2.75,
-          result: 'Unsettled',
-          score: '- - -',
-          gameweek: 24
-        }
-      ]
-    },
-    {
-      id: 2,
-      status: 'unsettled',
-      stake: 20,
-      returns: 0,
-      date: 'Feb 01 2025',
-      selections: [
-        {
-          match: 'Arsenal vs Manchester City',
-          league: 'Premier League',
-          pick: 'Over 2.5 goals',
-          odds: 1.75,
-          result: 'Unsettled',
-          score: '- - -',
-          gameweek: 24
-        }
-      ]
-    },
+   
     {
       id: 3,
       status: 'won',

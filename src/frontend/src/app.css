@@ -58,7 +58,7 @@
 }
 
 .brand-button {
-  @apply bg-BrandPurple hover:bg-BrandPurpleDark disabled:opacity-50 disabled:bg-gray-300 text-white px-2 py-1 rounded;
+  @apply bg-BrandPurple hover:bg-BrandPurpleDark disabled:opacity-50 disabled:bg-gray-300 text-white px-4 py-2 rounded;
 }
 
 .brand-cancel-button {
@@ -78,7 +78,7 @@
 }
 
 .brand-dropdown {
-  @apply text-black rounded px-2 py-1 w-full;
+  @apply text-black rounded px-4 py-2 w-full;
 }
 
 .stake-input {

@@ -5,11 +5,12 @@
   import CopyIcon from "$lib/icons/CopyIcon.svelte";
   import { writable } from "svelte/store";
   import WithdrawFplModal from "./withdraw-fpl-modal.svelte";
-    import { authStore } from "$lib/stores/auth-store";
-    import FullScreenSpinner from "../shared/full-screen-spinner.svelte";
-    import { SHUFTI_CLIENT_ID, SHUFTI_SECRET_KEY } from "$lib/environment/environment";
-    import { kycStore } from "$lib/stores/kyc-store";
-    import type { ProfileDTO } from "../../../../../declarations/backend/backend.did";
+  import { authStore } from "$lib/stores/auth-store";
+  import FullScreenSpinner from "../shared/full-screen-spinner.svelte";
+  import { SHUFTI_CLIENT_ID, SHUFTI_SECRET_KEY } from "$lib/environment/environment";
+  import { kycStore } from "$lib/stores/kyc-store";
+  import type { ProfileDTO } from "../../../../../declarations/backend/backend.did";
+  import { toasts } from "$lib/stores/toasts-store";
 
   let isLoading = true;
   let loadingBalances = true;
@@ -66,11 +67,11 @@
     await fetchBalances();
   };
 
-  
-
   async function fetchBalances() {
     try {
-      let fplBalance = await userStore.getFPLBalance();
+      loadingBalances = true;
+      fplBalance = await userStore.getFPLBalance();
+      console.log(fplBalance)
       fplBalanceFormatted = (Number(fplBalance) / 100_000_000).toFixed(4);
     } catch (error) {
       console.error("Error fetching profile detail:", error);
@@ -96,6 +97,7 @@
   async function copyAndShowToast(textToCopy: string) {
     try {
       await navigator.clipboard.writeText(textToCopy);
+      toasts.addToast({ message: "Copied to clipboard", type: "success" })
     } catch (err) {
       console.error("Failed to copy:", err);
     }
@@ -184,13 +186,13 @@
     closeModal={closeUsernameModal}
     cancelModal={cancelUsernameModal}
   />
-  <WithdrawFplModal
-    visible={showFPLModal}
-    closeModal={closeWithdrawFPLModal}
-    cancelModal={closeWithdrawFPLModal}
-    fplBalance={fplBalance}
-    fplBalanceFormatted={fplBalanceFormatted}
-  />
+  {#if !loadingBalances}
+    <WithdrawFplModal
+      visible={showFPLModal}
+      closeModal={closeWithdrawFPLModal}
+      cancelModal={closeWithdrawFPLModal}
+    />
+  {/if}
   <div class="container mt-4 mx-6">
     <div class="flex flex-wrap">
       <div class="w-full mb-4 md:mb-0">

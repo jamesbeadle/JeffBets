@@ -176,3 +176,8 @@
 .fixture-event-table-header-3 {
   @apply grid grid-cols-3 font-bold text-center text-black bg-white;
 }
+
+
+.bg-frontend-update {
+  @apply bg-BrandGreen;
+}

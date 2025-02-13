@@ -27,7 +27,7 @@
     
       <h2 class="text-2xl font-semibold mb-4">1. Introduction</h2>
       <p class="mb-4">
-        Welcome to <strong>JeffBets</strong> (hereinafter referred to as the "Site"). The Site is operated by 
+        Welcome to <strong>Jeff Bets</strong> (hereinafter referred to as the "Site"). The Site is operated by 
         <strong>Waterway Labs Ltd</strong> ("we," "us," or "our"). By accessing or using our Site or any associated 
         services, you ("the User") agree to be bound by these Terms and Conditions ("T&amp;Cs"). If you do not 
         agree to these T&amp;Cs, do not use the site.
@@ -127,7 +127,7 @@
       <h2 class="text-2xl font-semibold mb-4">8. Intellectual Property</h2>
       <ol class="list-decimal list-inside mb-4 space-y-2">
         <li>
-          <strong>Site Content:</strong> All text, graphics, logos, and software are the property of JeffBets 
+          <strong>Site Content:</strong> All text, graphics, logos, and software are the property of Jeff Bets 
           or Waterway Labs Ltd unless otherwise stated.
         </li>
         <li>
@@ -216,7 +216,7 @@
       </ol>
     
       <p class="mt-6">
-        <strong>By accessing or using JeffBets, you acknowledge that you have read, understood, and agree 
+        <strong>By accessing or using Jeff Bets, you acknowledge that you have read, understood, and agree 
         to be bound by these Terms and Conditions.</strong>
       </p>
       <div class="flex flex-row items-center my-4">

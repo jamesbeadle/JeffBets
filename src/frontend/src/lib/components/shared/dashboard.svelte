@@ -82,7 +82,7 @@
                     <a href="/" class={`flex items-center ${isMenuOpen ? "w-full justify-start p-4" : "justify-center py-4"} transition-all`}>
                         <LogoIcon className="w-4 md:w-6" />
                         {#if isMenuOpen}
-                            <span class="ml-2 text-sm tracking-wide md:text-base">JeffBets</span>
+                            <span class="ml-2 text-sm tracking-wide md:text-base">Jeff Bets</span>
                         {/if}
                     </a>
                     <button
@@ -229,7 +229,7 @@
         <div class="flex flex-col items-center justify-center min-h-screen px-4 bg-black">
             <LogoIcon className="w-24 h-24 mb-6" />
             <h1 class="mb-2 text-4xl font-bold text-white">
-                JeffBets
+                Jeff Bets
             </h1>
             <p class="mb-6 text-gray-300">
                 Next generation betting.

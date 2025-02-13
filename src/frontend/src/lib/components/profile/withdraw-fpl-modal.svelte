@@ -142,7 +142,7 @@
           />
           <button
             type="button"
-            class="text-sm md:text-sm p-1 md:p-2 px-2 md:px-4 rounded brand-button"
+            class="brand-button text-xs"
             on:click={setMaxWithdrawAmount}
           >
             Max

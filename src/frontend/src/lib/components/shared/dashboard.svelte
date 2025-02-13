@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import HomeIcon from "$lib/icons/side-nav/home-icon.svelte";
+    import HomeIcon from "$lib/icons/HomeIcon.svelte";
     import LogoIcon from "$lib/icons/LogoIcon.svelte";
-    import CollapseIcon from "$lib/icons/side-nav/collapse-icon.svelte";
-    import ExpandIcon from "$lib/icons/side-nav/expand-icon.svelte";
+    import CollapseIcon from "$lib/icons/CollapseIcon.svelte";
+    import ExpandIcon from "$lib/icons/ExpandIcon.svelte";
     import MenuIcon from "$lib/icons/MenuIcon.svelte";
     import XIcon from "$lib/icons/XIcon.svelte";
     import GithubIcon from "$lib/icons/GithubIcon.svelte";

@@ -239,7 +239,7 @@
         </div>
 
         {#if possibleMultiples.length > 0}
-          <div class="px-4 py-2 mt-2 rounded bg-BrandBase">
+          <div class="px-4 py-2 mt-2 rounded bg-BrandPurple">
             <span class="text-white">Multiple Bet</span>
           </div>
 

@@ -202,7 +202,7 @@
             {profile == null || profile.username == "" ? "Not Set" : profile.username}
           </h2>
           <button
-            class="text-sm md:text-sm p-1 md:p-2 px-2 md:px-4 rounded fg-button button-hover"
+            class="brand-button"
             on:click={displayUsernameModal}
           >
             Update
@@ -257,7 +257,7 @@
                 {#if !loadingBalances}
                 <div class="flex items-center text-xs mt-2">
                   <button
-                  class="text-sm md:text-sm p-1 md:p-2 px-2 md:px-4 rounded fg-button button-hover"
+                  class="brand-button"
                     on:click={loadWithdrawFPLModal}
                   >
                     Withdraw
@@ -272,7 +272,7 @@
                     <div class="flex items-center mt-2">
                       <div class="flex items-center text-xs mt-2">
                         <button
-                        class="text-sm md:text-sm p-1 md:p-2 px-2 md:px-4 rounded fg-button button-hover"
+                        class="brand-button"
                           on:click={beginKYC}
                         >
                           KYC Verification

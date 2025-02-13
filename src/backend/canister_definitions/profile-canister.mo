@@ -6,11 +6,9 @@ import Result "mo:base/Result";
 import Timer "mo:base/Timer";
 import Nat64 "mo:base/Nat64";
 import Time "mo:base/Time";
-import Debug "mo:base/Debug";
-import Iter "mo:base/Iter";
 
 import T "../types/app_types";
-import Base "../types/base_types";
+import Base "mo:waterway-mops/BaseTypes";
 import BettingTypes "../types/betting_types";
 import Environment "../environment";
 
@@ -20,7 +18,6 @@ import AppDTOs "../dtos/app_dtos";
 import AuditDTOs "../dtos/audit_dtos";
 import AppCommands "../cqrs/commands/app_commands";
 import BettingCommands "../cqrs/commands/betting_commands";
-import AuditQueries "../cqrs/queries/audit_queries";
 import UserCommands "../cqrs/commands/user_commands";
 import BettingQueries "../cqrs/queries/betting_queries";
 

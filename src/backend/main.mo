@@ -12,8 +12,8 @@ import Iter "mo:base/Iter";
 import Time "mo:base/Time";
 
 import T "types/app_types";
-import Base "types/base_types";
-import FootballTypes "types/football_types";
+import Base "mo:waterway-mops/BaseTypes";
+import FootballTypes "mo:waterway-mops/FootballTypes";
 import Environment "environment";
 
 import FPLLedger "managers/fpl_ledger_manager";
@@ -35,6 +35,15 @@ import BettingCommands "cqrs/commands/betting_commands";
 import AuditQueries "cqrs/queries/audit_queries";
 
 actor Self {
+  
+  private var appStatus: Base.AppStatus = { 
+    onHold = false;
+    version = "0.0.1";
+  };  
+  
+  public shared query func getAppStatus() : async Result.Result<AppDTOs.AppStatusDTO, T.Error> {
+    return #ok(appStatus);
+  };
 
   private let ledger = FPLLedger.FPLLedger();
   private let userManager = UserManager.UserManager(); 
@@ -316,8 +325,8 @@ actor Self {
   };
 
   private func postUpgradeCallback() : async (){
-    await oddsManager.recalculate(1, 1);
-    await oddsManager.recalculate(2, 1);
+    //await oddsManager.recalculate(1, 1);
+    //await oddsManager.recalculate(2, 1);
     //await updateProfileCanisterWasms();
   };
 

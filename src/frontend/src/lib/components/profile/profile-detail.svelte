@@ -111,7 +111,7 @@
       const payload = {
         reference: `SP_REQUEST_${reference}`,
         callback_url: "https://us-central1-openfpl1.cloudfunctions.net/api/forwardKYCResponse",
-        redirect_url: "https://jeffbets.xyz",
+        redirect_url: "https://jeffbets.com",
         country: "GB",
         language: "EN",
         verification_mode: "any",

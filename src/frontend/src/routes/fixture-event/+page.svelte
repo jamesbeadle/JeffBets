@@ -620,7 +620,7 @@
         <div class="page-panel">
           <div class="page-panel-header">
             <a href="/" class="hover:text-white">Home</a>
-            <span class="text-BrandPurple">></span>
+            <span class="text-BrandBase">></span>
             <span class="text-white">{homeClub.name} v {awayClub.name}</span>
           </div>
 
@@ -636,7 +636,7 @@
                     className="w-6 h-6"
                   />
                 </div>
-                <span class="text-xl text-BrandDisabled">v</span>
+                <span class="text-xl text-BrandGray">v</span>
                 <div class="fixture-event-panel-header-clubs-badge">
                   <BadgeIcon
                     primaryColour={awayClub.primaryColourHex}
@@ -650,15 +650,15 @@
               <div class="flex items-center space-x-4">
                 <div class="flex flex-col items-center">
                   <TableIcon className="w-5 h-5" />
-                  <span class="mt-1 text-xs text-BrandDisabled">Table</span>
+                  <span class="mt-1 text-xs text-BrandGray">Table</span>
                 </div>
                 <div class="flex flex-col items-center">
                   <OddsIcon className="w-5 h-5" fill="#919191" />
-                  <span class="mt-1 text-xs text-BrandDisabled">Stats</span>
+                  <span class="mt-1 text-xs text-BrandGray">Stats</span>
                 </div>
               </div>
             </div>
-            <div class="text-center text-BrandDisabled">
+            <div class="text-center text-BrandGray">
               {formatUnixDateToReadable(Number(fixture.kickOff))}{" "}
               {formatUnixTimeToTime(Number(fixture.kickOff))}
             </div>
@@ -685,8 +685,8 @@
               <div
                 class="
                   {expandedCategories[category]
-                    ? 'bg-BrandPurple'
-                    : 'bg-BrandLightGray'}
+                    ? 'bg-BrandBase'
+                    : 'bg-BrandWhite'}
                   rounded shadow
                 "
               >
@@ -721,7 +721,7 @@
                               <span class="text-lg font-bold">{score.homeGoals}-{score.awayGoals}</span>
                               <div class="flex items-center space-x-2">
                                 {#if isBetSelectedByData(fixtureId, category, score)}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                  <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   <span class="text-base">{formatOdds(score.odds)}</span>
                                 {/if}
@@ -739,7 +739,7 @@
                               <span class="text-lg font-bold">{score.homeGoals}-{score.awayGoals}</span>
                               <div class="flex items-center space-x-2">
                                 {#if isBetSelectedByData(fixtureId, category, score)}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                  <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   <span class="text-base">{formatOdds(score.odds)}</span>
                                 {/if}
@@ -757,7 +757,7 @@
                               <span class="text-lg font-bold">{score.homeGoals}-{score.awayGoals}</span>
                               <div class="flex items-center space-x-2">
                                 {#if isBetSelectedByData(fixtureId, category, score)}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   <span class="text-base">{formatOdds(score.odds)}</span>
                                 {/if}
@@ -803,7 +803,7 @@
                             >
                               {#if firstGoal}
                                 {#if isBetSelectedByData(fixtureId, "firstGoalscorer", { playerId: player.id, timing: "first" })}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   {formatOdds(firstGoal.odds)}
                                 {/if}
@@ -827,7 +827,7 @@
                             >
                               {#if lastGoal}
                                 {#if isBetSelectedByData(fixtureId, "lastGoalscorer", { playerId: player.id, timing: "last" })}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   {formatOdds(lastGoal.odds)}
                                 {/if}
@@ -851,7 +851,7 @@
                             >
                               {#if anytimeGoal}
                                 {#if isBetSelectedByData(fixtureId, "anytimeScorers", { playerId: player.id, timing: "anytime" })}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   {formatOdds(anytimeGoal.odds)}
                                 {/if}
@@ -898,7 +898,7 @@
                             >
                               {#if firstAssist}
                                 {#if isBetSelectedByData(fixtureId, "firstAssist", { playerId: player.id, timing: "first" })}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   {formatOdds(firstAssist.odds)}
                                 {/if}
@@ -922,7 +922,7 @@
                             >
                               {#if lastAssist}
                                 {#if isBetSelectedByData(fixtureId, "lastAssist", { playerId: player.id, timing: "last" })}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   {formatOdds(lastAssist.odds)}
                                 {/if}
@@ -946,7 +946,7 @@
                             >
                               {#if anytimeAssist}
                                 {#if isBetSelectedByData(fixtureId, "anytimeAssist", { playerId: player.id, timing: "anytime" })}
-                                  <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                                 {:else}
                                   {formatOdds(anytimeAssist.odds)}
                                 {/if}
@@ -968,7 +968,7 @@
                       <div class="divide-y divide-BrandOddsDivider">
                         {#each getOddsForCategory(category).sort(sortByLowestOdds) as odd}
                           <div class="grid grid-cols-4">
-                            <div class="col-span-3 p-4 text-base text-left bg-BrandLightGray">
+                            <div class="col-span-3 p-4 text-base text-left bg-BrandWhite">
                               {getOddDisplayText(odd)}
                             </div>
                             <button
@@ -984,7 +984,7 @@
                               }}
                             >
                               {#if isBetSelectedByData(fixtureId, category, odd)}
-                                <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                               {:else}
                                 {formatOdds(getOddValue(odd))}
                               {/if}
@@ -1004,7 +1004,7 @@
                       <div class="divide-y divide-BrandOddsDivider">
                         {#each getOddsForCategory(category).sort(sortByLowestOdds) as odd}
                           <div class="grid grid-cols-4">
-                            <div class="col-span-3 p-4 text-base text-left bg-BrandLightGray">
+                            <div class="col-span-3 p-4 text-base text-left bg-BrandWhite">
                               {getOddDisplayText(odd)}
                             </div>
                             <button
@@ -1020,7 +1020,7 @@
                               }}
                             >
                               {#if isBetSelectedByData(fixtureId, category, odd)}
-                                <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                               {:else}
                                 {formatOdds(getOddValue(odd))}
                               {/if}
@@ -1038,7 +1038,7 @@
                       </div>
                       <div class="divide-y divide-BrandOddsDivider">
                         <div class="grid grid-cols-4">
-                          <div class="col-span-3 p-4 text-base text-left bg-BrandLightGray">
+                          <div class="col-span-3 p-4 text-base text-left bg-BrandWhite">
                             {category === "bothTeamsToScore" ? "Yes" : homeClub.name + " to miss penalty" }
                           </div>
                           <button
@@ -1054,7 +1054,7 @@
                             }}
                           >
                             {#if isBetSelectedByData(fixtureId, category, category === "bothTeamsToScore" ? { isYes: true } : { clubId: homeClub.id })}
-                              <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                             {:else}
                               {formatOdds(category === "bothTeamsToScore" ? matchOdds.bothTeamsToScore.yesOdds : matchOdds.penaltyMissed.homeTeam)}
                             {/if}
@@ -1062,7 +1062,7 @@
                         </div>
 
                         <div class="grid grid-cols-4">
-                          <div class="col-span-3 p-4 text-base text-left bg-BrandLightGray">
+                          <div class="col-span-3 p-4 text-base text-left bg-BrandWhite">
                             {category === "bothTeamsToScore" ? "No" : awayClub.name + " to miss penalty" }
                           </div>
                           <button
@@ -1078,7 +1078,7 @@
                             }}
                           >
                             {#if isBetSelectedByData(fixtureId, category, category === "bothTeamsToScore" ? { isYes: false } : { clubId: awayClub.id })}
-                              <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                             {:else}
                               {formatOdds(category === "bothTeamsToScore" ? matchOdds.bothTeamsToScore.noOdds : matchOdds.penaltyMissed.awayTeam)}
                             {/if}
@@ -1097,7 +1097,7 @@
                       <div class="divide-y divide-BrandOddsDivider">
                         {#each matchOdds.goalsOverUnder.overOdds.sort(sortByLowestOdds) as overItem}
                           <div class="grid grid-cols-3">
-                            <div class="p-4 text-base text-center bg-BrandLightGray">
+                            <div class="p-4 text-base text-center bg-BrandWhite">
                               {overItem.margin}
                             </div>
 
@@ -1115,7 +1115,7 @@
                             >
                               <span>{formatOdds(overItem.odds)}</span>
                               {#if isBetSelectedByData(fixtureId, "goalsOverUnder", { margin: overItem.margin, isOver: true })}
-                                <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                               {/if}
                             </button>
 
@@ -1140,7 +1140,7 @@
                                 )}
                               </span>
                               {#if isBetSelectedByData(fixtureId, "goalsOverUnder", { margin: overItem.margin, isOver: false })}
-                                <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                                <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                               {/if}
                             </button>
                           </div>
@@ -1171,7 +1171,7 @@
                           <span class="mb-2 font-medium">Win</span>
                           <div class="flex items-center gap-2 text-xl">
                             {#if isBetSelectedByData(fixtureId, "correctResults", { matchResult: { HomeWin: null } })}
-                              <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                             {:else}
                               {formatOdds(matchOdds.correctResults.homeOdds)}
                             {/if}
@@ -1193,7 +1193,7 @@
                           <span class="mb-2 font-medium">Draw</span>
                           <div class="flex items-center gap-2 text-xl">
                             {#if isBetSelectedByData(fixtureId, "correctResults", { matchResult: { Draw: null } })}
-                              <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                             {:else}
                               {formatOdds(matchOdds.correctResults.drawOdds)}
                             {/if}
@@ -1215,7 +1215,7 @@
                           <span class="mb-2 font-medium">Win</span>
                           <div class="flex items-center gap-2 text-xl">
                             {#if isBetSelectedByData(fixtureId, "correctResults", { matchResult: { AwayWin: null } })}
-                              <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                             {:else}
                               {formatOdds(matchOdds.correctResults.awayOdds)}
                             {/if}
@@ -1242,7 +1242,7 @@
                             }}
                           >
                             {#if isBetSelectedByData(fixtureId, category, odd)}
-                              <BetSelectedIcon className="w-7 h-7 fill-BrandPurple" />
+                              <BetSelectedIcon className="w-7 h-7 fill-BrandBase" />
                             {:else}
                               {formatOdds(getOddValue(odd))}
                             {/if}
@@ -1287,7 +1287,7 @@
         <div class="w-full p-4 bg-white rounded-2xl md:mx-0">
           <button class="flex items-center w-full text-left" on:click={toggleBetSlip}>
             <div class="flex items-center">
-              <span class="flex items-center justify-center w-12 h-10 mr-3 text-xl font-medium text-white rounded-full bg-BrandPurple">
+              <span class="flex items-center justify-center w-12 h-10 mr-3 text-xl font-medium text-white rounded-full bg-BrandBase">
                 Bets
               </span>
               <span class="text-xl font-semibold text-black">Bet Slip</span>

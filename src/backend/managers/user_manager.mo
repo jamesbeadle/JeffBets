@@ -13,13 +13,12 @@ import Option "mo:base/Option";
 import Order "mo:base/Order";
 import Principal "mo:base/Principal";
 import Time "mo:base/Time";
-import Debug "mo:base/Debug";
 import List "mo:base/List";
 
 import T "../types/app_types";
-import Base "../types/base_types";
+import Base "mo:waterway-mops/BaseTypes";
 import BettingTypes "../types/betting_types";
-import FootballTypes "../types/football_types";
+import FootballTypes "mo:waterway-mops/FootballTypes";
 import ProfileCanister "../canister_definitions/profile-canister";
 
 import BettingUtilities "../utilities/betting_utilities";
@@ -29,7 +28,6 @@ import Management "../utilities/Management";
 import SNSToken "../utilities/ledger";
 import Utilities "../utilities/utilities";
 import AppTypes "../types/app_types";
-import ShuftiTypes "../types/shufti_types";
 import AppDTOs "../dtos/app_dtos";
 import AppCommands "../cqrs/commands/app_commands";
 import BettingCommands "../cqrs/commands/betting_commands";

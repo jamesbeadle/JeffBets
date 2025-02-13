@@ -3,8 +3,6 @@
     import EmptyBetSlipIcon from "$lib/icons/EmptyBetSlipIcon.svelte";
     import OpenFplIcon from "$lib/icons/OpenFPLIcon.svelte";
     import { betSlipStore } from "$lib/stores/bet-slip-store";
-    import { bettingStore } from "$lib/stores/betting-store";
-    import type { SubmitBetslipDTO } from "../../../../../declarations/backend/backend.did";
     import type { ClubDTO, FixtureDTO, FootballLeagueDTO } from "../../../../../declarations/data_canister/data_canister.did";
     import Modal from "../shared/modal.svelte";
   
@@ -123,7 +121,7 @@
         
     <div class="flex items-center justify-between p-4 border-b border-gray-100 md:px-4 md:py-2 md:bg-gray-100">
         <div class="flex items-center">
-            <span class="flex items-center justify-center w-8 text-lg font-medium text-white rounded-full h-7 bg-BrandPurple">
+            <span class="flex items-center justify-center w-8 text-lg font-medium text-white rounded-full h-7 bg-BrandBase">
                 {bets.length}
             </span>
             <span class="px-3 text-xl font-bold text-black">Bet Slip</span>
@@ -134,14 +132,14 @@
         {#if bets.length === 0}
             <div class="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
                 <div class="w-24 h-24 mb-4">
-                    <EmptyBetSlipIcon className="w-24 h-24 fill-BrandPurple" />
+                    <EmptyBetSlipIcon className="w-24 h-24 fill-BrandBase" />
                 </div>
                 <p class="text-lg text-gray-400 md:text-sm">
                     There are no selections in<br />your bet slip.
                 </p>
             </div>
         {:else}
-            <div class="px-4 py-2 mt-2 rounded bg-BrandPurple">
+            <div class="px-4 py-2 mt-2 rounded bg-BrandBase">
                 <span class="text-white">
                     {bets.length > 1 ? bets.length + " Singles" : "Single Bet"}
                 </span>
@@ -185,7 +183,7 @@
             </div>
     
             {#if possibleMultiples.length > 0}
-                <div class="px-4 py-2 mt-2 rounded bg-BrandPurple">
+                <div class="px-4 py-2 mt-2 rounded bg-BrandBase">
                     <span class="text-white">Multiple Bets</span>
                 </div>
     

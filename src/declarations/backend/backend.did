@@ -117,6 +117,11 @@ type ScoreDetail =
    awayGoals: nat8;
    homeGoals: nat8;
  };
+type Result_9 = 
+ variant {
+   err: Error;
+   ok: AppStatusDTO;
+ };
 type Result_8 = 
  variant {
    err: Error;
@@ -382,8 +387,14 @@ type AuditRecordDTO =
    principalId: PrincipalId;
    termsAcceptedDate: int;
  };
+type AppStatusDTO = 
+ record {
+   onHold: bool;
+   version: text;
+ };
 service : {
   agreeTerms: () -> (Result);
+  getAppStatus: () -> (Result_9) query;
   getBettableHomepageFixtures: (LeagueId) -> (Result_8) query;
   getDataHashes: () -> (Result_7) query;
   getMatchOdds: (LeagueId, FixtureId) -> (Result_6) query;

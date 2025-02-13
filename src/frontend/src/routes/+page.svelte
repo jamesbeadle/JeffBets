@@ -37,6 +37,7 @@
   import type { Category, HomePageFixtureDTO, SelectionDetail } from "../../../declarations/backend/backend.did";
   import { betSlipDataStore } from "$lib/stores/bet-slip-data-store";
   import { buildBetUiDescription } from "$lib/utils/buildBetUiDescription";
+    import { appStore } from "$lib/stores/app-store";
 
   let isLoading = true;
   let isBetSlipExpanded = false;
@@ -54,6 +55,7 @@
 
   onMount(async () => {
     try {
+      await appStore.checkServerVersion();
       leagues = await leagueStore.getLeagues();
       const existingBets = $betSlipStore.bets;
       const toggledLeagues = new Set<number>();
@@ -242,7 +244,7 @@
           <div class="page-panel-bar-format">
             {#each leagues as league}
               <div
-                class="{expandedLeagues[league.id] ? 'bg-BrandPurple' : 'bg-BrandLightGray'} rounded shadow"
+                class="{expandedLeagues[league.id] ? 'bg-BrandBase' : 'bg-BrandWhite'} rounded shadow"
               >
                 <button
                   type="button"
@@ -366,7 +368,7 @@
                                       { 'CorrectResult': null },
                                       { 'CorrectResult': { matchResult: { 'HomeWin': null } } }
                                     )}
-                                      <BetSelectedIcon className="w-8 h-8 fill-BrandPurple" />
+                                      <BetSelectedIcon className="w-8 h-8 fill-BrandBase" />
                                     {:else}
                                       <span>{oddsObj.homeOdds?.toFixed(2) || "N/A"}</span>
                                     {/if}
@@ -394,7 +396,7 @@
                                       { 'CorrectResult': null },
                                       { 'CorrectResult': { matchResult: { 'Draw': null } } }
                                     )}
-                                      <BetSelectedIcon className="w-8 h-8 fill-BrandPurple" />
+                                      <BetSelectedIcon className="w-8 h-8 fill-BrandBase" />
                                     {:else}
                                       <span>{oddsObj.drawOdds?.toFixed(2) || "N/A"}</span>
                                     {/if}
@@ -422,7 +424,7 @@
                                       { 'CorrectResult': null },
                                       { 'CorrectResult': { matchResult: { 'AwayWin': null } } }
                                     )}
-                                      <BetSelectedIcon className="w-8 h-8 fill-BrandPurple" />
+                                      <BetSelectedIcon className="w-8 h-8 fill-BrandBase" />
                                     {:else}
                                       <span>{oddsObj.awayOdds?.toFixed(2) || "N/A"}</span>
                                     {/if}
@@ -479,7 +481,7 @@
         <div class="w-full p-4 bg-white rounded-2xl md:mx-0">
           <button class="flex items-center w-full text-left" on:click={toggleBetSlip}>
             <div class="flex items-center">
-              <span class="flex items-center justify-center w-12 h-10 mr-3 text-xl font-medium text-white rounded-full bg-BrandPurple">
+              <span class="flex items-center justify-center w-12 h-10 mr-3 text-xl font-medium text-white rounded-full bg-BrandBase">
                 Bets
               </span>
               <span class="text-xl font-semibold text-black">Bet Slip</span>

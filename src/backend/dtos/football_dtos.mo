@@ -1,6 +1,5 @@
-import FootballTypes "../types/football_types";
-import Base "../types/base_types";
-import BettingTypes "../types/betting_types";
+import Base "mo:waterway-mops/BaseTypes";
+import FootballTypes "mo:waterway-mops/FootballTypes";
 
 module DTOs {
 

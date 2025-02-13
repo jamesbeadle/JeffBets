@@ -56,7 +56,7 @@
   aria-hidden={showModal ? "false" : "true"}
 >
 <div
-class="bg-BrandLightGray rounded-lg shadow-lg max-w-lg w-full mx-auto relative overflow-y-auto max-h-[90vh] px-6 py-4"
+class="bg-BrandWhite rounded-lg shadow-lg max-w-lg w-full mx-auto relative overflow-y-auto max-h-[90vh] px-6 py-4"
 role="dialog"
 aria-modal="true"
 tabindex="-1" 

@@ -80,9 +80,9 @@
         <button 
           class={`w-full p-2 ${
             bet.status === 'won' 
-              ? 'bg-BrandPositive' 
+              ? 'bg-BrandGreen' 
               : bet.status === 'lost'
-                ? 'bg-BrandNegative'
+                ? 'bg-BrandBase'
                 : 'bg-[#3CA1FF]'
           } ${!expandedBets.has(bet.id) ? 'rounded-t-lg' : 'rounded-t-lg'}`}
           on:click={() => toggleBet(bet.id)}
@@ -117,9 +117,9 @@
                 <span class="text-sm text-gray-500">{bet.date}</span>
                 <span class={`text-sm font-medium text-white px-3 py-1 rounded-md ${
                   bet.status === 'won' 
-                    ? 'bg-BrandPositive' 
+                    ? 'bg-BrandGreen' 
                     : bet.status === 'lost'
-                      ? 'bg-BrandNegative'
+                      ? 'bg-BrandBase'
                       : 'bg-[#3CA1FF]'
                 }`}>
                   {bet.status.toUpperCase()}

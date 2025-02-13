@@ -10,6 +10,11 @@ export const idlFactory = ({ IDL }) => {
     CanisterFull: IDL.Null,
   });
   const Result = IDL.Variant({ ok: IDL.Null, err: Error });
+  const AppStatusDTO = IDL.Record({
+    version: IDL.Text,
+    onHold: IDL.Bool,
+  });
+  const Result_9 = IDL.Variant({ ok: AppStatusDTO, err: Error });
   const LeagueId = IDL.Nat16;
   const FixtureId = IDL.Nat32;
   const GameweekNumber = IDL.Nat8;
@@ -309,6 +314,7 @@ export const idlFactory = ({ IDL }) => {
   });
   return IDL.Service({
     agreeTerms: IDL.Func([], [Result], []),
+    getAppStatus: IDL.Func([], [Result_9], ["query"]),
     getBettableHomepageFixtures: IDL.Func([LeagueId], [Result_8], ["query"]),
     getDataHashes: IDL.Func([], [Result_7], ["query"]),
     getMatchOdds: IDL.Func([LeagueId, FixtureId], [Result_6], ["query"]),

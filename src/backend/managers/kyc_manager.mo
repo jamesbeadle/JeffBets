@@ -1,4 +1,4 @@
-import Base "../types/base_types";
+import Base "mo:waterway-mops/BaseTypes";
 import App "../types/app_types";
 import Buffer "mo:base/Buffer";
 import Result "mo:base/Result";

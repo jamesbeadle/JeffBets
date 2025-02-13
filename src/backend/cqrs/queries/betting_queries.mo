@@ -1,4 +1,4 @@
-import Base "../../types/base_types";
+import Base "mo:waterway-mops/BaseTypes";
 import BettingTypes "../../types/betting_types";
 
 module BettingQueries {

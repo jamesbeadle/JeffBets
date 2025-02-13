@@ -135,7 +135,7 @@
 >
   <div class="flex items-center justify-between p-4 border-b border-gray-100 md:px-4 md:py-2 md:bg-gray-100">
     <div class="flex items-center">
-      <span class="flex items-center justify-center w-8 text-lg font-medium text-white rounded-full h-7 bg-BrandPurple">
+      <span class="flex items-center justify-center w-8 text-lg font-medium text-white rounded-full h-7 bg-BrandBase">
         {bets.length}
       </span>
       <span class="px-3 text-xl font-bold text-black">Bet Slip</span>
@@ -152,19 +152,19 @@
 
   <div class="flex border-b border-gray-100">
     <button 
-      class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'betslip' ? 'text-BrandPurple border-b-2 border-BrandPurple' : 'text-gray-500'}"
+      class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'betslip' ? 'text-BrandBase border-b-2 border-BrandBase' : 'text-gray-500'}"
       on:click={() => activeTab = 'betslip'}
     >
       Bet Slip
     </button>
     <button 
-      class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'open' ? 'text-BrandPurple border-b-2 border-BrandPurple' : 'text-gray-500'}"
+      class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'open' ? 'text-BrandBase border-b-2 border-BrandBase' : 'text-gray-500'}"
       on:click={() => activeTab = 'open'}
     >
       Open Bets
     </button>
     <button 
-      class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'settled' ? 'text-BrandPurple border-b-2 border-BrandPurple' : 'text-gray-500'}"
+      class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'settled' ? 'text-BrandBase border-b-2 border-BrandBase' : 'text-gray-500'}"
       on:click={() => activeTab = 'settled'}
     >
       Settled Bets
@@ -176,14 +176,14 @@
       {#if bets.length === 0}
         <div class="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
           <div class="w-24 h-24 mb-4">
-            <EmptyBetSlipIcon className="w-24 h-24 fill-BrandPurple" />
+            <EmptyBetSlipIcon className="w-24 h-24 fill-BrandBase" />
           </div>
           <p class="text-lg text-gray-400 md:text-sm">
             There are no selections in<br />your bet slip.
           </p>
         </div>
       {:else}
-        <div class="px-4 py-2 mt-2 rounded bg-BrandPurple">
+        <div class="px-4 py-2 mt-2 rounded bg-BrandBase">
           <span class="text-white">
             {bets.length > 1 ? bets.length + " Singles" : "Single Bet"}
           </span>
@@ -239,7 +239,7 @@
         </div>
 
         {#if possibleMultiples.length > 0}
-          <div class="px-4 py-2 mt-2 rounded bg-BrandPurple">
+          <div class="px-4 py-2 mt-2 rounded bg-BrandBase">
             <span class="text-white">Multiple Bet</span>
           </div>
 

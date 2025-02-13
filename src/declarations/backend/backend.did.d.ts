@@ -2,6 +2,10 @@ import type { Principal } from "@dfinity/principal";
 import type { ActorMethod } from "@dfinity/agent";
 import type { IDL } from "@dfinity/candid";
 
+export interface AppStatusDTO {
+  version: string;
+  onHold: boolean;
+}
 export interface AuditRecordDTO {
   kycApprovalDate: bigint;
   joinedDate: bigint;
@@ -208,6 +212,7 @@ export type Result_5 = { ok: ProfileDTO } | { err: Error };
 export type Result_6 = { ok: MatchOddsDTO } | { err: Error };
 export type Result_7 = { ok: Array<DataHashDTO> } | { err: Error };
 export type Result_8 = { ok: Array<HomePageFixtureDTO> } | { err: Error };
+export type Result_9 = { ok: AppStatusDTO } | { err: Error };
 export interface ScoreDetail {
   homeGoals: number;
   awayGoals: number;
@@ -313,6 +318,7 @@ export interface YesNoSelectionOdds {
 }
 export interface _SERVICE {
   agreeTerms: ActorMethod<[], Result>;
+  getAppStatus: ActorMethod<[], Result_9>;
   getBettableHomepageFixtures: ActorMethod<[LeagueId], Result_8>;
   getDataHashes: ActorMethod<[], Result_7>;
   getMatchOdds: ActorMethod<[LeagueId, FixtureId], Result_6>;

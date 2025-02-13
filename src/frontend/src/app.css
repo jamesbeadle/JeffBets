@@ -29,11 +29,11 @@
 }
 
 .selected-panel {
-  @apply bg-BrandPositive hover:bg-BrandPositive px-3 py-2;
+  @apply bg-BrandGreen hover:bg-BrandGreen px-3 py-2;
 }
 
 .select-panel {
-  @apply bg-BrandPurple hover:bg-BrandPurple p-3 text-white;
+  @apply bg-BrandBase hover:bg-BrandBase p-3 text-white;
 }
 
 .fg-button {
@@ -42,7 +42,7 @@
 }
 
 .button-hover {
-  @apply bg-white text-black hover:bg-BrandPositive hover:text-BrandGray;
+  @apply bg-white text-black hover:bg-BrandGreen hover:text-BrandGray;
 }
 
 .bg-panel {
@@ -50,31 +50,31 @@
 }
 
 .bg-panel-color {
-  @apply bg-BrandDarkGray rounded border-BrandGray;
+  @apply bg-BrandGray rounded border-BrandGray;
 }
 
 .active-tab {
-  @apply border-b border-b-BrandPositive;
+  @apply border-b border-b-BrandGreen;
 }
 
 .brand-button {
-  @apply bg-BrandPurple hover:bg-BrandPurpleDark disabled:opacity-50 disabled:bg-gray-300 text-white px-4 py-2 rounded;
+  @apply bg-BrandBase hover:bg-BrandGreen disabled:opacity-50 disabled:bg-BrandGray text-white px-4 py-2 rounded;
 }
 
 .brand-cancel-button {
-  @apply bg-BrandNegative text-white px-4 py-2 rounded;
+  @apply bg-BrandBase text-white px-4 py-2 rounded;
 }
 
 .brand-button-disabled {
-  @apply bg-BrandDisabled text-white px-4 py-2 rounded;
+  @apply bg-BrandGray text-white px-4 py-2 rounded;
 }
 
 .brand-select {
-  @apply bg-BrandDarkGray text-white border border-BrandDarkGray rounded-lg focus:ring focus:ring-BrandLightGray text-sm p-2;
+  @apply bg-BrandGray text-white border border-BrandGray rounded-lg focus:ring focus:ring-BrandWhite text-sm p-2;
 }
 
 .brand-input {
-  @apply w-full bg-BrandDarkGray text-white border border-BrandDarkGray rounded-lg focus:ring focus:ring-BrandLightGray text-sm p-2;
+  @apply w-full bg-BrandGray text-white border border-BrandGray rounded-lg focus:ring focus:ring-BrandWhite text-sm p-2;
 }
 
 .brand-dropdown {
@@ -90,15 +90,15 @@
 }
 
 .bg-info {
-  @apply bg-BrandDarkGray;
+  @apply bg-BrandGray;
 }
 
 .bg-success {
-  @apply bg-BrandPositive;
+  @apply bg-BrandGreen;
 }
 
 .bg-error {
-  @apply bg-BrandNegative;
+  @apply bg-BrandBase;
 }
 
 .page-panel {
@@ -122,11 +122,11 @@
 }
 
 .page-panel-bar-spinner {
-  @apply px-4 py-2 space-y-2 text-sm bg-BrandDarkGray;
+  @apply px-4 py-2 space-y-2 text-sm bg-BrandGray;
 }
 
 .page-panel-table-container {
-  @apply overflow-hidden text-sm border rounded-b bg-BrandDarkGray border-BrandPurple;
+  @apply overflow-hidden text-sm border rounded-b bg-BrandGray border-BrandBase;
 }
 
 .page-panel-table-header {
@@ -134,7 +134,7 @@
 }
 
 .fixture-event-panel {
-  @apply flex flex-col items-center p-6 space-y-4 rounded-t-lg bg-BrandLightGray;
+  @apply flex flex-col items-center p-6 space-y-4 rounded-t-lg bg-BrandWhite;
 }
 
 .fixture-event-panel-header {
@@ -154,7 +154,7 @@
 }
 
 .fixture-event-tab-panel {
-  @apply flex p-4 space-x-2 overflow-x-auto border border-BrandDarkGray;
+  @apply flex p-4 space-x-2 overflow-x-auto border border-BrandGray;
 }
 
 .fixture-event-tab-panel-button {
@@ -162,11 +162,11 @@
 }
 
 .fixture-event-tab-panel-button-active {
-  @apply text-white bg-BrandPurple;
+  @apply text-white bg-BrandBase;
 }
 
 .fixture-event-tab-panel-button-inactive {
-  @apply text-white border bg-BrandGray border-BrandDarkGray hover:bg-BrandGray/80;
+  @apply text-white border bg-BrandGray border-BrandGray hover:bg-BrandGray/80;
 }
 
 .fixture-event-table-header-4 {

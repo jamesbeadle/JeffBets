@@ -1,10 +1,10 @@
-import FootballTypes "../types/football_types";
-import Base "../types/base_types";
+import FootballTypes "mo:waterway-mops/FootballTypes";
+import Base "mo:waterway-mops/BaseTypes";
 import BettingTypes "../types/betting_types";
 
 module DTOs {
 
-  public type SystemStateDTO = {
+  public type AppStatusDTO = {
     onHold : Bool;
     version: Text;
   };

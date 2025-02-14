@@ -253,9 +253,9 @@
                 >
                   <p class="page-panel-bar-button-title">{league.name}</p>
                   {#if expandedLeagues[league.id]}
-                    <ArrowUp className="w-5 h-5 text-gray-600" />
+                    <ArrowUp className="w-5 h-5 text-BrandGray" />
                   {:else}
-                    <ArrowDown className="w-5 h-5 text-gray-600" />
+                    <ArrowDown className="w-5 h-5 text-BrandGray" />
                   {/if}
                 </button>
 
@@ -269,7 +269,7 @@
                       <div class="page-panel-table-header">
                         <div class="flex items-center justify-center w-5/12 py-2 md:py-3">
                           <button
-                            class="text-gray-500 hover:text-gray-700"
+                            class="text-BrandGray"
                             on:click={() => priorGameweek(league.id)}
                           >
                             <ArrowLeft className="w-4" />
@@ -283,7 +283,7 @@
                             </span>
                           </div>
                           <button
-                            class="text-gray-500 hover:text-gray-700"
+                            class="text-BrandGray hover:text-BrandGray"
                             on:click={() => nextGameweek(league.id)}
                           >
                             <ArrowRight className="w-4" />
@@ -341,7 +341,7 @@
                                       </span>
                                     </div>
 
-                                    <span class="mt-1 text-[10px] md:text-xs text-gray-400">
+                                    <span class="mt-1 text-[10px] md:text-xs text-BrandGray">
                                       {convertDateToReadable(Number(fixture.kickOff))}
                                     </span>
                                   </div>
@@ -456,7 +456,7 @@
     </div>
 
     <div class="flex-shrink-0 lg:ml-4 lg:w-80">
-      <div class="hidden lg:block lg:sticky lg:top-4">
+      <div class="hidden lg:block lg:sticky lg:top-2">
         <Betslip
           leagueData={leagues.reduce((acc, league) => ({...acc, [league.id]: league}), {})}
           fixtureData={Object.entries(leagueFixtures).reduce((acc, [leagueId, fixtures]) => ({

@@ -1260,7 +1260,7 @@
     </div>
 
     <div class="flex-shrink-0 lg:ml-4 lg:w-80">
-      <div class="hidden lg:block lg:sticky lg:top-4">
+      <div class="hidden lg:block lg:sticky lg:top-2">
         {#if league && fixture}
           <Betslip
             bind:isExpanded={isBetSlipExpanded}

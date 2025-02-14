@@ -75,9 +75,9 @@
               <span class="text-sm font-medium text-white">@ {bet.selections[0].odds}</span>
               <span class="text-white">
                 {#if expandedBets.has(bet.id)}
-                  <ArrowUp className="w-5 h-5 text-gray-600" />
+                  <ArrowUp className="w-5 h-5 text-BrandGray" />
                 {:else}
-                  <ArrowDown className="w-5 h-5 text-gray-600" />
+                  <ArrowDown className="w-5 h-5 text-BrandGray" />
                 {/if}
               </span>
             </div>
@@ -85,18 +85,18 @@
         </button>
         
         {#if !expandedBets.has(bet.id)}
-          <div class="px-2 py-1 text-xs text-gray-400 bg-[#F9F9F9] border-x border-b rounded-b-lg border-gray-100">
+          <div class="px-2 py-1 text-xs text-BrandGray bg-[#F9F9F9] border-x border-b rounded-b-lg border-BrandGray">
             Bet placed on Feb 10 2025, 17:30
           </div>
         {/if}
       </div>
 
       {#if expandedBets.has(bet.id)}
-        <div class="p-4 rounded-b-lg bg-[#F9F9F9] border-x border-b border-gray-100">
+        <div class="p-4 rounded-b-lg bg-[#F9F9F9] border-x border-b border-BrandGray">
           {#each bet.selections as selection}
             <div class="mb-2">
               <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-500">{bet.date}</span>
+                <span class="text-sm text-BrandGray">{bet.date}</span>
                 <span class={`text-sm font-medium text-white px-3 py-1 rounded-md ${
                   bet.status === 'won' 
                     ? 'bg-BrandGreen' 
@@ -109,22 +109,22 @@
               </div>
               <p class="mt-2 text-sm font-medium text-black">{selection.match}</p>
               <div class="flex flex-col gap-2 mt-1">
-                <p class="text-xs text-gray-500">{selection.league}</p>
-                <span class="text-xs font-medium text-gray-700">Full Time Score: {selection.score}</span>
+                <p class="text-xs text-BrandGray">{selection.league}</p>
+                <span class="text-xs font-medium text-BrandGray">Full Time Score: {selection.score}</span>
               </div>
             </div>
           {/each}
 
-          <div class="flex justify-between pt-2 mt-4 text-black border-t border-gray-100">
+          <div class="flex justify-between pt-2 mt-4 text-black border-t border-BrandGray">
             <div>
-              <p class="text-xs text-gray-500">Stake</p>
+              <p class="text-xs text-BrandGray">Stake</p>
               <span class="flex items-center text-sm font-medium">
                 <OpenFPLIcon className="w-3 h-3 mr-1" />
                 {bet.stake.toFixed(2)}
               </span>
             </div>
             <div class="text-right">
-              <p class="text-xs text-gray-500">Returns</p>
+              <p class="text-xs text-BrandGray">Returns</p>
               <span class="flex items-center text-sm font-medium">
                 <OpenFPLIcon className="w-3 h-3 mr-1" />
                 {bet.returns.toFixed(2)}
@@ -138,7 +138,7 @@
 
   {#if unsettledBets.length === 0}
     <div class="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
-      <p class="text-lg text-gray-400 md:text-sm">
+      <p class="text-lg text-BrandGray md:text-sm">
         No settled bets to display
       </p>
     </div>

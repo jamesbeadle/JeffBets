@@ -208,7 +208,7 @@
                 </div>
             {/if}
 
-            <div class={`w-full mt-16 bg-BrandDark md:px-6 md:py-4 md:mx-2 md:rounded-lg md:mt-0 ${isMenuOpen ? "md:ml-[288px]" : "md:ml-20"} transition-all`}>
+            <div class={`w-full mt-16 bg-BrandDark md:px-4 md:mx-2 md:rounded-lg md:mt-0 ${isMenuOpen ? "md:ml-[288px]" : "md:ml-20"} transition-all`}>
                 <slot></slot>
             </div>
         </div>
@@ -231,7 +231,7 @@
             <h1 class="mb-2 text-4xl font-bold text-white">
                 Jeff Bets
             </h1>
-            <p class="mb-6 text-gray-300">
+            <p class="mb-6 text-BrandGray">
                 Next generation betting.
             </p>
             <button 

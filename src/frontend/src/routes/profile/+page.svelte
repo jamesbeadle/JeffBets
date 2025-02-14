@@ -42,7 +42,7 @@
       <div class="m-4">
         <div class="bg-panel rounded-md">
           <ul
-            class="flex rounded-t-lg bg-light-gray border-b border-gray-700 px-4 pt-2"
+            class="flex rounded-t-lg bg-light-gray border-b border-BrandGray px-4 pt-2"
           >
             <li class={`mr-4 ${activeTab === "details" ? "active-tab" : ""}`}>
               <button

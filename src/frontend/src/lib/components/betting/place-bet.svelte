@@ -119,7 +119,7 @@
       </div>
       <form on:submit|preventDefault={placeBet}>
         
-    <div class="flex items-center justify-between p-4 border-b border-gray-100 md:px-4 md:py-2 md:bg-gray-100">
+    <div class="flex items-center justify-between p-4 border-b border-BrandGray md:px-4 md:py-2 md:bg-BrandGray">
         <div class="flex items-center">
             <span class="flex items-center justify-center w-8 text-lg font-medium text-white rounded-full h-7 bg-BrandBase">
                 {bets.length}
@@ -134,7 +134,7 @@
                 <div class="w-24 h-24 mb-4">
                     <EmptyBetSlipIcon className="w-24 h-24 fill-BrandBase" />
                 </div>
-                <p class="text-lg text-gray-400 md:text-sm">
+                <p class="text-lg text-BrandGray md:text-sm">
                     There are no selections in<br />your bet slip.
                 </p>
             </div>
@@ -148,29 +148,29 @@
             <div class="flex-1 p-4 space-y-2">
                 {#each bets as bet, index}
                     {@const details = getLeagueAndFixtureDetails(bet)}
-                    <div class="flex flex-col gap-2 p-2 border border-gray-300 rounded">
+                    <div class="flex flex-col gap-2 p-2 border border-BrandGray rounded">
                     <div class="flex justify-between">
                         <div>
                         <p class="text-sm font-medium text-black">{bet.uiDescription}</p>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-BrandGray">
                             {details.leagueName} - {details.fixtureDetails}
                         </p>
                         </div>
                         <button
-                        class="text-gray-400 hover:text-red-500"
+                        class="text-BrandGray hover:text-red-500"
                         on:click={() => removeSingleBet(index)}
                         >
                         &times;
                         </button>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">@ {bet.odds.toFixed(2)}</span>
-                        <span class="text-sm text-gray-600">@ {Number(bet.stake).toFixed(4)}</span>
+                        <span class="text-sm text-BrandGray">@ {bet.odds.toFixed(2)}</span>
+                        <span class="text-sm text-BrandGray">@ {Number(bet.stake).toFixed(4)}</span>
                         
                     </div>
         
                     {#if singleStakes[index] && singleStakes[index] > 0}
-                        <div class="text-sm text-gray-700">
+                        <div class="text-sm text-BrandGray">
                         Potential Returns: 
                         <span class="font-medium">
                             {(singleStakes[index] * (1 + bet.odds)).toFixed(2)}
@@ -194,19 +194,19 @@
                             {#if slipState.isMultiple}
                             
                             {@const multiOdds = calculateMultipleOddsForType(bets, multi)}
-                            <div class="flex flex-col gap-1 p-2 border border-gray-300 rounded">
+                            <div class="flex flex-col gap-1 p-2 border border-BrandGray rounded">
                                 <div class="flex items-center justify-between">
                                 <p class="text-sm font-medium text-black">
                                     {mKey}
                                 </p>
                                 </div>
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-BrandGray">
                                 Combined odds: 
                                     {multiOdds.toFixed(2)}
                                 </p>
                         
                                 {#if slipState.multipleStakes[mKey] && slipState.multipleStakes[mKey] > 0}
-                                <p class="text-sm text-gray-700">
+                                <p class="text-sm text-BrandGray">
                                     Potential Returns:
                                     <span class="font-medium">
                                     { (slipState.multipleStakes[mKey] + (slipState.multipleStakes[mKey] * multiOdds)).toFixed(2)}
@@ -222,9 +222,9 @@
             {/if}
         {/if}
     
-        <div class="p-6 mt-auto border-t border-gray-100 md:p-4 md:bg-gray-100">
+        <div class="p-6 mt-auto border-t border-BrandGray md:p-4 md:bg-BrandGray">
             <div class="flex items-center justify-between mb-4">
-            <span class="text-lg text-gray-500 md:text-sm">Bet Total:</span>
+            <span class="text-lg text-BrandGray md:text-sm">Bet Total:</span>
             <span class="flex items-center text-lg font-medium text-black md:text-sm">
                 <OpenFplIcon className="w-3 h-3 mr-1" />
                 {totalStakes.toFixed(2)}
@@ -232,7 +232,7 @@
             </div>
     
             <div class="flex items-center justify-between mb-6 md:mb-4">
-            <span class="text-lg text-gray-500 md:text-sm">Potential Returns:</span>
+            <span class="text-lg text-BrandGray md:text-sm">Potential Returns:</span>
             <span class="flex items-center text-lg font-medium text-black md:text-sm">
                 <OpenFplIcon className="w-3 h-3 mr-1" />
                 {totalReturns.toFixed(2)}

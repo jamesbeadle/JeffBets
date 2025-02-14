@@ -32,7 +32,7 @@
             return;
         }
 
-        auditData = await auditStore.getUserAudit(1); 
+        //auditData = await auditStore.getUserAudit(1); //TODO
         isLoading = false;
     });
   </script>
@@ -47,7 +47,7 @@
                 <div class="overflow-x-auto">
                 <table class="min-w-full table-auto border-collapse">
                     <thead>
-                    <tr class="bg-gray-700 text-white">
+                    <tr class="bg-BrandGray text-white">
                         <th class="py-2 px-4 text-left">Principal ID</th>
                         <th class="py-2 px-4 text-left">Joined Date</th>
                         <th class="py-2 px-4 text-left">Terms Accepted Date</th>
@@ -58,7 +58,7 @@
                     </thead>
                     <tbody>
                     {#each auditData.users as user}
-                        <tr class="border-b border-gray-200">
+                        <tr class="border-b border-BrandGray">
                             <td class="py-2 px-4 font-sm">{user.principalId}</td>
                             <td class="py-2 px-4">{user.joinedDate && user.joinedDate > 0 ? formatUnixDateToSmallReadable(Number(user.joinedDate)) + ", " + formatUnixTimeToTime(Number(user.joinedDate)) : "-"}</td>
                             <td class="py-2 px-4">{user.termsAcceptedDate && user.termsAcceptedDate > 0 ? formatUnixDateToSmallReadable(Number(user.termsAcceptedDate)) + ", " + formatUnixTimeToTime(Number(user.termsAcceptedDate))  :  "-"}</td>

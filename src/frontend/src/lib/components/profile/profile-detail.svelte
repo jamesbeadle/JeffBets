@@ -226,7 +226,7 @@
         <div class="mt-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div
-              class="flex items-center p-4 rounded-lg shadow-md border border-gray-700"
+              class="flex items-center p-4 rounded-lg shadow-md border border-BrandGray"
             >
               <img
                 src="/FPLCoin.png"

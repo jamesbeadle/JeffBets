@@ -65,7 +65,7 @@
 }
 
 .page-panel-bar-button-title {
-  @apply text-sm font-medium md:text-base;
+  @apply text-sm font-medium md:text-base text-black;
 }
 
 .page-panel-bar-spinner {

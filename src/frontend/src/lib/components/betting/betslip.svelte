@@ -299,7 +299,7 @@
 
       <div class="p-6 mt-auto border-t border-BrandGray md:p-4 md:bg-BrandGray">
         <div class="flex items-center justify-between mb-4">
-          <span class="text-lg text-BrandGray md:text-sm">Bet Total:</span>
+          <span class="text-lg text-black md:text-sm">Bet Total:</span>
           <span class="flex items-center text-lg font-medium text-black md:text-sm">
             <OpenFPLIcon className="w-3 h-3 mr-1" />
             {totalStakes.toFixed(2)}
@@ -307,7 +307,7 @@
         </div>
 
         <div class="flex items-center justify-between mb-6 md:mb-4">
-          <span class="text-lg text-BrandGray md:text-sm">Potential Returns:</span>
+          <span class="text-lg text-black md:text-sm">Potential Returns:</span>
           <span class="flex items-center text-lg font-medium text-black md:text-sm">
             <OpenFPLIcon className="w-3 h-3 mr-1" />
             {totalReturns.toFixed(2)}

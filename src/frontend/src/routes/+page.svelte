@@ -21,15 +21,12 @@
   import { bettingStore } from "$lib/stores/betting-store";
   import { betSlipStore } from "$lib/stores/bet-slip-store";
 
-  import { storeManager } from "$lib/managers/store-manager";
-
   import { convertDateToReadable } from "$lib/utils/helpers";
 
   import type {
     FootballLeagueDTO,
     FixtureDTO,
     ClubDTO,
-    FixtureId,
     LeagueId,
     GameweekNumber
   } from "../../../declarations/data_canister/data_canister.did";
@@ -253,9 +250,9 @@
                 >
                   <p class="page-panel-bar-button-title">{league.name}</p>
                   {#if expandedLeagues[league.id]}
-                    <ArrowUp className="w-5 h-5 text-BrandGray" />
+                    <ArrowUp fill="white" className="w-5 h-5" />
                   {:else}
-                    <ArrowDown className="w-5 h-5 text-BrandGray" />
+                    <ArrowDown fill="black" className="w-5 h-5" />
                   {/if}
                 </button>
 

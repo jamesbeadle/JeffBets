@@ -222,18 +222,18 @@
             {/if}
         {/if}
     
-        <div class="p-6 mt-auto border-t border-BrandGray md:p-4 md:bg-BrandGray">
+        <div class="p-6 mt-auto border-t border-BrandGray text-black md:p-4 md:bg-BrandGray">
             <div class="flex items-center justify-between mb-4">
-            <span class="text-lg text-BrandGray md:text-sm">Bet Total:</span>
-            <span class="flex items-center text-lg font-medium text-black md:text-sm">
+            <span class="text-lg md:text-sm">Bet Total:</span>
+            <span class="flex items-center text-lg font-medium md:text-sm">
                 <OpenFplIcon className="w-3 h-3 mr-1" />
                 {totalStakes.toFixed(2)}
             </span>
             </div>
     
-            <div class="flex items-center justify-between mb-6 md:mb-4">
-            <span class="text-lg text-BrandGray md:text-sm">Potential Returns:</span>
-            <span class="flex items-center text-lg font-medium text-black md:text-sm">
+            <div class="flex items-center justify-between text-black mb-6 md:mb-4">
+            <span class="text-lg md:text-sm">Potential Returns:</span>
+            <span class="flex items-center text-lg font-medium md:text-sm">
                 <OpenFplIcon className="w-3 h-3 mr-1" />
                 {totalReturns.toFixed(2)}
             </span>

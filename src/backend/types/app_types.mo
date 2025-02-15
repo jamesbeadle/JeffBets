@@ -1,4 +1,5 @@
 import Base "mo:waterway-mops/BaseTypes";
+import FootballTypes "mo:waterway-mops/FootballTypes";
 import BettingTypes "betting_types";
 import Text "mo:base/Text";
 import ShuftiTypes "shufti_types";
@@ -44,6 +45,5 @@ module AppTypes {
         shuftiResponse: ?ShuftiTypes.ShuftiResponse;
         kycSubmissionDate: Int;
         kycApprovalDate: Int;
-    }
-
+    };
 };

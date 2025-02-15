@@ -256,6 +256,18 @@ module BettingTypes {
         #BothTeamsToScoreAndWinner : BothTeamsToScoreAndWinnerDetail;
     };
 
+    public type Stats = {
+        priorSeasonTable: FootballTypes.LeagueTable;
+        homeTeamPriorSeasonFinish: Nat;
+        awayTeamPriorSeasonFinish: Nat;
+        totalHomeClubPoints: Nat;
+        totalAwayClubPoints: Nat;
+        totalGameweeks: Nat8;
+        homeCurrentSeasonWinPercentage: Float;
+        awayCurrentSeasonWinPercentage: Float;
+    };
+
+
     
 
 

@@ -1,5 +1,6 @@
 import Iter "mo:base/Iter";
 import Nat64 "mo:base/Nat64";
+import Float "mo:base/Float";
 import BettingTypes "../types/betting_types";
 import Utilities "utilities";
 
@@ -98,6 +99,10 @@ module {
     public func getYankeeSelectionWinnings(betslip: BettingTypes.BetSlip) : Nat64 {
       //4 selections creating 11 bets
       return 0; //TODO
+    };
+
+    public func formatOdds (odds_factor: Float, baseOdds: Float) : Float  {
+      return Float.nearest((baseOdds * odds_factor) * 4) / 4;
     };
 
 };

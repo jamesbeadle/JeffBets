@@ -246,8 +246,8 @@ module BaseOdds {
     public let BOTH_TEAMS_NOT_TO_SCORE_AND_AWAY_WIN : Float = 7;
     public let BOTH_TEAMS_NOT_TO_SCORE_AND_DRAW : Float = 6;
     
-    public let HOME_WIN_ODDS : Float = 3;
-    public let DRAW_ODDS : Float = 2;
+    public let HOME_WIN_ODDS : Float = 2;
+    public let DRAW_ODDS : Float = 3;
     public let AWAY_WIN_ODDS : Float = 4;
     
     public let OVER_ODDS_ZERO_POINT_FIVE : Float = 2;

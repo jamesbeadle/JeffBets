@@ -5,78 +5,39 @@ import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
+import Nat8 "mo:base/Nat8";
 import FootballTypes "mo:waterway-mops/FootballTypes";
 import FootballDTOs "../dtos/football_dtos";
+import ResultsOddsGenerator "results_odds_generator";
+import BettingUtilities "../utilities/betting_utilities";
 
 module {
 
   public class OddsGenerator() {
 
-    public func getCorrectResultOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO) : BettingTypes.TeamSelectionOdds{
+    private let correctResultOddsGenerator = ResultsOddsGenerator.ResultsOddsGenerator();
 
-      let finalisedHomeFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
-        entry.status == #Finalised and
-        (entry.homeClubId == bettingFixture.homeClubId or entry.awayClubId == bettingFixture.homeClubId)
-      });
+    public func getCorrectResultOdds(stats: BettingTypes.Stats) : BettingTypes.TeamSelectionOdds{
 
-      let finalisedAwayFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
-        entry.status == #Finalised and
-        (entry.homeClubId == bettingFixture.awayClubId or entry.awayClubId == bettingFixture.awayClubId)
-      });
+      let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
+      let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
-      let homeWins = Array.filter<FootballDTOs.FixtureDTO>(finalisedHomeFixtures, func(homeEntry: FootballDTOs.FixtureDTO){
-        (homeEntry.homeGoals > homeEntry.awayGoals and homeEntry.homeClubId == bettingFixture.homeClubId) or
-        (homeEntry.homeGoals < homeEntry.awayGoals and homeEntry.awayClubId == bettingFixture.homeClubId);
-      });
-
-      let awayWins = Array.filter<FootballDTOs.FixtureDTO>(finalisedAwayFixtures, func(awayEntry: FootballDTOs.FixtureDTO){
-        (awayEntry.homeGoals > awayEntry.awayGoals and awayEntry.homeClubId == bettingFixture.awayClubId) or
-        (awayEntry.homeGoals < awayEntry.awayGoals and awayEntry.awayClubId == bettingFixture.awayClubId);
-      });
-
-      let homeDraws = Array.filter<FootballDTOs.FixtureDTO>(finalisedHomeFixtures, func(homeEntry: FootballDTOs.FixtureDTO){
-        (homeEntry.homeGoals == homeEntry.awayGoals and homeEntry.homeClubId == bettingFixture.homeClubId) or
-        (homeEntry.homeGoals == homeEntry.awayGoals and homeEntry.awayClubId == bettingFixture.homeClubId);
-      });
-
-      let awayDraws = Array.filter<FootballDTOs.FixtureDTO>(finalisedAwayFixtures, func(awayEntry: FootballDTOs.FixtureDTO){
-        (awayEntry.homeGoals == awayEntry.awayGoals and awayEntry.homeClubId == bettingFixture.awayClubId) or
-        (awayEntry.homeGoals == awayEntry.awayGoals and awayEntry.awayClubId == bettingFixture.awayClubId);
-      });
-
-      let totalHomePoints = (Array.size(homeWins) * 3) + Array.size(homeDraws);
-      let totalAwayPoints = (Array.size(awayWins) * 3) + Array.size(awayDraws);
-
-      let totalPossibleHomePoints = Array.size(finalisedHomeFixtures) * 3;
-      let totalPossibleAwayPoints = Array.size(finalisedAwayFixtures) * 3;
-
-      var home_odds_factor: Float = 0.25;
-      var away_odds_factor: Float = 0.25;
-      var draw_odds_factor: Float = 0.5;
-
-      let homeDrawPercentage: Float = Float.fromInt(Array.size(homeDraws)) / Float.fromInt(Array.size(finalisedHomeFixtures));
-      let awayDrawPercentage: Float = Float.fromInt(Array.size(awayDraws)) / Float.fromInt(Array.size(finalisedAwayFixtures));
-      let homeWinPercentage: Float = (Float.fromInt(totalHomePoints) / Float.fromInt(totalPossibleHomePoints));
-      let awayWinPercentage: Float = (Float.fromInt(totalAwayPoints) / Float.fromInt(totalPossibleAwayPoints));
-
-      if(totalHomePoints > 0){
-        home_odds_factor := home_odds_factor * (1 + (1 - homeWinPercentage)) * (1 + awayWinPercentage);
+      if(homeFavourite and homeFormBetter){
+        return correctResultOddsGenerator.getOnFormHomeFavouriteOdds(stats);
       };
 
-      if(totalAwayPoints > 0){
-        away_odds_factor := away_odds_factor * (1 + (1 - awayWinPercentage))  * (1 + homeWinPercentage);
+      if(homeFavourite and not homeFormBetter){
+        return correctResultOddsGenerator.getOffFormHomeFavouriteOdds(stats);
+      };
+
+      if(not homeFavourite and homeFormBetter){
+        return correctResultOddsGenerator.getOffFormAwayFavouriteOdds(stats);
       };
       
-      draw_odds_factor := draw_odds_factor * (1 + (2*homeDrawPercentage)) * (1 + awayDrawPercentage);
-
-      return {
-        awayOdds = formatOdds(away_odds_factor, BaseOdds.AWAY_WIN_ODDS);
-        drawOdds = formatOdds(draw_odds_factor, BaseOdds.DRAW_ODDS);
-        homeOdds = formatOdds(home_odds_factor, BaseOdds.HOME_WIN_ODDS);
-      }
+      return correctResultOddsGenerator.getOnFormAwayFavouriteOdds(stats);
     };
     
-    public func getFirstAssistOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO) : Float{
+    public func getFirstAssistOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO, stats: BettingTypes.Stats) : Float{
 
       var odds_factor: Float = 1;
 
@@ -130,37 +91,37 @@ module {
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_FIRST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_FIRST_ASSIST);
           }
         };
         case (#Defender){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_FIRST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_FIRST_ASSIST);
           }
         };
         case (#Midfielder){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_FIRST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_FIRST_ASSIST);
           }
         };
         case (#Forward){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_FORWARD_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_FORWARD_FIRST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_FIRST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_FIRST_ASSIST);
           }
         }
       };
       return 0;
     };
     
-    public func getAnytimeAssistOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO) : Float{
+    public func getAnytimeAssistOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO, stats: BettingTypes.Stats) : Float{
       var odds_factor: Float = 1;
 
       let recentFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
@@ -213,37 +174,37 @@ module {
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_ANYTIME_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_ANYTIME_ASSIST);
           }
         };
         case (#Defender){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_ANYTIME_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_ANYTIME_ASSIST);
           }
         };
         case (#Midfielder){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_ANYTIME_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_ANYTIME_ASSIST);
           }
         };
         case (#Forward){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_FORWARD_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_FORWARD_ANYTIME_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_ANYTIME_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_ANYTIME_ASSIST);
           }
         }
       };
       return 0;
     };
     
-    public func getLastAssistOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO) : Float{
+    public func getLastAssistOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO, stats: BettingTypes.Stats) : Float{
       var odds_factor: Float = 1;
 
       let recentFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
@@ -296,37 +257,37 @@ module {
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_LAST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_LAST_ASSIST);
           }
         };
         case (#Defender){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_LAST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_LAST_ASSIST);
           }
         };
         case (#Midfielder){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_LAST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_LAST_ASSIST);
           }
         };
         case (#Forward){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_FORWARD_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_FORWARD_LAST_ASSIST);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_LAST_ASSIST);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_LAST_ASSIST);
           }
         }
       };
       return 0;
     };
     
-    public func getAnytimeScorerOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO) : Float{
+    public func getAnytimeScorerOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO, stats: BettingTypes.Stats) : Float{
       var odds_factor: Float = 1;
 
       let recentFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
@@ -379,37 +340,37 @@ module {
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_GOALKEEPER_ANYTIME_GOALSCORER);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_GOALKEEPER_ANYTIME_GOALSCORER);
           }
         };
         case (#Defender){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_DEFENDER_ANYTIME_GOALSCORER);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_DEFENDER_ANYTIME_GOALSCORER);
           }
         };
         case (#Midfielder){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_MIDFIELDER_ANYTIME_GOALSCORER);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_MIDFIELDER_ANYTIME_GOALSCORER);
           }
         };
         case (#Forward){
           if(onHomeTeam){
-            return formatOdds(odds_factor, BaseOdds.HOME_FORWARD_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.HOME_FORWARD_ANYTIME_GOALSCORER);
           } else {
-            return formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_ANYTIME_GOALSCORER);
+            return BettingUtilities.formatOdds(odds_factor, BaseOdds.AWAY_FORWARD_ANYTIME_GOALSCORER);
           }
         }
       };
       return 0;
     };
     
-    public func getFirstGoalscorerOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO) : Float{
+    public func getFirstGoalscorerOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO, stats: BettingTypes.Stats) : Float{
       var odds_factor: Float = 1;
 
       let recentFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
@@ -492,7 +453,7 @@ module {
       return 0;
     };
     
-    public func getLastScorerOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO) : Float{
+    public func getLastScorerOdds(fixtures: [FootballDTOs.FixtureDTO], bettingFixture: FootballDTOs.FixtureDTO, player: FootballDTOs.PlayerDTO, stats: BettingTypes.Stats) : Float{
       var odds_factor: Float = 1;
 
       let recentFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
@@ -574,19 +535,8 @@ module {
       };
       return 0;
     };
-
-
-
-
-
-
-
-
-    private func formatOdds (odds_factor: Float, baseOdds: Float) : Float  {
-      return Float.nearest((baseOdds * odds_factor) * 4) / 4;
-    };
     
-    public func getScoresBraceOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getScoresBraceOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool, stats: BettingTypes.Stats) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -620,7 +570,7 @@ module {
       return 0;
     };
     
-    public func getScoreHatrickOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getScoreHatrickOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool, stats: BettingTypes.Stats) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -654,7 +604,7 @@ module {
       return 0;
     };
     
-    public func getMissesPenaltyOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getMissesPenaltyOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool, stats: BettingTypes.Stats) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -688,7 +638,7 @@ module {
       return 0;
     };
     
-    public func getYellowCardsOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getYellowCardsOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool, stats: BettingTypes.Stats) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -722,7 +672,7 @@ module {
       return 0;
     };
     
-    public func getRedCardsOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool) : Float{
+    public func getRedCardsOdds(player: FootballDTOs.PlayerDTO, onHomeTeam: Bool, stats: BettingTypes.Stats) : Float{
       switch(player.position){
         case (#Goalkeeper){
           if(onHomeTeam){
@@ -756,12 +706,12 @@ module {
       return 0;
     };
     
-    public func getBothTeamsToScoreOdds() : BettingTypes.YesNoSelectionOdds = {
+    public func getBothTeamsToScoreOdds(stats: BettingTypes.Stats) : BettingTypes.YesNoSelectionOdds = {
       noOdds = BaseOdds.BOTH_TEAMS_NOT_TO_SCORE; 
       yesOdds = BaseOdds.BOTH_TEAMS_TO_SCORE;
     };
                           
-    public func getBothTeamsToScoreAndWinnerOdds() : [BettingTypes.ResultAndYesNoSelectionOdds]{
+    public func getBothTeamsToScoreAndWinnerOdds(stats: BettingTypes.Stats) : [BettingTypes.ResultAndYesNoSelectionOdds]{
       return [
         { result = #HomeWin; isYes = true; odds = BaseOdds.BOTH_TEAMS_TO_SCORE_AND_HOME_WIN },
         { result = #AwayWin; isYes = true; odds = BaseOdds.BOTH_TEAMS_TO_SCORE_AND_AWAY_WIN },
@@ -772,7 +722,7 @@ module {
       ]
     };
 
-    public func getCorrectScoreOdds() : [BettingTypes.ScoreSelectionOdds]{
+    public func getCorrectScoreOdds(stats: BettingTypes.Stats) : [BettingTypes.ScoreSelectionOdds]{
       
       return [
         {awayGoals = 0; homeGoals = 0; odds = BaseOdds.FULL_TIME_SCORE_NIL_NIL},
@@ -822,7 +772,7 @@ module {
       ]
     };
 
-    public func getGoalsOverUnderOdds() : BettingTypes.OverUnderSelectionOdds{
+    public func getGoalsOverUnderOdds(stats: BettingTypes.Stats) : BettingTypes.OverUnderSelectionOdds{
       return {
         overOdds = [
           {
@@ -895,7 +845,7 @@ module {
       }
     };
 
-    public func getHalfTimeFullTimeResultOdds() : [BettingTypes.HalfTimeFullTimeOdds]{
+    public func getHalfTimeFullTimeResultOdds(stats: BettingTypes.Stats) : [BettingTypes.HalfTimeFullTimeOdds]{
       return [
         {
           firstHalfResult = #Draw;
@@ -945,7 +895,7 @@ module {
       ]
     };
 
-    public func getHalfTimeScoreOdds() : [BettingTypes.ScoreSelectionOdds]{
+    public func getHalfTimeScoreOdds(stats: BettingTypes.Stats) : [BettingTypes.ScoreSelectionOdds]{
       
       return [
         {awayGoals = 0; homeGoals = 0; odds = BaseOdds.HALF_TIME_SCORE_NIL_NIL},
@@ -995,7 +945,7 @@ module {
       ]
     };
     
-    public func getPenaltyMissedOdds() : BettingTypes.MissPenaltyOdds{
+    public func getPenaltyMissedOdds(stats: BettingTypes.Stats) : BettingTypes.MissPenaltyOdds{
       return {
         homeTeam = BaseOdds.HOME_TEAM_PENALTY_MISS;
         awayTeam = BaseOdds.AWAY_TEAM_PENALTY_MISS;

@@ -54,6 +54,8 @@ actor Self {
   private stable var totalBetsStaked: Nat64 = 0;
   private stable var totalPotentialPayout: Nat64 = 0;
 
+  private stable var activeBettingLeagues: [FootballTypes.LeagueId] = [];
+
   /* Application functions */
 
   public shared query func getDataHashes(): async Result.Result<[AppDTOs.DataHashDTO], T.Error> {
@@ -325,7 +327,23 @@ actor Self {
   };
 
   private func postUpgradeCallback() : async (){
-    //await oddsManager.recalculate(1, 1);
+    
+    await oddsManager.recalculate(1, 1, {
+      activeGameweek = 0;
+      activeMonth = 0;
+      activeSeasonId = 0;
+      completedGameweek = 0;
+      leagueId = 0;
+      seasonActive = false;
+      totalGameweeks = 38;
+      transferWindowActive = false;
+      transferWindowEndDay = 0;
+      transferWindowEndMonth = 0;
+      transferWindowStartDay = 0;
+      transferWindowStartMonth = 0;
+      unplayedGameweek = 0;
+
+    });
     //await oddsManager.recalculate(2, 1);
     //await updateProfileCanisterWasms();
   };

@@ -120,7 +120,7 @@ module {
                     let lastGoalscorerOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
                     let scoresBraceOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
                     let scoresHatTrickOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
-                    let penaltyMissersOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
+                    let playerPenaltyMissedOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
                     let yellowCardsOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
                     let redCardsOddsBuffer = Buffer.fromArray<BettingTypes.PlayerSelectionOdds>([]);
                     
@@ -128,68 +128,68 @@ module {
 
                       firstAssistersOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getFirstAssistOdds(fixtures, fixture, player, stats);
+                        odds = oddsGenerator.getFirstAssistOdds(stats, player);
                       });
 
                       firstGoalscorersOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getFirstGoalscorerOdds(fixtures, fixture, player, stats);
+                        odds = oddsGenerator.getFirstGoalscorerOdds(stats, player);
                       });
 
                       anytimeAssistOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getAnytimeAssistOdds(fixtures, fixture, player, stats);
+                        odds = oddsGenerator.getAnytimeAssistOdds(stats, player);
                       });
 
                       anytimeScorerOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getAnytimeScorerOdds(fixtures, fixture, player, stats);
+                        odds = oddsGenerator.getAnytimeScorerOdds(stats, player);
                       });
 
                       lastAssistOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getLastAssistOdds(fixtures, fixture, player, stats);
+                        odds = oddsGenerator.getLastAssistOdds(stats, player);
                       });
 
                       lastGoalscorerOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getLastScorerOdds(fixtures, fixture, player, stats);
+                        odds = oddsGenerator.getLastScorerOdds(stats, player);
                       });
 
                       scoresBraceOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getScoresBraceOdds(player, player.clubId == fixture.homeClubId, stats);
+                        odds = oddsGenerator.getScoresBraceOdds(stats, player);
                       });
 
                       scoresHatTrickOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getScoreHatrickOdds(player, player.clubId == fixture.homeClubId, stats);
+                        odds = oddsGenerator.getScoreHatrickOdds(stats, player);
                       });
 
-                      penaltyMissersOddsBuffer.add({
+                      playerPenaltyMissedOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getMissesPenaltyOdds(player, player.clubId == fixture.homeClubId, stats);
+                        odds = oddsGenerator.getPlayerPenaltyMissOdds(stats, player);
                       });
 
                       yellowCardsOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getYellowCardsOdds(player, player.clubId == fixture.homeClubId, stats);
+                        odds = oddsGenerator.getYellowCardOdds(stats, player);
                       });
 
                       redCardsOddsBuffer.add({
                         playerId = player.id;
-                        odds = oddsGenerator.getRedCardsOdds(player, player.clubId == fixture.homeClubId, stats);
+                        odds = oddsGenerator.getRedCardOdds(stats, player);
                       });
                     };
                     
                     let correctResultsOdds = oddsGenerator.getCorrectResultOdds(stats);
                     let bothTeamsToScoreOdds = oddsGenerator.getBothTeamsToScoreOdds(stats);
-                    let bothTeamsToScoreAndWinnerOdds = oddsGenerator.getBothTeamsToScoreAndWinnerOdds(stats);
+                    let bothTeamsToScoreAndWinnerOdds = oddsGenerator.getBothTeamsToScoreWithWinnerOdds(stats);
                     let correctScoresOdds = oddsGenerator.getCorrectScoreOdds(stats);
                     let goalsOverUnderOdds = oddsGenerator.getGoalsOverUnderOdds(stats);
                     let halfTimeFullTimeResultOdds = oddsGenerator.getHalfTimeFullTimeResultOdds(stats);
-                    let halfTimeScoresOdds = oddsGenerator.getHalfTimeScoreOdds(stats);
-                    let penaltyMissedOdds = oddsGenerator.getPenaltyMissedOdds(stats);
+                    let halfTimeScoresOdds = oddsGenerator.getHalfTimeCorrectScoreOdds(stats);
+                    let teamPenaltyMissOdds = oddsGenerator.getTeamPenaltyMissOdds(stats);
 
                     let matchOdds: BettingTypes.MatchOdds = {
                       leagueId = leagueId;
@@ -208,8 +208,8 @@ module {
                       halfTimeScores = halfTimeScoresOdds;
                       lastAssist = Buffer.toArray(lastAssistOddsBuffer);
                       lastGoalscorers = Buffer.toArray(lastGoalscorerOddsBuffer);
-                      penaltyMissed = penaltyMissedOdds;
-                      penaltyMissers = Buffer.toArray(penaltyMissersOddsBuffer);
+                      penaltyMissed = teamPenaltyMissOdds;
+                      penaltyMissers = Buffer.toArray(playerPenaltyMissedOddsBuffer);
                       redCards = Buffer.toArray(redCardsOddsBuffer);
                       scoresBrace = Buffer.toArray(scoresBraceOddsBuffer);
                       scoresHatTrick = Buffer.toArray(scoresHatTrickOddsBuffer);
@@ -307,6 +307,8 @@ module {
         totalGameweeks;
         homeCurrentSeasonWinPercentage;
         awayCurrentSeasonWinPercentage;
+        currentSeasonFixtures = fixtures;
+        bettingFixture = fixture;
       };
 
     };

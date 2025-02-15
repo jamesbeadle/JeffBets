@@ -1,5 +1,6 @@
 import Base "mo:waterway-mops/BaseTypes";
 import FootballTypes "mo:waterway-mops/FootballTypes";
+import FootballDTOs "../dtos/football_dtos";
 
 module BettingTypes {
 
@@ -257,6 +258,8 @@ module BettingTypes {
     };
 
     public type Stats = {
+        currentSeasonFixtures: [FootballDTOs.FixtureDTO];
+        bettingFixture: FootballDTOs.FixtureDTO;
         priorSeasonTable: FootballTypes.LeagueTable;
         homeTeamPriorSeasonFinish: Nat;
         awayTeamPriorSeasonFinish: Nat;

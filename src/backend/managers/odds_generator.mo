@@ -1,5 +1,6 @@
 import BettingTypes "../types/betting_types";
 import Float "mo:base/Float";
+import Debug "mo:base/Debug";
 import CorrectResultOddsGenerator "odds_generators/correct_result_odds_generator";
 import FirstAssistOddsGenerator "odds_generators/first_assist_odds_generator";
 import AnytimeAssistOddsGenerator "odds_generators/anytime_assist_odds_generator";
@@ -48,7 +49,7 @@ module {
     
 
     public func getCorrectResultOdds(stats: BettingTypes.Stats) : BettingTypes.TeamSelectionOdds{
-
+      
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 

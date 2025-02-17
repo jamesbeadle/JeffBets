@@ -14,35 +14,75 @@ module {
       var away_odds_factor: Float = 1;
       var draw_odds_factor: Float = 1;
       
-      let totalClubs = (stats.totalGameweeks / 2) + 1;  
-      var finishDifference: Float = (Float.fromInt(stats.awayTeamPriorSeasonFinish) / Float.fromInt(Nat8.toNat(totalClubs))) - (Float.fromInt(stats.homeTeamPriorSeasonFinish) / Float.fromInt(Nat8.toNat(totalClubs)));
-      if(finishDifference <= 2){
-        finishDifference := 2;
-      };
       
-      if(finishDifference > 20){
-        finishDifference := 20;
-      };
+      let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
+      let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
+      let homeTeamBad = stats.homeTeamPriorSeasonFinish >= 13;
+      let awayTeamGood = stats.awayTeamPriorSeasonFinish <= 4;
+      let awayTeamAverage = stats.awayTeamPriorSeasonFinish > 4 and stats.awayTeamPriorSeasonFinish < 13;
+      let awayTeamBad = stats.awayTeamPriorSeasonFinish >= 13;
+
       
-      if(stats.homeTeamPriorSeasonFinish < 5){
-        //top 4 club odds
-        home_odds_factor := 1.25 / finishDifference;
-        draw_odds_factor := 4 / finishDifference;
-        away_odds_factor := 6 / finishDifference;
+      if(homeTeamGood){
+
+        if(awayTeamGood){
+          home_odds_factor := 1.25;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.75;
+        };
+        
+        if(awayTeamAverage){
+          home_odds_factor := 0.6; //arsenal
+          draw_odds_factor := 1.5;
+          away_odds_factor := 2.375; //west ham
+        };
+
+        if(awayTeamBad){
+          home_odds_factor := 0.625; 
+          draw_odds_factor := 0.66;
+          away_odds_factor := 1; 
+        };
+        
       };
 
-      if(stats.homeTeamPriorSeasonFinish >= 5 and stats.homeTeamPriorSeasonFinish < 13){
-        //mid table last season
-        home_odds_factor := 1.5 / finishDifference;
-        draw_odds_factor := 3 / finishDifference;
-        away_odds_factor := 4 / finishDifference;
+      if(homeTeamAverage){
+        if(awayTeamGood){
+          home_odds_factor := 1.25;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.75;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1.125;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.875;
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 0.75; //bournemouth
+          draw_odds_factor := 1.125;
+          away_odds_factor := 1.25; //wolves
+        };
       };
 
-      if(stats.homeTeamPriorSeasonFinish >= 13){
-        //bad last season
-        home_odds_factor := 1.75 / finishDifference;
-        draw_odds_factor := 2 / finishDifference;
-        away_odds_factor := 2 / finishDifference;
+      if(homeTeamBad){
+        if(awayTeamGood){
+          home_odds_factor := 1.25;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.75;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1.125;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.875;
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 1.5; //Leicester
+          draw_odds_factor := 0.9;
+          away_odds_factor := 0.5; //Brentford
+        };
       };
       
       return {
@@ -56,78 +96,238 @@ module {
       var home_odds_factor: Float = 1;
       var away_odds_factor: Float = 1;
       var draw_odds_factor: Float = 1;
+      
+      let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
+      let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
+      let homeTeamBad = stats.homeTeamPriorSeasonFinish >= 13;
+      let awayTeamGood = stats.awayTeamPriorSeasonFinish <= 4;
+      let awayTeamAverage = stats.awayTeamPriorSeasonFinish > 4 and stats.awayTeamPriorSeasonFinish < 13;
+      let awayTeamBad = stats.awayTeamPriorSeasonFinish >= 13;
 
-      let totalClubs = (stats.totalGameweeks / 2) + 1;  
-      var finishDifference: Float = (Float.fromInt(stats.awayTeamPriorSeasonFinish) / Float.fromInt(Nat8.toNat(totalClubs))) - (Float.fromInt(stats.homeTeamPriorSeasonFinish) / Float.fromInt(Nat8.toNat(totalClubs)));
-      if(finishDifference <= 2){
-        finishDifference := 2;
+      if(homeTeamGood){
+
+        if(awayTeamGood){
+          home_odds_factor := 1.25; //Man City
+          draw_odds_factor := 1;
+          away_odds_factor := 0.55; //Liverpool
+        };
+        
+        if(awayTeamAverage){
+          home_odds_factor := 1.25; //villa
+          draw_odds_factor := 0.9;
+          away_odds_factor := 0.55; //chelsea
+        };
+
+        if(awayTeamBad){
+          home_odds_factor := 1.25; //inferred
+          draw_odds_factor := 0.8; //inferred
+          away_odds_factor := 0.55; //inferred
+        };
+        
+      };
+
+      if(homeTeamAverage){
+        if(awayTeamGood){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 0.835; //Newcastle
+          draw_odds_factor := 1;
+          away_odds_factor := 0.9375; //Forest
+        };
+      };
+
+      if(homeTeamBad){
+        if(awayTeamGood){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1; 
+          draw_odds_factor := 1;
+          away_odds_factor := 1; 
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
       };
       
-      if(finishDifference > 20){
-        finishDifference := 20;
-      };
-
-      if(stats.homeTeamPriorSeasonFinish < 5){
-        //top 4 club odds
-        home_odds_factor := 1.5 / finishDifference;
-        draw_odds_factor := 3.5 / finishDifference;
-        away_odds_factor := 4 / finishDifference;
-      };
-
-      if(stats.homeTeamPriorSeasonFinish >= 5 and stats.homeTeamPriorSeasonFinish < 13){
-        //mid table last season
-      };
-
-      if(stats.homeTeamPriorSeasonFinish >= 13){
-        //bad last season
-      };
-
       return {
         awayOdds = BettingUtilities.formatOdds(away_odds_factor, BaseOdds.AWAY_WIN_ODDS);
         drawOdds = BettingUtilities.formatOdds(draw_odds_factor, BaseOdds.DRAW_ODDS);
         homeOdds = BettingUtilities.formatOdds(home_odds_factor, BaseOdds.HOME_WIN_ODDS);
       }
     };
-    public func getOffFormAwayFavouriteOdds(stats: BettingTypes.Stats) : BettingTypes.TeamSelectionOdds{
-      var home_odds_factor: Float = 1;
-      var away_odds_factor: Float = 1;
-      var draw_odds_factor: Float = 1;
 
-      if(stats.homeTeamPriorSeasonFinish < 5){
-        //top 4 club odds
-      };
-
-      if(stats.homeTeamPriorSeasonFinish >= 5 and stats.homeTeamPriorSeasonFinish < 13){
-        //mid table last season
-      };
-
-      if(stats.homeTeamPriorSeasonFinish >= 13){
-        //bad last season
-      };
-
-      return {
-        awayOdds = BettingUtilities.formatOdds(away_odds_factor, BaseOdds.AWAY_WIN_ODDS);
-        drawOdds = BettingUtilities.formatOdds(draw_odds_factor, BaseOdds.DRAW_ODDS);
-        homeOdds = BettingUtilities.formatOdds(home_odds_factor, BaseOdds.HOME_WIN_ODDS);
-      }
-    };
     public func getOnFormAwayFavouriteOdds(stats: BettingTypes.Stats) : BettingTypes.TeamSelectionOdds{
       var home_odds_factor: Float = 1;
       var away_odds_factor: Float = 1;
       var draw_odds_factor: Float = 1;
+      
+      let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
+      let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
+      let homeTeamBad = stats.homeTeamPriorSeasonFinish >= 13;
+      let awayTeamGood = stats.awayTeamPriorSeasonFinish <= 4;
+      let awayTeamAverage = stats.awayTeamPriorSeasonFinish > 4 and stats.awayTeamPriorSeasonFinish < 13;
+      let awayTeamBad = stats.awayTeamPriorSeasonFinish >= 13;
 
-      if(stats.homeTeamPriorSeasonFinish < 5){
-        //top 4 club odds
+      if(homeTeamGood){
+
+        if(awayTeamGood){
+          home_odds_factor := 1.75; //aston villa
+          draw_odds_factor := 1;
+          away_odds_factor := 0.425; //liverpool
+        };
+        
+        if(awayTeamAverage){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamBad){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+        
       };
 
-      if(stats.homeTeamPriorSeasonFinish >= 5 and stats.homeTeamPriorSeasonFinish < 13){
-        //mid table last season
+      if(homeTeamAverage){
+        if(awayTeamGood){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
       };
 
-      if(stats.homeTeamPriorSeasonFinish >= 13){
-        //bad last season
+      if(homeTeamBad){
+        if(awayTeamGood){
+          home_odds_factor := 1; 
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1.5; //ipswich
+          draw_odds_factor := 1;
+          away_odds_factor := 0.4375; //tottenham
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+      };
+      
+      return {
+        awayOdds = BettingUtilities.formatOdds(away_odds_factor, BaseOdds.AWAY_WIN_ODDS);
+        drawOdds = BettingUtilities.formatOdds(draw_odds_factor, BaseOdds.DRAW_ODDS);
+        homeOdds = BettingUtilities.formatOdds(home_odds_factor, BaseOdds.HOME_WIN_ODDS);
+      }
+    };
+
+    public func getOffFormAwayFavouriteOdds(stats: BettingTypes.Stats) : BettingTypes.TeamSelectionOdds{
+      var home_odds_factor: Float = 1;
+      var away_odds_factor: Float = 1;
+      var draw_odds_factor: Float = 1;
+      
+      let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
+      let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
+      let homeTeamBad = stats.homeTeamPriorSeasonFinish >= 13;
+      let awayTeamGood = stats.awayTeamPriorSeasonFinish <= 4;
+      let awayTeamAverage = stats.awayTeamPriorSeasonFinish > 4 and stats.awayTeamPriorSeasonFinish < 13;
+      let awayTeamBad = stats.awayTeamPriorSeasonFinish >= 13;
+
+      if(homeTeamGood){
+
+        if(awayTeamGood){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+        
+        if(awayTeamAverage){
+          home_odds_factor := 1.125;
+          draw_odds_factor := 0.85;
+          away_odds_factor := 0.6;
+        };
+
+        if(awayTeamBad){
+          home_odds_factor := 1; 
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+        
       };
 
+      if(homeTeamAverage){
+        if(awayTeamGood){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+      };
+
+      if(homeTeamBad){
+        if(awayTeamGood){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+
+        if(awayTeamAverage){
+          home_odds_factor := 1; //Fulham //??southampton brighton came out badly
+          draw_odds_factor := 0.9;
+          away_odds_factor := 0.825; //Palace
+        };
+        
+        if(awayTeamBad){
+          home_odds_factor := 1;
+          draw_odds_factor := 1;
+          away_odds_factor := 1;
+        };
+      };
+      
       return {
         awayOdds = BettingUtilities.formatOdds(away_odds_factor, BaseOdds.AWAY_WIN_ODDS);
         drawOdds = BettingUtilities.formatOdds(draw_odds_factor, BaseOdds.DRAW_ODDS);

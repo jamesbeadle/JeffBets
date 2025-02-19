@@ -14,7 +14,6 @@ module {
       var away_odds_factor: Float = 1;
       var draw_odds_factor: Float = 1;
       
-      
       let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
       let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
       let homeTeamBad = stats.homeTeamPriorSeasonFinish >= 13;
@@ -22,67 +21,76 @@ module {
       let awayTeamAverage = stats.awayTeamPriorSeasonFinish > 4 and stats.awayTeamPriorSeasonFinish < 13;
       let awayTeamBad = stats.awayTeamPriorSeasonFinish >= 13;
 
-      
       if(homeTeamGood){
-
-        if(awayTeamGood){
-          home_odds_factor := 1.25;
-          draw_odds_factor := 1;
-          away_odds_factor := 0.75;
-        };
-        
-        if(awayTeamAverage){
-          home_odds_factor := 0.6; //arsenal
-          draw_odds_factor := 1.5;
-          away_odds_factor := 2.375; //west ham
-        };
-
-        if(awayTeamBad){
-          home_odds_factor := 0.625; 
-          draw_odds_factor := 0.66;
-          away_odds_factor := 1; 
-        };
-        
+        home_odds_factor := home_odds_factor * 0.5;
+        draw_odds_factor := draw_odds_factor * 1.5;
+        away_odds_factor := away_odds_factor * 1.5;
       };
 
       if(homeTeamAverage){
-        if(awayTeamGood){
-          home_odds_factor := 1.25;
-          draw_odds_factor := 1;
-          away_odds_factor := 0.75;
-        };
-
-        if(awayTeamAverage){
-          home_odds_factor := 1.125;
-          draw_odds_factor := 1;
-          away_odds_factor := 0.875;
-        };
-        
-        if(awayTeamBad){
-          home_odds_factor := 0.75; //bournemouth
-          draw_odds_factor := 1.125;
-          away_odds_factor := 1.25; //wolves
-        };
+        home_odds_factor := home_odds_factor * 1;
+        draw_odds_factor := draw_odds_factor * 1;
+        away_odds_factor := away_odds_factor * 1;
       };
 
       if(homeTeamBad){
-        if(awayTeamGood){
+        home_odds_factor := home_odds_factor * 1.5;
+        draw_odds_factor := draw_odds_factor * 0.5;
+        away_odds_factor := away_odds_factor * 0.5;
+      };
+
+      if(homeTeamGood and awayTeamGood){
+        home_odds_factor := home_odds_factor * 2;
+        draw_odds_factor := draw_odds_factor * 1;
+        away_odds_factor := away_odds_factor * 0.5;
+      };
+
+      if(homeTeamGood and awayTeamAverage){
+          home_odds_factor := home_odds_factor * 1.2;
+          draw_odds_factor := draw_odds_factor * 1;
+          away_odds_factor := away_odds_factor * 1.5;
+      };
+
+      if(homeTeamGood and awayTeamBad){
+          home_odds_factor := 0.625; 
+          draw_odds_factor := 1;
+          away_odds_factor := 2.5; 
+      };
+
+      if(homeTeamAverage and awayTeamGood){
           home_odds_factor := 1.25;
           draw_odds_factor := 1;
           away_odds_factor := 0.75;
-        };
+      };
 
-        if(awayTeamAverage){
+      if(homeTeamAverage and awayTeamAverage){
           home_odds_factor := 1.125;
           draw_odds_factor := 1;
           away_odds_factor := 0.875;
-        };
-        
-        if(awayTeamBad){
+      };
+
+      if(homeTeamAverage and awayTeamBad){
+          home_odds_factor := 0.75; //bournemouth
+          draw_odds_factor := 1.125;
+          away_odds_factor := 1.25; //wolves
+      };
+
+      if(homeTeamBad and awayTeamGood){
+          home_odds_factor := 1.25;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.75;
+      };
+
+      if(homeTeamBad and awayTeamAverage){
+          home_odds_factor := 1.125;
+          draw_odds_factor := 1;
+          away_odds_factor := 0.875;
+      };
+
+      if(homeTeamBad and awayTeamBad){
           home_odds_factor := 1.5; //Leicester
           draw_odds_factor := 0.9;
           away_odds_factor := 0.5; //Brentford
-        };
       };
       
       return {
@@ -90,7 +98,7 @@ module {
         drawOdds = BettingUtilities.formatOdds(draw_odds_factor, BaseOdds.DRAW_ODDS);
         homeOdds = BettingUtilities.formatOdds(home_odds_factor, BaseOdds.HOME_WIN_ODDS);
       }
-    };
+    };   
 
     public func getOffFormHomeFavouriteOdds(stats: BettingTypes.Stats) : BettingTypes.TeamSelectionOdds{
       var home_odds_factor: Float = 1;

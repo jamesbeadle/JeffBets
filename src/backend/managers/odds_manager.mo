@@ -77,11 +77,11 @@ module {
     public func recalculate(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId, leagueStatus: FootballTypes.LeagueStatus) : async () {
       
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-        getFixtures : shared query (leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
+        getBettableFixtures : shared query (leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
         getPlayers : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[FootballDTOs.PlayerDTO], T.Error>;
         getLeagueTable : shared query (leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) -> async Result.Result<FootballTypes.LeagueTable, T.Error>;
       };
-      let fixturesResult = await data_canister.getFixtures(leagueId, seasonId);
+      let fixturesResult = await data_canister.getBettableFixtures(leagueId, seasonId);
       let playersResult = await data_canister.getPlayers(leagueId);
 
       let priorSeasonLeagueTable = await data_canister.getLeagueTable(leagueId, seasonId - 1);

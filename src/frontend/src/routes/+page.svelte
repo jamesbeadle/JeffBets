@@ -53,7 +53,7 @@
   onMount(async () => {
     try {
       await appStore.checkServerVersion();
-      leagues = await leagueStore.getLeagues();
+      leagues = await leagueStore.getBettableLeagues();
       const existingBets = $betSlipStore.bets;
       const toggledLeagues = new Set<number>();
       

@@ -20,6 +20,17 @@ export class LeagueService {
     return result.ok;
   }
 
+  async getBettableLeagues(): Promise<FootballLeagueDTO[]> {
+    const identityActor: any =
+      await ActorFactory.createDataCanisterIdentityActor(
+        authStore,
+        process.env.DATA_CANISTER_ID ?? "",
+      );
+    const result = await identityActor.getUpToDateLeagues();
+    if (isError(result)) throw new Error("Failed to fetch leagues");
+    return result.ok;
+  }
+
   async getLeagueStatus(leagueId: number): Promise<LeagueStatus> {
     const identityActor: any =
       await ActorFactory.createDataCanisterIdentityActor(

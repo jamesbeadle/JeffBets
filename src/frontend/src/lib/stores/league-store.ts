@@ -187,6 +187,10 @@ function createLeagueStore() {
     return new LeagueService().getLeagues();
   }
 
+  async function getBettableLeagues() {
+    return new LeagueService().getBettableLeagues();
+  }
+
   async function getLeagueStatus(leagueId: number): Promise<LeagueStatus> {
     return new LeagueService().getLeagueStatus(leagueId);
   }
@@ -198,6 +202,7 @@ function createLeagueStore() {
     getLeagueStatus,
     syncLeagueStatus,
     subscribeLeagueStatus,
+    getBettableLeagues,
   };
 }
 

@@ -327,14 +327,24 @@ export interface _SERVICE {
   getUserBets: ActorMethod<[GetUserBets], Result_3>;
   isAuditor: ActorMethod<[], Result_2>;
   kycVerificationCallback: ActorMethod<[ShuftiResponse], Result>;
-  notifyAppsOfFixtureFinalised: ActorMethod<[SeasonId, GameweekNumber], Result>;
-  notifyAppsOfGameweekStarting: ActorMethod<[SeasonId, GameweekNumber], Result>;
-  notifyAppsOfLoan: ActorMethod<[PlayerId], Result>;
-  notifyAppsOfLoanExpired: ActorMethod<[PlayerId], Result>;
-  notifyAppsOfPositionChange: ActorMethod<[PlayerId], Result>;
-  notifyAppsOfRetirement: ActorMethod<[PlayerId], Result>;
-  notifyAppsOfSeasonComplete: ActorMethod<[SeasonId], Result>;
-  notifyAppsOfTransfer: ActorMethod<[PlayerId], Result>;
+  notifyAppsOfFixtureComplete: ActorMethod<
+    [LeagueId, SeasonId, GameweekNumber],
+    Result
+  >;
+  notifyAppsOfFixtureFinalised: ActorMethod<
+    [LeagueId, SeasonId, GameweekNumber],
+    Result
+  >;
+  notifyAppsOfGameweekStarting: ActorMethod<
+    [LeagueId, SeasonId, GameweekNumber],
+    Result
+  >;
+  notifyAppsOfLoan: ActorMethod<[LeagueId, PlayerId], Result>;
+  notifyAppsOfLoanExpired: ActorMethod<[LeagueId, PlayerId], Result>;
+  notifyAppsOfPositionChange: ActorMethod<[LeagueId, PlayerId], Result>;
+  notifyAppsOfRetirement: ActorMethod<[LeagueId, PlayerId], Result>;
+  notifyAppsOfSeasonComplete: ActorMethod<[LeagueId, SeasonId], Result>;
+  notifyAppsOfTransfer: ActorMethod<[LeagueId, PlayerId], Result>;
   pauseAccount: ActorMethod<[PauseAccount], Result>;
   placeBet: ActorMethod<[SubmitBetslip], Result_1>;
   setDailyBetLimit: ActorMethod<[SetDailyBetLimit], Result>;

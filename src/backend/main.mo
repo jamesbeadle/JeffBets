@@ -328,13 +328,14 @@ actor Self {
 
   private func postUpgradeCallback() : async (){
     
+    /*
     await oddsManager.recalculate(1, 1, {
       activeGameweek = 0;
       activeMonth = 0;
       activeSeasonId = 0;
       completedGameweek = 0;
       leagueId = 0;
-      seasonActive = false;
+      seasonActive = true;
       totalGameweeks = 38;
       transferWindowActive = false;
       transferWindowEndDay = 0;
@@ -344,6 +345,7 @@ actor Self {
       unplayedGameweek = 0;
 
     });
+    */
     //await oddsManager.recalculate(2, 1);
     //await updateProfileCanisterWasms();
   };

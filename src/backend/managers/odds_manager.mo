@@ -12,7 +12,10 @@ import Debug "mo:base/Debug";
 import Float "mo:base/Float";
 import Environment "../environment";
 import OddsGenerator "odds_generator";
-import SHA224 "../utilities/SHA224";
+import SHA224 "mo:waterway-mops/SHA224";
+import FootballIds "mo:waterway-mops/football/FootballIds";
+import FootballEnums "mo:waterway-mops/football/FootballEnums";
+import FootballTypes "mo:waterway-mops/football/FootballTypes";
 import AppDTOs "../dtos/app_dtos";
 import FootballDTOs "../dtos/football_dtos";
 
@@ -20,18 +23,18 @@ module {
 
   public class OddsManager() {
 
-    private var matchOddsCache: [(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])] = [];
+    private var matchOddsCache: [(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])] = [];
     private let oddsGenerator = OddsGenerator.OddsGenerator();
   
-    public func getHomepageLeagueFixtures(leagueId: FootballTypes.LeagueId) : [AppDTOs.HomePageFixtureDTO] {
+    public func getHomepageLeagueFixtures(leagueId: FootballIds.LeagueId) : [AppDTOs.HomePageFixtureDTO] {
  
-      let matchOddsResult = Array.find<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(matchOddsCacheEntry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])) : Bool {
+      let matchOddsResult = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(matchOddsCacheEntry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
         matchOddsCacheEntry.0 == leagueId;
       });
 
       switch(matchOddsResult){
         case (?foundMatchOdds){
-          return Array.map<(FootballTypes.FixtureId, BettingTypes.MatchOdds), AppDTOs.HomePageFixtureDTO>(foundMatchOdds.1, func (oddsEntry: (FootballTypes.FixtureId, BettingTypes.MatchOdds)) {
+          return Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), AppDTOs.HomePageFixtureDTO>(foundMatchOdds.1, func (oddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) {
             let matchOdds = oddsEntry.1;
             return {
               leagueId = matchOdds.leagueId;
@@ -49,16 +52,16 @@ module {
       };
     };
     
-    public func getMatchOdds(leagueId: FootballTypes.LeagueId, fixtureId: FootballTypes.FixtureId) : Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
+    public func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
       
-      let leagueOddsCache = Array.find<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, 
-          func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])) : Bool {
+      let leagueOddsCache = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, 
+          func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
             entry.0 == leagueId;
       });
 
       switch(leagueOddsCache){
         case (?foundLeagueOdds){
-          let fixtureOddsResult = Array.find<(FootballTypes.FixtureId, BettingTypes.MatchOdds)>(foundLeagueOdds.1, func(entry: (FootballTypes.FixtureId, BettingTypes.MatchOdds)) : Bool {
+          let fixtureOddsResult = Array.find<(FootballIds.FixtureId, BettingTypes.MatchOdds)>(foundLeagueOdds.1, func(entry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) : Bool {
             entry.0 == fixtureId;
           });
           switch(fixtureOddsResult){
@@ -73,12 +76,12 @@ module {
       return #err(#NotFound);
     };
 
-    public func recalculate(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId, leagueStatus: FootballTypes.LeagueStatus) : async () {
+    public func recalculate(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, leagueStatus: FootballTypes.LeagueStatus) : async () {
       
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-        getBettableFixtures : shared query (leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
-        getPlayers : shared query (leagueId: FootballTypes.LeagueId) -> async Result.Result<[FootballDTOs.PlayerDTO], T.Error>;
-        getLeagueTable : shared query (leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) -> async Result.Result<FootballTypes.LeagueTable, T.Error>;
+        getBettableFixtures : shared query (leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
+        getPlayers : shared query (leagueId: FootballIds.LeagueId) -> async Result.Result<[FootballDTOs.PlayerDTO], T.Error>;
+        getLeagueTable : shared query (leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) -> async Result.Result<FootballTypes.LeagueTable, T.Error>;
       };
       let fixturesResult = await data_canister.getBettableFixtures(leagueId, seasonId);
       let playersResult = await data_canister.getPlayers(leagueId);
@@ -87,7 +90,7 @@ module {
       switch(priorSeasonLeagueTable){
         case (#ok priorSeasonTable){
 
-          matchOddsCache := Array.map<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)]), (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])){
+          matchOddsCache := Array.map<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)]), (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])){
             if(entry.0 == leagueId){
               return (entry.0, [])
             } else {
@@ -314,13 +317,13 @@ module {
 
     private func storeMatchOdds(matchOdds: BettingTypes.MatchOdds){
       
-      let existingLeague = Array.find<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])) : Bool {
+      let existingLeague = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
         entry.0 == matchOdds.leagueId
       });
 
       switch(existingLeague){
         case (?foundLeague){
-          let existingFixtureOdds = Array.find<(FootballTypes.FixtureId, BettingTypes.MatchOdds)>(foundLeague.1, func(fixtureEntry: (FootballTypes.FixtureId, BettingTypes.MatchOdds)) : Bool {
+          let existingFixtureOdds = Array.find<(FootballIds.FixtureId, BettingTypes.MatchOdds)>(foundLeague.1, func(fixtureEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) : Bool {
             fixtureEntry.0 == matchOdds.fixtureId;
           });
 
@@ -340,9 +343,9 @@ module {
     };
 
     private func replaceMatchOdds(matchOdds: BettingTypes.MatchOdds){
-      matchOddsCache := Array.map<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)]), (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])){
+      matchOddsCache := Array.map<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)]), (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])){
         if(entry.0 == matchOdds.leagueId){
-          return (entry.0, Array.map<(FootballTypes.FixtureId, BettingTypes.MatchOdds), (FootballTypes.FixtureId, BettingTypes.MatchOdds)>(entry.1, func(matchOddsEntry: (FootballTypes.FixtureId, BettingTypes.MatchOdds)){
+          return (entry.0, Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), (FootballIds.FixtureId, BettingTypes.MatchOdds)>(entry.1, func(matchOddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)){
             if(matchOddsEntry.0 == matchOdds.fixtureId){
               return (matchOddsEntry.0, matchOdds);
             } else {
@@ -356,9 +359,9 @@ module {
     };
 
     private func addNewMatchOdds(matchOdds: BettingTypes.MatchOdds){
-      matchOddsCache := Array.map<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)]), (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])){
+      matchOddsCache := Array.map<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)]), (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])){
         if(entry.0 == matchOdds.leagueId){
-          let leagueOddsBuffer = Buffer.fromArray<(FootballTypes.FixtureId, BettingTypes.MatchOdds)>(entry.1);
+          let leagueOddsBuffer = Buffer.fromArray<(FootballIds.FixtureId, BettingTypes.MatchOdds)>(entry.1);
           leagueOddsBuffer.add((matchOdds.fixtureId, matchOdds));
           return (entry.0, Buffer.toArray(leagueOddsBuffer));
         } else {
@@ -368,7 +371,7 @@ module {
     };
 
     private func addInitialLeagueMatchOdds(matchOdds: BettingTypes.MatchOdds){
-      let matchOddsCacheBuffer = Buffer.fromArray<(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache);
+      let matchOddsCacheBuffer = Buffer.fromArray<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache);
       matchOddsCacheBuffer.add(matchOdds.leagueId, [(matchOdds.fixtureId, matchOdds)]);
       matchOddsCache := Buffer.toArray(matchOddsCacheBuffer);
     };
@@ -433,11 +436,11 @@ module {
       return #ok(dataHashes)
     };
 
-    public func getStableMatchOddsCache(): [(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])]{
+    public func getStableMatchOddsCache(): [(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])]{
       return matchOddsCache;
     };
 
-    public func setStableMatchOddsCache(stable_match_odds_cache: [(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])]){
+    public func setStableMatchOddsCache(stable_match_odds_cache: [(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])]){
       matchOddsCache := stable_match_odds_cache;
     };
 

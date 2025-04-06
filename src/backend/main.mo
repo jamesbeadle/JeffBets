@@ -50,6 +50,8 @@ import KYCManager "managers/kyc_manager";
 import Base "mo:waterway-mops/BaseTypes";
 import Ids "mo:waterway-mops/Ids";
 import Management "mo:waterway-mops/Management";
+import FootballIds "mo:waterway-mops/football/FootballIds";
+import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
 import T "types/app_types";
 import BettingTypes "types/betting_types";
 import AppTypes "types/app_types";
@@ -76,7 +78,7 @@ actor Self {
   private stable var totalBetsStaked: Nat64 = 0;
   private stable var totalPotentialPayout: Nat64 = 0;
 
-  private stable var activeBettingLeagues: [FootballTypes.LeagueId] = [];
+  private stable var activeBettingLeagues: [FootballIds.LeagueId] = [];
 
   /* Application functions */
 
@@ -144,11 +146,11 @@ actor Self {
 
   /* Betting functions */
 
-  public shared query func getBettableHomepageFixtures(leagueId: FootballTypes.LeagueId) : async Result.Result<[AppDTOs.HomePageFixtureDTO], T.Error> {
+  public shared query func getBettableHomepageFixtures(leagueId: FootballIds.LeagueId) : async Result.Result<[AppDTOs.HomePageFixtureDTO], T.Error> {
     return #ok(oddsManager.getHomepageLeagueFixtures(leagueId));
   };
 
-  public shared query func getMatchOdds(leagueId: FootballTypes.LeagueId, fixtureId: FootballTypes.FixtureId) : async Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
+  public shared query func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : async Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
     return oddsManager.getMatchOdds(leagueId, fixtureId);
   };
   
@@ -367,7 +369,7 @@ actor Self {
     return true;
   };
 
-  private func settleBets(completedFixtureId: FootballTypes.FixtureId) : async (){
+  private func settleBets(completedFixtureId: FootballIds.FixtureId) : async (){
 
     let updatedOpenBetsBuffer = Buffer.fromArray<BettingTypes.BetSlip>([]);
     for(bet in Iter.fromArray(openBets)){
@@ -434,7 +436,7 @@ actor Self {
   private stable var stable_kyc_profiles: [(Ids.PrincipalId, AppTypes.KYCProfile)] = [];
 
   //Odds Manager
-  private stable var stable_match_odds_cache: [(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])] = [];
+  private stable var stable_match_odds_cache: [(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])] = [];
 
   system func preupgrade() {
     stable_profile_canister_ids := userManager.getStableProfileCanisterIds();
@@ -517,7 +519,7 @@ actor Self {
 
   //Todo this should be called by the notification callback functions
   
-  public shared ({ caller }) func updateBettingOdds(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateBettingOdds(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     await oddsManager.recalculate(leagueId, seasonId);
     return #ok();
@@ -545,13 +547,13 @@ actor Self {
 
   //Data canister notification callback functions
 
-  public shared ({ caller }) func notifyAppsOfLoan(leagueId: FootballTypes.LeagueId, playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfLoan(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfLoanExpired(leagueId: FootballTypes.LeagueId, playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfLoanExpired(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     
     //TODO
@@ -559,13 +561,13 @@ actor Self {
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfTransfer(leagueId: FootballTypes.LeagueId, playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfTransfer(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfRetirement(leagueId: FootballTypes.LeagueId, playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfRetirement(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
 
     //TODO
@@ -573,19 +575,19 @@ actor Self {
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfPositionChange(leagueId: FootballTypes.LeagueId, playerId: FootballTypes.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfPositionChange(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfGameweekStarting(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId, gameweek: FootballTypes.GameweekNumber) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfGameweekStarting(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfFixtureComplete(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId, gameweek: FootballTypes.GameweekNumber) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfFixtureComplete(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), T.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     let leagueStatusResult = await getLeagueStatus(leagueId);
     switch (leagueStatusResult) {
@@ -600,7 +602,7 @@ actor Self {
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfFixtureFinalised(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId, gameweek: FootballTypes.GameweekNumber) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfFixtureFinalised(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), T.Error> {
     
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
 
@@ -619,7 +621,7 @@ actor Self {
   };
 
 
-  public shared ({ caller }) func notifyAppsOfSeasonComplete(leagueId: FootballTypes.LeagueId, seasonId: FootballTypes.SeasonId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfSeasonComplete(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) : async Result.Result<(), T.Error> {
     
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     
@@ -628,9 +630,9 @@ actor Self {
     return #ok();
   };
 
-  private func getLeagueStatus(leagueId: FootballTypes.LeagueId) : async Result.Result<FootballTypes.LeagueStatus, T.Error> {
+  private func getLeagueStatus(leagueId: FootballIds.LeagueId) : async Result.Result<FootballTypes.LeagueStatus, T.Error> {
     let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-      getLeagueStatus : shared query (leagueId : FootballTypes.LeagueId) -> async Result.Result<FootballTypes.LeagueStatus, T.Error>;
+      getLeagueStatus : shared query (leagueId : FootballIds.LeagueId) -> async Result.Result<FootballTypes.LeagueStatus, T.Error>;
     };
     return await data_canister.getLeagueStatus(leagueId);
   };

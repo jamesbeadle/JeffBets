@@ -1,7 +1,5 @@
 import Ids "mo:waterway-mops/Ids";
 import FootballIds "mo:waterway-mops/football/FootballIds";
-import DTOs "../../dtos/football_dtos";
-import FootballDTOs "../../dtos/football_dtos";
 
 module FootballQueries {
 

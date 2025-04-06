@@ -1,6 +1,5 @@
 import Float "mo:base/Float";
 import BettingTypes "../../types/betting_types";
-import FootballDTOs "../../dtos/football_dtos";
 
 module {
 

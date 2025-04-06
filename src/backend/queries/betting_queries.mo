@@ -2,34 +2,50 @@ import Ids "mo:waterway-mops/Ids";
 import FootballIds "mo:waterway-mops/football/FootballIds";
 import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
 import BettingTypes "../types/betting_types";
+import BettingEnums "../enums/betting_enums";
 
-module DTOs {
+module BettingQueries {
 
-  public type AppStatusDTO = {
-    onHold : Bool;
-    version: Text;
+  public type GetUserBets = {
+    principalId: Ids.PrincipalId;
   };
 
-  public type ProfileDTO = {
-    principalId : Ids.PrincipalId;
-    joinedDate: Int;
-    termsAcceptedDate: Int;
-    username : Text; 
-    profilePicture: ?Blob;
-    profilePictureExtension: Text;
-    withdrawalAddress: Text;
-    accountOnPause: Bool;
-    maxBetLimit: Nat64;
-    monthlyBetLimit: Nat64;
-    monthlyBetTotal: Nat64;
-    accountBalance: Nat64;
-    kycComplete: Bool;
-    kycSubmissionDate: Int;
-    kycApprovalDate: Int;
-    kycRef: Text;
+  public type UserBetsList = {
+    bets: [BetSlip];
+  };
+
+  public type BetSlip = {
+      id: Nat;
+      placedBy: Ids.PrincipalId;
+      placedOn: Int;
+      status: BettingEnums.SelectionStatus;
+      result: BettingEnums.BetResult;
+      selections: [Selection];
+      betType: BettingEnums.BetType;
+      totalStake: Nat64;
+      expectedReturns: Nat64;
+      totalWinnings: Nat64;
+      settledOn: Int;
+  };
+
+    public type Selection = {
+      leagueId: FootballIds.LeagueId;
+      selectionType: BettingEnums.Category;
+      selectionDetail: BettingTypes.SelectionDetail;
+      status: BettingEnums.SelectionStatus;
+      result: BettingEnums.BetResult;
+      odds: Float;
+      stake: Nat64;
+      fixtureId: FootballIds.FixtureId;
+      winnings: Float;
+      expectedReturns: Nat64;
+    };
+
+  public type GetBetslipFixtures = {
+    selections: [BettingTypes.Selection];
   };
   
-  public type MatchOddsDTO = {
+  public type MatchOdds = {
     leagueId: FootballIds.LeagueId;
     fixtureId: FootballIds.FixtureId;
     correctResults: BettingTypes.TeamSelectionOdds;
@@ -53,7 +69,7 @@ module DTOs {
     bothTeamsToScoreAndWinner: [BettingTypes.ResultAndYesNoSelectionOdds];
   };
 
-  public type HomePageFixtureDTO = {
+  public type HomePageFixture = {
     leagueId: FootballIds.LeagueId;
     gameweek: FootballDefinitions.GameweekNumber;
     fixtureId: FootballIds.FixtureId;
@@ -61,16 +77,4 @@ module DTOs {
     drawOdds: Float;
     awayOdds: Float;
   };
-
-  public type CountryDTO = {
-    id : Ids.CountryId;
-    name : Text;
-    code : Text;
-  };
-
-  public type DataHashDTO = {
-    category : Text;
-    hash : Text;
-  };
-
 };

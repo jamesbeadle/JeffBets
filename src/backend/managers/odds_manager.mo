@@ -16,8 +16,6 @@ import SHA224 "mo:waterway-mops/SHA224";
 import FootballIds "mo:waterway-mops/football/FootballIds";
 import FootballEnums "mo:waterway-mops/football/FootballEnums";
 import FootballTypes "mo:waterway-mops/football/FootballTypes";
-import AppDTOs "../dtos/app_dtos";
-import FootballDTOs "../dtos/football_dtos";
 
 module {
 

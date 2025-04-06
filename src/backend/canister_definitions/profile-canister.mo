@@ -15,8 +15,6 @@ import Environment "../environment";
 
 import ICFCLedger "../mops/interfaces/ICFCLedger";
 import Utilities "../utilities/utilities";
-import AppDTOs "../dtos/app_dtos";
-import AuditDTOs "../dtos/audit_dtos";
 import AppCommands "../cqrs/commands/app_commands";
 import BettingCommands "../cqrs/commands/betting_commands";
 import UserCommands "../cqrs/commands/user_commands";

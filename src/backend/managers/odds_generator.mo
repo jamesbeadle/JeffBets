@@ -20,7 +20,6 @@ import CorrectScoreOddsGenerator "odds_generators/correct_score_odds_generator";
 import GoalsOverUnderOddsGenerator "odds_generators/goals_over_under_odds_generator";
 import HalfTimeFullTimeOddsGenerator "odds_generators/half_time_full_time_odds_generator";
 import HalfTimeCorrectScoreOddsGenerator "odds_generators/half_time_correct_score_odds_generator";
-import FootballDTOs "../dtos/football_dtos";
 
 module {
 

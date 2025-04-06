@@ -1,4 +1,3 @@
-import Account "../utilities/Account";
 import Array "mo:base/Array";
 import Blob "mo:base/Blob";
 import Buffer "mo:base/Buffer";
@@ -22,19 +21,13 @@ import FootballTypes "mo:waterway-mops/football/FootballTypes";
 import ProfileCanister "../canister_definitions/profile-canister";
 
 import BettingUtilities "../utilities/betting_utilities";
-import Constants "../utilities/Constants";
 import Environment "../environment";
-import Management "../utilities/Management";
-import SNSToken "../utilities/ledger";
 import Utilities "../utilities/utilities";
 import AppTypes "../types/app_types";
-import AppDTOs "../dtos/app_dtos";
 import AppCommands "../cqrs/commands/app_commands";
 import BettingCommands "../cqrs/commands/betting_commands";
 import UserCommands "../cqrs/commands/user_commands";
 import BettingQueries "../cqrs/queries/betting_queries";
-import AuditDTOs "../dtos/audit_dtos";
-import FootballDTOs "../dtos/football_dtos";
 
 module {
 

@@ -2,6 +2,7 @@ import FootballIds "mo:waterway-mops/football/FootballIds";
 import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
 import Ids "mo:waterway-mops/Ids";
 import FootballTypes "mo:waterway-mops/football/FootballTypes";
+import BettingEnums "../enums/betting_enums";
 
 module BettingTypes {
 
@@ -87,8 +88,8 @@ module BettingTypes {
         id: Nat;
         placedBy: Ids.PrincipalId;
         placedOn: Int;
-        status: SelectionStatus;
-        result: BetResult;
+        status: BettingEnums.SelectionStatus;
+        result: BettingEnums.BetResult;
         selections: [Selection];
         betType: BetType;
         totalStake: Nat64;
@@ -101,25 +102,13 @@ module BettingTypes {
         leagueId: FootballIds.LeagueId;
         selectionType: Category;
         selectionDetail: SelectionDetail;
-        status: SelectionStatus;
-        result: BetResult;
+        status: BettingEnums.SelectionStatus;
+        result: BettingEnums.BetResult;
         odds: Float;
         stake: Nat64;
         fixtureId: FootballIds.FixtureId;
         winnings: Float;
         expectedReturns: Nat64;
-    };
-
-    public type SelectionStatus = {
-        #Unsettled;
-        #Settled;
-        #Void;
-    };
-
-    public type BetResult = {
-        #Open;
-        #Won;
-        #Lost;
     };
 
     public type Event = {

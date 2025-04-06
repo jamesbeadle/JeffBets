@@ -1,4 +1,3 @@
-import AuditDTOs "../../dtos/audit_dtos";
 
 module AuditQueries {
 
@@ -9,7 +8,11 @@ module AuditQueries {
 
   public type UserAuditList = {
     date: Int;
-    users: [AuditDTOs.AuditRecordDTO];
+    users: [AuditRecord];
     offset: Nat;
+  };
+
+  public type AuditRecord = {
+    /* // TODO - Confirm query requirements on audit. */
   };
 };

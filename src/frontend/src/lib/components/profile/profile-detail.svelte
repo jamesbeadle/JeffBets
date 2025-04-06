@@ -9,7 +9,7 @@
   import FullScreenSpinner from "../shared/full-screen-spinner.svelte";
   import { SHUFTI_CLIENT_ID, SHUFTI_SECRET_KEY } from "$lib/environment/environment";
   import { kycStore } from "$lib/stores/kyc-store";
-  import type { ProfileDTO } from "../../../../../declarations/backend/backend.did";
+  import type { Profile } from "../../../../../declarations/backend/backend.did";
   import { toasts } from "$lib/stores/toasts-store";
 
   let isLoading = true;
@@ -20,7 +20,7 @@
   let dots = writable('.');
   let dot_interval: ReturnType<typeof setInterval>;
   let principalId = "";
-  let profile: ProfileDTO | null = null;
+  let profile: Profile | null = null;
 
   let showUsernameModal = false;
   let showFPLModal = false;

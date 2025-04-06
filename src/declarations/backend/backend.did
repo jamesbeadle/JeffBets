@@ -1,0 +1,693 @@
+type YesNoSelectionOdds = 
+ record {
+   noOdds: float64;
+   yesOdds: float64;
+ };
+type UserBetsList = record {bets: vec BetSlip__1;};
+type UserAuditList = 
+ record {
+   date: int;
+   offset: nat;
+   users: vec AuditRecord;
+ };
+type UpdateWithdrawalAddress = 
+ record {
+   principalId: PrincipalId;
+   withdrawalAddress: text;
+ };
+type UpdateUsername = 
+ record {
+   principalId: PrincipalId;
+   username: text;
+ };
+type UpdateProfilePicture = 
+ record {
+   principalId: PrincipalId;
+   profilePicture: blob;
+   profilePictureExtension: text;
+ };
+type TeamSelectionOdds = 
+ record {
+   awayOdds: float64;
+   drawOdds: float64;
+   homeOdds: float64;
+ };
+type SubmitBetslip = 
+ record {
+   expectedReturn: nat64;
+   leagueId: LeagueId;
+   principalId: PrincipalId;
+   seasonId: SeasonId;
+   totalStake: nat64;
+ };
+type ShuftiResponse = 
+ variant {
+   ShuftiAcceptedResponse: ShuftiAcceptedResponse;
+   ShuftiRejectedResponse: ShuftiRejectedResponse;
+ };
+type ShuftiRejectedResponse = 
+ record {
+   event: text;
+   reference: text;
+ };
+type ShuftiAcceptedResponse = 
+ record {
+   event: text;
+   reference: text;
+ };
+type ShirtType = 
+ variant {
+   Filled;
+   Striped;
+ };
+type SetMonthlyBetLimit = 
+ record {
+   monthlyBetLimit: nat64;
+   principalId: PrincipalId;
+ };
+type SetDailyBetLimit = 
+ record {
+   maxBetLimit: nat64;
+   principalId: PrincipalId;
+ };
+type Selection__1 = 
+ record {
+   expectedReturns: nat64;
+   fixtureId: FixtureId;
+   leagueId: LeagueId;
+   odds: float64;
+   result: BetResult;
+   selectionDetail: SelectionDetail;
+   selectionType: Category__1;
+   stake: nat64;
+   status: SelectionStatus;
+   winnings: float64;
+ };
+type SelectionStatus = 
+ variant {
+   Settled;
+   Unsettled;
+   Void;
+ };
+type SelectionDetail = 
+ variant {
+   AnytimeAssist: PlayerEventDetail;
+   AnytimeGoalscorer: PlayerEventDetail;
+   BothTeamsToScore: BothTeamsToScoreDetail;
+   BothTeamsToScoreAndWinner: BothTeamsToScoreAndWinnerDetail;
+   CorrectResult: CorrectResultDetail;
+   CorrectScore: ScoreDetail;
+   FirstAssist: PlayerEventDetail;
+   FirstGoalscorer: PlayerEventDetail;
+   HalfTimeFullTimeResult: HalfTimeFullTimeResultDetail;
+   HalfTimeScore: ScoreDetail;
+   LastAssist: PlayerEventDetail;
+   LastGoalscorer: PlayerEventDetail;
+   MissPenalty: PlayerEventDetail;
+   PenaltyMissed: ClubEventDetail;
+   RedCard: PlayerEventDetail;
+   ScoreBrace: PlayerGroupEventDetail;
+   ScoreHatrick: PlayerGroupEventDetail;
+   YellowCard: PlayerEventDetail;
+ };
+type Selection = 
+ record {
+   expectedReturns: nat64;
+   fixtureId: FixtureId;
+   leagueId: LeagueId;
+   odds: float64;
+   result: BetResult;
+   selectionDetail: SelectionDetail;
+   selectionType: Category;
+   stake: nat64;
+   status: SelectionStatus;
+   winnings: float64;
+ };
+type Seasons = record {seasons: vec Season;};
+type SeasonId = nat16;
+type Season = 
+ record {
+   id: nat16;
+   name: text;
+   year: nat16;
+ };
+type ScoreSelectionOdds = 
+ record {
+   awayGoals: nat8;
+   homeGoals: nat8;
+   odds: float64;
+ };
+type ScoreDetail = 
+ record {
+   awayGoals: nat8;
+   homeGoals: nat8;
+ };
+type Result_9 = 
+ variant {
+   err: Error;
+   ok: LoanedPlayers;
+ };
+type Result_8 = 
+ variant {
+   err: Error;
+   ok: MatchOdds;
+ };
+type Result_7 = 
+ variant {
+   err: Error;
+   ok: Players;
+ };
+type Result_6 = 
+ variant {
+   err: Error;
+   ok: Profile;
+ };
+type Result_5 = 
+ variant {
+   err: Error;
+   ok: Seasons;
+ };
+type Result_4 = 
+ variant {
+   err: Error;
+   ok: UserAuditList;
+ };
+type Result_3 = 
+ variant {
+   err: Error;
+   ok: UserBetsList;
+ };
+type Result_2 = 
+ variant {
+   err: Error;
+   ok: bool;
+ };
+type Result_16 = 
+ variant {
+   err: Error;
+   ok: AppStatus;
+ };
+type Result_15 = 
+ variant {
+   err: Error;
+   ok: vec HomePageFixture;
+ };
+type Result_14 = 
+ variant {
+   err: Error;
+   ok: Clubs;
+ };
+type Result_13 = 
+ variant {
+   err: Error;
+   ok: Countries;
+ };
+type Result_12 = 
+ variant {
+   err: Error;
+   ok: vec DataHash;
+ };
+type Result_11 = 
+ variant {
+   err: Error;
+   ok: Fixtures;
+ };
+type Result_10 = 
+ variant {
+   err: Error;
+   ok: Leagues;
+ };
+type Result_1 = 
+ variant {
+   err: Error;
+   ok: BetSlip;
+ };
+type ResultAndYesNoSelectionOdds = 
+ record {
+   isYes: bool;
+   odds: float64;
+   result: MatchResult;
+ };
+type Result = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Profile = 
+ record {
+   accountBalance: nat64;
+   accountOnPause: bool;
+   joinedDate: int;
+   kycApprovalDate: int;
+   kycComplete: bool;
+   kycRef: text;
+   kycSubmissionDate: int;
+   maxBetLimit: nat64;
+   monthlyBetLimit: nat64;
+   monthlyBetTotal: nat64;
+   principalId: PrincipalId;
+   profilePicture: opt blob;
+   profilePictureExtension: text;
+   termsAcceptedDate: int;
+   username: text;
+   withdrawalAddress: text;
+ };
+type PrincipalId = text;
+type Players = record {players: vec Player;};
+type PlayerStatus = 
+ variant {
+   Active;
+   FreeAgent;
+   OnLoan;
+   Retired;
+ };
+type PlayerSelectionOdds = 
+ record {
+   odds: float64;
+   playerId: PlayerId;
+ };
+type PlayerPosition = 
+ variant {
+   Defender;
+   Forward;
+   Goalkeeper;
+   Midfielder;
+ };
+type PlayerId = nat16;
+type PlayerGroupEventDetail = 
+ record {
+   clubId: ClubId;
+   playerId: PlayerId;
+ };
+type PlayerEventType = 
+ variant {
+   Appearance;
+   CleanSheet;
+   Goal;
+   GoalAssisted;
+   GoalConceded;
+   HighestScoringPlayer;
+   KeeperSave;
+   OwnGoal;
+   PenaltyMissed;
+   PenaltySaved;
+   RedCard;
+   YellowCard;
+ };
+type PlayerEventDetail = 
+ record {
+   clubId: ClubId;
+   playerId: PlayerId;
+ };
+type PlayerEventData = 
+ record {
+   clubId: ClubId;
+   eventEndMinute: nat8;
+   eventStartMinute: nat8;
+   eventType: PlayerEventType;
+   fixtureId: FixtureId;
+   playerId: nat16;
+ };
+type Player = 
+ record {
+   clubId: ClubId;
+   currentLoanEndDate: int;
+   dateOfBirth: int;
+   firstName: text;
+   id: nat16;
+   lastName: text;
+   leagueId: LeagueId;
+   nationality: CountryId;
+   parentClubId: ClubId;
+   parentLeagueId: LeagueId;
+   position: PlayerPosition;
+   shirtNumber: nat8;
+   status: PlayerStatus;
+   valueQuarterMillions: nat16;
+ };
+type PauseAccount = 
+ record {
+   pauseDays: nat;
+   principalId: PrincipalId;
+ };
+type OverUnderSelectionOdds = 
+ record {
+   overOdds: vec OverUnderSelection;
+   underOdds: vec OverUnderSelection;
+ };
+type OverUnderSelection = 
+ record {
+   margin: float64;
+   odds: float64;
+ };
+type MissPenaltyOdds = 
+ record {
+   awayTeam: float64;
+   homeTeam: float64;
+ };
+type MatchResult = 
+ variant {
+   AwayWin;
+   Draw;
+   HomeWin;
+ };
+type MatchOdds = 
+ record {
+   anytimeAssist: vec PlayerSelectionOdds;
+   anytimeScorers: vec PlayerSelectionOdds;
+   bothTeamsToScore: YesNoSelectionOdds;
+   bothTeamsToScoreAndWinner: vec ResultAndYesNoSelectionOdds;
+   correctResults: TeamSelectionOdds;
+   correctScores: vec ScoreSelectionOdds;
+   firstAssisters: vec PlayerSelectionOdds;
+   firstGoalscorers: vec PlayerSelectionOdds;
+   fixtureId: FixtureId;
+   goalsOverUnder: OverUnderSelectionOdds;
+   halfTimeFullTimeResult: vec HalfTimeFullTimeOdds;
+   halfTimeScores: vec ScoreSelectionOdds;
+   lastAssist: vec PlayerSelectionOdds;
+   lastGoalscorers: vec PlayerSelectionOdds;
+   leagueId: LeagueId;
+   penaltyMissed: MissPenaltyOdds;
+   penaltyMissers: vec PlayerSelectionOdds;
+   redCards: vec PlayerSelectionOdds;
+   scoresBrace: vec PlayerSelectionOdds;
+   scoresHatTrick: vec PlayerSelectionOdds;
+   yellowCards: vec PlayerSelectionOdds;
+ };
+type LoanedPlayers = record {players: vec Player;};
+type Leagues = record {leagues: vec League;};
+type LeagueId = nat16;
+type League = 
+ record {
+   abbreviation: text;
+   countryId: CountryId;
+   formed: int;
+   governingBody: text;
+   id: LeagueId;
+   logo: blob;
+   name: text;
+   relatedGender: Gender;
+   teamCount: nat8;
+ };
+type HomePageFixture = 
+ record {
+   awayOdds: float64;
+   drawOdds: float64;
+   fixtureId: FixtureId;
+   gameweek: GameweekNumber;
+   homeOdds: float64;
+   leagueId: LeagueId;
+ };
+type HalfTimeFullTimeResultDetail = 
+ record {
+   fullTimeResult: MatchResult;
+   halfTimeResult: MatchResult;
+ };
+type HalfTimeFullTimeOdds = 
+ record {
+   firstHalfResult: MatchResult;
+   odds: float64;
+   secondHalfResult: MatchResult;
+ };
+type GetUserBets = record {principalId: PrincipalId;};
+type GetUserAudit = 
+ record {
+   page: nat;
+   principalId: text;
+ };
+type GetSeasons = record {leagueId: LeagueId;};
+type GetPlayers = record {leagueId: LeagueId;};
+type GetLoanedPlayers = record {leagueId: LeagueId;};
+type GetLeagues = record {};
+type GetFixtures = 
+ record {
+   leagueId: LeagueId;
+   seasonId: SeasonId;
+ };
+type GetCountries = record {};
+type GetClubs = record {leagueId: LeagueId;};
+type Gender = 
+ variant {
+   Female;
+   Male;
+ };
+type GameweekNumber = nat8;
+type Fixtures = 
+ record {
+   fixtures: vec Fixture;
+   leagueId: LeagueId;
+   seasonId: SeasonId;
+ };
+type FixtureStatusType = 
+ variant {
+   Active;
+   Complete;
+   Finalised;
+   Unplayed;
+ };
+type FixtureId = nat32;
+type Fixture = 
+ record {
+   awayClubId: ClubId;
+   awayGoals: nat8;
+   events: vec PlayerEventData;
+   gameweek: GameweekNumber;
+   highestScoringPlayerId: PlayerId;
+   homeClubId: ClubId;
+   homeGoals: nat8;
+   id: FixtureId;
+   kickOff: int;
+   seasonId: SeasonId;
+   status: FixtureStatusType;
+ };
+type Error = 
+ variant {
+   AlreadyClaimed;
+   AlreadyExists;
+   CanisterCreateError;
+   DecodeError;
+   DuplicateData;
+   FailedInterCanisterCall;
+   InEligible;
+   IncorrectSetup;
+   InsufficientFunds;
+   InsufficientPacketsRemaining;
+   InvalidData;
+   InvalidProfilePicture;
+   InvalidProperty;
+   MaxDataExceeded;
+   NeuronAlreadyUsed;
+   NoPacketsRemaining;
+   NotAllowed;
+   NotAuthorized;
+   NotFound;
+   SystemOnHold;
+   TooLong;
+   UpdateFailed;
+ };
+type DataHash = 
+ record {
+   category: text;
+   hash: text;
+ };
+type CountryId = nat16;
+type Country = 
+ record {
+   code: text;
+   id: CountryId;
+   name: text;
+ };
+type Countries = record {countries: vec Country;};
+type CorrectResultDetail = record {matchResult: MatchResult;};
+type Clubs = 
+ record {
+   clubs: vec Club;
+   leagueId: LeagueId;
+ };
+type ClubId = nat16;
+type ClubEventDetail = record {clubId: ClubId;};
+type Club = 
+ record {
+   abbreviatedName: text;
+   friendlyName: text;
+   id: ClubId;
+   name: text;
+   primaryColourHex: text;
+   secondaryColourHex: text;
+   shirtType: ShirtType;
+   thirdColourHex: text;
+ };
+type Category__1 = 
+ variant {
+   AnytimeAssist;
+   AnytimeGoalscorer;
+   BothTeamsToScore;
+   BothTeamsToScoreAndWinner;
+   CorrectResult;
+   CorrectScore;
+   FirstAssist;
+   FirstGoalscorer;
+   HalfTimeFullTimeResult;
+   HalfTimeScore;
+   LastAssist;
+   LastGoalscorer;
+   MissPenalty;
+   PenaltyMissed;
+   RedCard;
+   ScoreBrace;
+   ScoreHatrick;
+   YellowCard;
+ };
+type Category = 
+ variant {
+   AnytimeAssist;
+   AnytimeGoalscorer;
+   BothTeamsToScore;
+   BothTeamsToScoreAndWinner;
+   CorrectResult;
+   CorrectScore;
+   FirstAssist;
+   FirstGoalscorer;
+   HalfTimeFullTimeResult;
+   HalfTimeScore;
+   LastAssist;
+   LastGoalscorer;
+   MissPenalty;
+   PenaltyMissed;
+   RedCard;
+   ScoreBrace;
+   ScoreHatrick;
+   YellowCard;
+ };
+type BothTeamsToScoreDetail = record {bothTeamsToScore: bool;};
+type BothTeamsToScoreAndWinnerDetail = 
+ record {
+   bothTeamsToScore: bool;
+   matchResult: MatchResult;
+ };
+type BetType__1 = 
+ variant {
+   Canadian;
+   Double;
+   EightFold;
+   FiveFold;
+   FourFold;
+   Goliath;
+   Heinz;
+   Lucky15;
+   Lucky31;
+   Lucky63;
+   NineFold;
+   Patent;
+   SevenFold;
+   Single;
+   SixFold;
+   SuperHeinz;
+   TenFold;
+   Treble;
+   Trixie;
+   Yankee;
+ };
+type BetType = 
+ variant {
+   Canadian;
+   Double;
+   EightFold;
+   FiveFold;
+   FourFold;
+   Goliath;
+   Heinz;
+   Lucky15;
+   Lucky31;
+   Lucky63;
+   NineFold;
+   Patent;
+   SevenFold;
+   Single;
+   SixFold;
+   SuperHeinz;
+   TenFold;
+   Treble;
+   Trixie;
+   Yankee;
+ };
+type BetSlip__1 = 
+ record {
+   betType: BetType__1;
+   expectedReturns: nat64;
+   id: nat;
+   placedBy: PrincipalId;
+   placedOn: int;
+   result: BetResult;
+   selections: vec Selection__1;
+   settledOn: int;
+   status: SelectionStatus;
+   totalStake: nat64;
+   totalWinnings: nat64;
+ };
+type BetSlip = 
+ record {
+   betType: BetType;
+   expectedReturns: nat64;
+   id: nat;
+   placedBy: PrincipalId;
+   placedOn: int;
+   result: BetResult;
+   selections: vec Selection;
+   settledOn: int;
+   status: SelectionStatus;
+   totalStake: nat64;
+   totalWinnings: nat64;
+ };
+type BetResult = 
+ variant {
+   Lost;
+   Open;
+   Won;
+ };
+type AuditRecord = record {};
+type AppStatus = 
+ record {
+   onHold: bool;
+   version: text;
+ };
+service : {
+  agreeTerms: () -> (Result);
+  getAppStatus: () -> (Result_16) query;
+  getBettableHomepageFixtures: (LeagueId) -> (Result_15) query;
+  getClubs: (GetClubs) -> (Result_14);
+  getCountries: (GetCountries) -> (Result_13);
+  getDataHashes: () -> (Result_12) query;
+  getFixtures: (GetFixtures) -> (Result_11);
+  getLeagues: (GetLeagues) -> (Result_10);
+  getLoanedPlayers: (GetLoanedPlayers) -> (Result_9);
+  getMatchOdds: (LeagueId, FixtureId) -> (Result_8) query;
+  getPlayers: (GetPlayers) -> (Result_7);
+  getProfile: () -> (Result_6);
+  getSeasons: (GetSeasons) -> (Result_5);
+  getUserAudit: (GetUserAudit) -> (Result_4);
+  getUserBets: (GetUserBets) -> (Result_3);
+  isAuditor: () -> (Result_2);
+  kycVerificationCallback: (ShuftiResponse) -> (Result);
+  notifyAppsOfFixtureComplete: (LeagueId, SeasonId, GameweekNumber) ->
+   (Result);
+  notifyAppsOfFixtureFinalised: (LeagueId, SeasonId, GameweekNumber) ->
+   (Result);
+  notifyAppsOfGameweekStarting: (LeagueId, SeasonId, GameweekNumber) ->
+   (Result);
+  notifyAppsOfLoan: (LeagueId, PlayerId) -> (Result);
+  notifyAppsOfLoanExpired: (LeagueId, PlayerId) -> (Result);
+  notifyAppsOfPositionChange: (LeagueId, PlayerId) -> (Result);
+  notifyAppsOfRetirement: (LeagueId, PlayerId) -> (Result);
+  notifyAppsOfSeasonComplete: (LeagueId, SeasonId) -> (Result);
+  notifyAppsOfTransfer: (LeagueId, PlayerId) -> (Result);
+  pauseAccount: (PauseAccount) -> (Result);
+  placeBet: (SubmitBetslip) -> (Result_1);
+  setDailyBetLimit: (SetDailyBetLimit) -> (Result);
+  setMonthlyBetLimit: (SetMonthlyBetLimit) -> (Result);
+  storeKYCReference: (text) -> ();
+  updateProfilePicture: (UpdateProfilePicture) -> (Result);
+  updateUsername: (UpdateUsername) -> (Result);
+  updateWithdrawalAddress: (UpdateWithdrawalAddress) -> (Result);
+}

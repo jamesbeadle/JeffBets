@@ -6,11 +6,10 @@ export class DataHashService {
   constructor() {}
 
   async getDataHashes(leagueId: LeagueId): Promise<DataHashDTO[]> {
-    const identityActor: any =
-      await ActorFactory.createIdentityActor(
-        authStore,
-        process.env.BACKEND_CANISTER_ID ?? "",
-      );
+    const identityActor: any = await ActorFactory.createIdentityActor(
+      authStore,
+      process.env.BACKEND_CANISTER_ID ?? "",
+    );
     const result = await identityActor.getDataHashes(leagueId);
     if (isError(result)) throw new Error("Failed to fetch data hashes");
     return result.ok;

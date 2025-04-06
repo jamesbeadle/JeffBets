@@ -1,10 +1,11 @@
 import { get, writable } from "svelte/store";
 import { clubStore } from "$lib/stores/club-store";
 import { playerStore } from "$lib/stores/player-store";
+import type { Club, LeagueId, Player } from "../../../../declarations/backend/backend.did";
 
 interface LeagueData {
-  clubs: Record<number, ClubDTO>;
-  players: Record<number, PlayerDTO>;
+  clubs: Record<number, Club>;
+  players: Record<number, Player>;
 }
 
 const dataStore = writable<Record<LeagueId, LeagueData>>({});
@@ -21,11 +22,11 @@ export async function ensureLeagueData(
   const clubsArr = await clubStore.getClubs(leagueId);
   const playersArr = await playerStore.getPlayers(leagueId);
 
-  const clubsObj: Record<number, ClubDTO> = {};
+  const clubsObj: Record<number, Club> = {};
   for (const c of clubsArr) {
     clubsObj[c.id] = c;
   }
-  const playersObj: Record<number, PlayerDTO> = {};
+  const playersObj: Record<number, Player> = {};
   for (const p of playersArr) {
     playersObj[p.id] = p;
   }

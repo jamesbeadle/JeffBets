@@ -14,11 +14,10 @@ export class PlayerEventsService {
         playerId: playerId,
         seasonId: seasonId,
       };
-      const identityActor: any =
-        await ActorFactory.createIdentityActor(
-          authStore,
-          process.env.BACKEND_CANISTER_ID ?? "",
-        );
+      const identityActor: any = await ActorFactory.createIdentityActor(
+        authStore,
+        process.env.BACKEND_CANISTER_ID ?? "",
+      );
       const result = await identityActor.getPlayerDetails(dto);
 
       if (isError(result)) {
@@ -43,11 +42,10 @@ export class PlayerEventsService {
       seasonId,
       gameweek,
     };
-    const identityActor: any =
-      await ActorFactory.createIdentityActor(
-        authStore,
-        process.env.BACKEND_CANISTER_ID ?? "",
-      );
+    const identityActor: any = await ActorFactory.createIdentityActor(
+      authStore,
+      process.env.BACKEND_CANISTER_ID ?? "",
+    );
     const result = await identityActor.getPlayerDetailsForGameweek(
       leagueId,
       dto,
@@ -68,11 +66,10 @@ export class PlayerEventsService {
         seasonId,
         gameweek,
       };
-      const identityActor: any =
-        await ActorFactory.createIdentityActor(
-          authStore,
-          process.env.BACKEND_CANISTER_ID ?? "",
-        );
+      const identityActor: any = await ActorFactory.createIdentityActor(
+        authStore,
+        process.env.BACKEND_CANISTER_ID ?? "",
+      );
       const result = await identityActor.getPlayerDetailsForGameweek(dto);
 
       if (isError(result)) {

@@ -4,13 +4,14 @@ import { DataHashService } from "../services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
 import { leagueStore } from "./league-store";
+import type { Fixture, LeagueId, SeasonId } from "../../../../declarations/backend/backend.did";
 
 function createFixtureStore() {
-  const { subscribe, update } = writable<Record<number, FixtureDTO[]>>({});
+  const { subscribe, update } = writable<Record<number, Fixture[]>>({});
 
   let leagueCacheOrder: number[] = [];
 
-  async function syncFixtures(leagueId: number) {
+  async function syncFixtures(leagueId: LeagueId, seasonId: SeasonId) {
     try {
       const localHashKey = `fixtures_hash_${leagueId}`;
       const localFixturesKey = `fixtures_${leagueId}`;
@@ -21,9 +22,9 @@ function createFixtureStore() {
         leagueId,
       );
 
-      let fixtures: FixtureDTO[];
+      let fixtures: Fixture[];
 
-      let leagueStatus = await leagueStore.getLeagueStatus(leagueId);
+      let leagueStatus = await leagueStore.getLeagueStatus(leagueId, seasonId);
 
       if (!localHash || fixtureHash !== localHash) {
         fixtures = await getFixtures(leagueId, leagueStatus.activeSeasonId);
@@ -32,14 +33,14 @@ function createFixtureStore() {
       } else {
         const cached = localStorage.getItem(localFixturesKey);
         if (cached) {
-          fixtures = deserializeData(cached) as FixtureDTO[];
+          fixtures = deserializeData(cached) as Fixture[];
         } else {
           fixtures = await getFixtures(leagueId, leagueStatus.activeSeasonId);
           localStorage.setItem(localFixturesKey, serializeData(fixtures));
         }
       }
 
-      update((current: Record<number, FixtureDTO[]>) => ({
+      update((current: Record<number, Fixture[]>) => ({
         ...current,
         [leagueId]: fixtures,
       }));
@@ -62,8 +63,8 @@ function createFixtureStore() {
       console.error(`Error syncing fixtures for league ${leagueId}:`, error);
       const cached = localStorage.getItem(`fixtures_${leagueId}`);
       if (cached) {
-        const fixtures = deserializeData(cached) as FixtureDTO[];
-        update((current: Record<number, FixtureDTO[]>) => ({
+        const fixtures = deserializeData(cached) as Fixture[];
+        update((current: Record<number, Fixture[]>) => ({
           ...current,
           [leagueId]: fixtures,
         }));
@@ -74,12 +75,12 @@ function createFixtureStore() {
   async function getFixtures(
     leagueId: number,
     seasonId: number,
-  ): Promise<FixtureDTO[]> {
+  ): Promise<Fixture[]> {
     return new FixtureService().getFixtures(leagueId, seasonId);
   }
 
-  function getFixturesByLeagueId(leagueId: number): FixtureDTO[] | undefined {
-    let data: Record<number, FixtureDTO[]> = {};
+  function getFixturesByLeagueId(leagueId: number): Fixture[] | undefined {
+    let data: Record<number, Fixture[]> = {};
     const unsubscribe = subscribe((value) => {
       data = value;
     });

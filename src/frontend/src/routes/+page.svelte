@@ -23,7 +23,7 @@
 
   import { convertDateToReadable } from "$lib/utils/helpers";
 
-  import type { Category, HomePageFixtureDTO, SelectionDetail } from "../../../declarations/backend/backend.did";
+  import type { Category, Club, Fixture, GameweekNumber, HomePageFixture, League, LeagueId, SelectionDetail } from "../../../declarations/backend/backend.did";
   import { betSlipDataStore } from "$lib/stores/bet-slip-data-store";
   import { buildBetUiDescription } from "$lib/utils/buildBetUiDescription";
     import { appStore } from "$lib/stores/app-store";
@@ -31,10 +31,10 @@
   let isLoading = true;
   let isBetSlipExpanded = false;
 
-  let leagues: FootballLeagueDTO[] = [];
-  let leagueFixtures: Record<LeagueId, FixtureDTO[]> = {};
-  let leagueClubs: Record<LeagueId, Record<number, ClubDTO>> = {};
-  let allBettingFixtures: Record<LeagueId, HomePageFixtureDTO[]> = {};
+  let leagues: League[] = [];
+  let leagueFixtures: Record<LeagueId, Fixture[]> = {};
+  let leagueClubs: Record<LeagueId, Record<number, Club>> = {};
+  let allBettingFixtures: Record<LeagueId, HomePageFixture[]> = {};
   let expandedLeagues: Record<LeagueId, boolean> = {};
   let loadingFixtures: Record<LeagueId, boolean> = {};
   let selectedGameweeks: Record<LeagueId, GameweekNumber> = {};
@@ -87,7 +87,7 @@
     try {
       const clubsData = await clubStore.getClubs(leagueId);
       leagueClubs[leagueId] = {};
-      clubsData.forEach((club: ClubDTO) => {
+      clubsData.forEach((club: Club) => {
         leagueClubs[leagueId][club.id] = club;
       });
     } catch (error) {

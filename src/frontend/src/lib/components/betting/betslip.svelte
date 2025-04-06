@@ -8,15 +8,16 @@
 
   import SettledBets from "./settled-bets.svelte";
   import OpenBets from "./open-bets.svelte";
+    import type { Club, Fixture, League } from "../../../../../declarations/backend/backend.did";
   
-  interface ExtendedFixtureDTO extends FixtureDTO {
+  interface ExtendedFixtureDTO extends Fixture {
     leagueId: number;
   }
 
   export let isExpanded: boolean = false;
-  export let leagueData: Record<number, FootballLeagueDTO>;
+  export let leagueData: Record<number, League>;
   export let fixtureData: Record<number, ExtendedFixtureDTO>;
-  export let clubsData: Record<number, Record<number, ClubDTO>>;
+  export let clubsData: Record<number, Record<number, Club>>;
   
   let showPlaceBet = false;
   let activeTab: 'betslip' | 'open' | 'settled' = 'betslip';
@@ -118,7 +119,7 @@
     };
   }
 
-  function getClub(leagueId: number, clubId: number): ClubDTO | undefined {
+  function getClub(leagueId: number, clubId: number): Club | undefined {
     return clubsData[leagueId]?.[clubId];
   }
 </script>

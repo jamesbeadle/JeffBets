@@ -23,7 +23,6 @@
   } from "$lib/utils/helpers";
 
   import type {
-    MatchOddsDTO,
     PlayerSelectionOdds,
     ScoreSelectionOdds,
     YesNoSelectionOdds,
@@ -33,7 +32,25 @@
     HalfTimeFullTimeOdds,
     ResultAndYesNoSelectionOdds,
     Category,
-    SelectionDetail
+    SelectionDetail,
+
+    MatchOdds,
+
+    Player,
+
+    Club,
+
+    League,
+
+    Fixture,
+
+    ClubId
+
+
+
+
+
+
   } from "../../../../declarations/backend/backend.did";
 
   import { betSlipDataStore } from "$lib/stores/bet-slip-data-store";
@@ -46,15 +63,15 @@
   let activeTab = "All";
   let isBetSlipExpanded = false;
 
-  let matchOdds: MatchOddsDTO;
-  let players: PlayerDTO[] = [];
-  let clubs: ClubDTO[] = [];
-  let league: FootballLeagueDTO | undefined;
-  let fixture: FixtureDTO;
-  let homeClub: ClubDTO;
-  let awayClub: ClubDTO;
-  let allFixturesData: FixtureDTO[] = [];
-  let allClubsData: Record<number, Record<number, ClubDTO>> = {};
+  let matchOdds: MatchOdds;
+  let players: Player[] = [];
+  let clubs: Club[] = [];
+  let league: League | undefined;
+  let fixture: Fixture;
+  let homeClub: Club;
+  let awayClub: Club;
+  let allFixturesData: Fixture[] = [];
+  let allClubsData: Record<number, Record<number, Club>> = {};
   
   const categoryGroups = {
     Goals: ["goalsOverUnder", "correctScores", "halfTimeScores"],
@@ -121,7 +138,7 @@
               "penaltyMissed",
               "penaltyMissers"
             ].filter((key) => key in matchOdds)
-          : categoryGroups[activeTab as keyof typeof categoryGroups]) as readonly (keyof MatchOddsDTO)[]
+          : categoryGroups[activeTab as keyof typeof categoryGroups]) as readonly (keyof MatchOdds)[]
       : [];
 
   $: homeClub = homeClub ?? {
@@ -159,7 +176,7 @@
             const betClubs = await clubStore.getClubs(bet.leagueId);
             
             allClubsData[bet.leagueId] = {};
-            betClubs.forEach((club: ClubDTO) => {
+            betClubs.forEach((club: Club) => {
               allClubsData[bet.leagueId][club.id] = club;
             });
             
@@ -176,13 +193,13 @@
       const clubsData = await clubStore.getClubs(leagueId);
       
       allClubsData[leagueId] = {};
-      clubsData.forEach((club: ClubDTO) => {
+      clubsData.forEach((club: Club) => {
         allClubsData[leagueId][club.id] = club;
       });
 
       fixture = fixtures.find((x) => x.id === fixtureId)!;
-      homeClub = clubsData.find((x: ClubDTO) => x.id === fixture.homeClubId)!;
-      awayClub = clubsData.find((x: ClubDTO) => x.id === fixture.awayClubId)!;
+      homeClub = clubsData.find((x: Club) => x.id === fixture.homeClubId)!;
+      awayClub = clubsData.find((x: Club) => x.id === fixture.awayClubId)!;
       
       allFixturesData = [
         ...allFixturesData,
@@ -577,7 +594,7 @@
       .join(" ");
   }
 
-  function getOddsForCategory(category: keyof MatchOddsDTO) {
+  function getOddsForCategory(category: keyof MatchOdds) {
       if (!matchOdds) return [];
       const odds = matchOdds[category];
       if (!odds) return [];
@@ -585,10 +602,10 @@
   }
 
   function sortPlayersByTeamAndValue(
-    players: PlayerDTO[],
+    players: Player[],
     homeClubId: ClubId,
     awayClubId: ClubId
-  ): PlayerDTO[] {
+  ): Player[] {
     return players.sort((a, b) => {
       if (a.clubId === homeClubId && b.clubId !== homeClubId) {
         return -1;

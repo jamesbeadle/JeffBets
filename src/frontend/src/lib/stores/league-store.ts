@@ -3,11 +3,10 @@ import { LeagueService } from "../services/league-service";
 import { DataHashService } from "$lib/services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
+import type { League } from "../../../../declarations/backend/backend.did";
 
 function createLeagueStore() {
-  const { subscribe, update } = writable<Record<number, FootballLeagueDTO>>({});
-  const { subscribe: subscribeLeagueStatus, update: updateLeagueStatus } =
-    writable<Record<number, LeagueStatus>>({});
+  const { subscribe, update } = writable<Record<number, League>>({});
 
   let leagueCacheOrder: number[] = [];
 
@@ -21,7 +20,7 @@ function createLeagueStore() {
         toggledLeagueId,
       );
 
-      let leagues: FootballLeagueDTO[];
+      let leagues: League[];
 
       if (!localHash || leagueHash !== localHash) {
         leagues = await getLeagues();
@@ -30,7 +29,7 @@ function createLeagueStore() {
       } else {
         const cached = localStorage.getItem(localLeaguesKey);
         if (cached) {
-          const cachedLeagues = deserializeData(cached) as FootballLeagueDTO[];
+          const cachedLeagues = deserializeData(cached) as League[];
           const serverLeagues = await getLeagues();
 
           const cachedLeagueMap = new Map(
@@ -68,7 +67,7 @@ function createLeagueStore() {
       const filteredLeagues = leagueCacheOrder
         .slice(-MAX_CACHED_LEAGUES)
         .map((id) => leagues.find((league) => league.id === id))
-        .filter((league): league is FootballLeagueDTO => league !== undefined);
+        .filter((league): league is League => league !== undefined);
 
       localStorage.setItem(localLeaguesKey, serializeData(filteredLeagues));
 
@@ -84,7 +83,7 @@ function createLeagueStore() {
             acc[league.id] = league;
             return acc;
           },
-          {} as Record<number, FootballLeagueDTO>,
+          {} as Record<number, League>,
         ),
       );
     } catch (error) {
@@ -92,87 +91,16 @@ function createLeagueStore() {
 
       const cached = localStorage.getItem("leagues");
       if (cached) {
-        const leagues = deserializeData(cached) as FootballLeagueDTO[];
+        const leagues = deserializeData(cached) as League[];
         update((current) =>
           leagues.reduce(
             (acc, league) => {
               acc[league.id] = league;
               return acc;
             },
-            {} as Record<number, FootballLeagueDTO>,
+            {} as Record<number, League>,
           ),
         );
-      }
-    }
-  }
-
-  async function syncLeagueStatus(leagueId: number) {
-    try {
-      const localHashKey = `league_status_hash_${leagueId}`;
-      const localLeagueStatusKey = `league_status_${leagueId}`;
-
-      const localHash = localStorage.getItem(localHashKey);
-      const leagueStatusHash = await new DataHashService().getCategoryHash(
-        "league_status",
-        leagueId,
-      );
-
-      let leagueStatus: LeagueStatus;
-
-      if (!localHash || leagueStatusHash !== localHash) {
-        leagueStatus = await getLeagueStatus(leagueId);
-        localStorage.setItem(localLeagueStatusKey, serializeData(leagueStatus));
-        localStorage.setItem(localHashKey, leagueStatusHash || "");
-      } else {
-        const cached = localStorage.getItem(localLeagueStatusKey);
-        if (cached) {
-          leagueStatus = deserializeData(cached) as LeagueStatus;
-        } else {
-          leagueStatus = await getLeagueStatus(leagueId);
-          localStorage.setItem(
-            localLeagueStatusKey,
-            serializeData(leagueStatus),
-          );
-        }
-      }
-
-      let currentStatuses: Record<number, LeagueStatus> = {};
-      const unsubscribe = subscribeLeagueStatus((value) => {
-        currentStatuses = value;
-      });
-      unsubscribe();
-
-      updateLeagueStatus((currentStatuses) => ({
-        ...currentStatuses,
-        [leagueId]: leagueStatus,
-      }));
-
-      if (!leagueCacheOrder.includes(leagueId)) {
-        leagueCacheOrder.push(leagueId);
-      } else {
-        leagueCacheOrder = leagueCacheOrder.filter((id) => id !== leagueId);
-        leagueCacheOrder.push(leagueId);
-      }
-
-      if (leagueCacheOrder.length > MAX_CACHED_LEAGUES) {
-        const leastUsedLeagueId = leagueCacheOrder.shift();
-        if (leastUsedLeagueId !== undefined) {
-          localStorage.removeItem(`league_status_${leastUsedLeagueId}`);
-          localStorage.removeItem(`league_status_hash_${leastUsedLeagueId}`);
-        }
-      }
-    } catch (error) {
-      console.error(
-        `Error syncing league status for league ${leagueId}:`,
-        error,
-      );
-      const cached = localStorage.getItem(`league_status_${leagueId}`);
-      if (cached) {
-        const leagueStatus = deserializeData(cached) as LeagueStatus;
-        updateLeagueStatus((currentStatuses) => ({
-          ...currentStatuses,
-          [leagueId]: leagueStatus,
-        }));
       }
     }
   }
@@ -185,17 +113,10 @@ function createLeagueStore() {
     return new LeagueService().getBettableLeagues();
   }
 
-  async function getLeagueStatus(leagueId: number): Promise<LeagueStatus> {
-    return new LeagueService().getLeagueStatus(leagueId);
-  }
-
   return {
     subscribe,
     syncLeagues,
     getLeagues,
-    getLeagueStatus,
-    syncLeagueStatus,
-    subscribeLeagueStatus,
     getBettableLeagues,
   };
 }

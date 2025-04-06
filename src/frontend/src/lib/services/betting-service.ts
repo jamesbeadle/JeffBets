@@ -1,8 +1,8 @@
 import type {
   FixtureId,
-  HomePageFixtureDTO,
+  HomePageFixture,
   LeagueId,
-  MatchOddsDTO,
+  MatchOdds,
   SubmitBetslip,
 } from "../../../../declarations/backend/backend.did";
 import { isError } from "$lib/utils/helpers";
@@ -14,7 +14,7 @@ export class BettingService {
 
   async getBettableHomepageFixtures(
     leagueId: LeagueId,
-  ): Promise<HomePageFixtureDTO[]> {
+  ): Promise<HomePageFixture[]> {
     const identityActor: any = await ActorFactory.createIdentityActor(
       authStore,
       process.env.BACKEND_CANISTER_ID ?? "",
@@ -28,7 +28,7 @@ export class BettingService {
   async getMatchOdds(
     leagueId: LeagueId,
     fixtureId: FixtureId,
-  ): Promise<MatchOddsDTO> {
+  ): Promise<MatchOdds> {
     const identityActor: any = await ActorFactory.createIdentityActor(
       authStore,
       process.env.BACKEND_CANISTER_ID ?? "",

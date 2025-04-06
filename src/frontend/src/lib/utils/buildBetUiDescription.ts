@@ -1,22 +1,24 @@
 import type {
   BothTeamsToScoreAndWinnerDetail,
   BothTeamsToScoreDetail,
+  Club,
   CorrectResultDetail,
   HalfTimeFullTimeResultDetail,
+  Player,
   ScoreDetail,
   SelectionDetail,
 } from "../../../../declarations/backend/backend.did";
 
 function lookupPlayer(
   playerId: number,
-  players: Record<number, PlayerDTO>,
+  players: Record<number, Player>,
 ): string {
   const p = players[playerId];
   if (!p) return `Player ${playerId}`;
   return `${p.firstName} ${p.lastName}`;
 }
 
-function lookupClub(clubId: number, clubs: Record<number, ClubDTO>): string {
+function lookupClub(clubId: number, clubs: Record<number, Club>): string {
   const c = clubs[clubId];
   if (!c) return `Club ${clubId}`;
   return c.name;
@@ -24,8 +26,8 @@ function lookupClub(clubId: number, clubs: Record<number, ClubDTO>): string {
 
 function lookupClubByPlayerOrId(
   detail: { clubId?: number; playerId?: number },
-  players: Record<number, PlayerDTO>,
-  clubs: Record<number, ClubDTO>,
+  players: Record<number, Player>,
+  clubs: Record<number, Club>,
 ): string {
   let clubId = detail.clubId;
   if (!clubId && detail.playerId != null) {
@@ -42,8 +44,8 @@ function lookupClubByPlayerOrId(
 
 export function buildBetUiDescription(
   detail: SelectionDetail,
-  clubs: Record<number, ClubDTO>,
-  players: Record<number, PlayerDTO>,
+  clubs: Record<number, Club>,
+  players: Record<number, Player>,
 ): string {
   if ("MissPenalty" in detail) {
     const d = detail.MissPenalty;

@@ -1,12 +1,12 @@
 import { writable } from "svelte/store";
-import type { LeagueId } from "../../../../declarations/backend/backend.did";
+import type { Club, LeagueId } from "../../../../declarations/backend/backend.did";
 import { ClubService } from "../services/club-service";
 import { DataHashService } from "../services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
 
 function createClubStore() {
-  const { subscribe, update } = writable<Record<number, ClubDTO[]>>({});
+  const { subscribe, update } = writable<Record<number, Club[]>>({});
 
   let leagueCacheOrder: number[] = [];
 
@@ -21,7 +21,7 @@ function createClubStore() {
         leagueId,
       );
 
-      let clubs: ClubDTO[];
+      let clubs: Club[];
 
       if (!localHash || clubHash !== localHash) {
         clubs = await getClubs(leagueId);
@@ -30,14 +30,14 @@ function createClubStore() {
       } else {
         const cached = localStorage.getItem(localClubsKey);
         if (cached) {
-          clubs = deserializeData(cached) as ClubDTO[];
+          clubs = deserializeData(cached) as Club[];
         } else {
           clubs = await getClubs(leagueId);
           localStorage.setItem(localClubsKey, serializeData(clubs));
         }
       }
 
-      update((current: Record<number, ClubDTO[]>) => ({
+      update((current: Record<number, Club[]>) => ({
         ...current,
         [leagueId]: clubs,
       }));
@@ -60,8 +60,8 @@ function createClubStore() {
       console.error(`Error syncing clubs for league ${leagueId}:`, error);
       const cached = localStorage.getItem(`clubs_${leagueId}`);
       if (cached) {
-        const clubs = deserializeData(cached) as ClubDTO[];
-        update((current: Record<number, ClubDTO[]>) => ({
+        const clubs = deserializeData(cached) as Club[];
+        update((current: Record<number, Club[]>) => ({
           ...current,
           [leagueId]: clubs,
         }));

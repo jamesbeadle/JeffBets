@@ -3,6 +3,7 @@ import { SeasonService } from "$lib/services/season-service";
 import { DataHashService } from "$lib/services/data-hash-service";
 import { serializeData, deserializeData } from "$lib/utils/helpers";
 import { MAX_CACHED_LEAGUES } from "$lib/constants/app.constants";
+import type { Season } from "../../../../declarations/backend/backend.did";
 
 function createSeasonStore() {
   const { subscribe, update } = writable<Record<number, SeasonDTO[]>>({});
@@ -34,14 +35,14 @@ function createSeasonStore() {
       } else {
         const cached = localStorage.getItem(localSeasonsKey);
         if (cached) {
-          seasons = deserializeData(cached) as SeasonDTO[];
+          seasons = deserializeData(cached) as Season[];
         } else {
           seasons = await getSeasons(leagueId);
           localStorage.setItem(localSeasonsKey, serializeData(seasons));
         }
       }
 
-      update((current: Record<number, SeasonDTO[]>) => ({
+      update((current: Record<number, Season[]>) => ({
         ...current,
         [leagueId]: seasons,
       }));

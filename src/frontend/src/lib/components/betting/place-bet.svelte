@@ -3,17 +3,18 @@
     import EmptyBetSlipIcon from "$lib/icons/EmptyBetSlipIcon.svelte";
     import OpenFplIcon from "$lib/icons/OpenFPLIcon.svelte";
     import { betSlipStore } from "$lib/stores/bet-slip-store";
+    import type { Club, Fixture, League } from "../../../../../declarations/backend/backend.did";
     import Modal from "../shared/modal.svelte";
   
-    interface ExtendedFixtureDTO extends FixtureDTO {
+    interface ExtendedFixtureDTO extends Fixture {
         leagueId: number;
     }
     export let visible: boolean;
     export let closeModal: () => void;
     export let cancelModal: () => void;
-    export let leagueData: Record<number, FootballLeagueDTO>;
+    export let leagueData: Record<number, League>;
     export let fixtureData: Record<number, ExtendedFixtureDTO>;
-        export let clubsData: Record<number, Record<number, ClubDTO>>;
+        export let clubsData: Record<number, Record<number, Club>>;
     
     $: rawSlipState = $betSlipStore;
     $: slipState = rawSlipState ?? {
@@ -62,7 +63,7 @@
         totalReturns = sum;
     }
 
-    function getClub(leagueId: number, clubId: number): ClubDTO | undefined {
+    function getClub(leagueId: number, clubId: number): Club | undefined {
         return clubsData[leagueId]?.[clubId];
     }
 

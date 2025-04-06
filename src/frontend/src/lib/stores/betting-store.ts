@@ -1,6 +1,6 @@
 import type {
   FixtureId,
-  HomePageFixtureDTO,
+  HomePageFixture,
   LeagueId,
   SubmitBetslip,
 } from "../../../../declarations/backend/backend.did";
@@ -9,7 +9,7 @@ import { BettingService } from "../services/betting-service";
 function createBettingStore() {
   async function getBettableHomepageFixtures(
     leagueId: LeagueId,
-  ): Promise<HomePageFixtureDTO[]> {
+  ): Promise<HomePageFixture[]> {
     return new BettingService().getBettableHomepageFixtures(leagueId);
   }
 

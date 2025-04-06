@@ -16,6 +16,12 @@ import SHA224 "mo:waterway-mops/SHA224";
 import FootballIds "mo:waterway-mops/football/FootballIds";
 import FootballEnums "mo:waterway-mops/football/FootballEnums";
 import FootballTypes "mo:waterway-mops/football/FootballTypes";
+import Enums "mo:waterway-mops/Enums";
+import FixtureQueries "mo:waterway-mops/queries/football-queries/FixtureQueries";
+import PlayerQueries "mo:waterway-mops/queries/football-queries/PlayerQueries";
+import AppQueries "../queries/app_queries";
+import MopsAppQueries "../mops/app_queries";
+import BettingQueries "../queries/betting_queries";
 
 module {
 
@@ -24,7 +30,7 @@ module {
     private var matchOddsCache: [(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])] = [];
     private let oddsGenerator = OddsGenerator.OddsGenerator();
   
-    public func getHomepageLeagueFixtures(leagueId: FootballIds.LeagueId) : [AppDTOs.HomePageFixtureDTO] {
+    public func getHomepageLeagueFixtures(leagueId: FootballIds.LeagueId) : [BettingQueries.HomePageFixture] {
  
       let matchOddsResult = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(matchOddsCacheEntry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
         matchOddsCacheEntry.0 == leagueId;
@@ -32,7 +38,7 @@ module {
 
       switch(matchOddsResult){
         case (?foundMatchOdds){
-          return Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), AppDTOs.HomePageFixtureDTO>(foundMatchOdds.1, func (oddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) {
+          return Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), BettingQueries.HomePageFixture>(foundMatchOdds.1, func (oddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) {
             let matchOdds = oddsEntry.1;
             return {
               leagueId = matchOdds.leagueId;
@@ -50,7 +56,7 @@ module {
       };
     };
     
-    public func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
+    public func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : Result.Result<BettingQueries.MatchOdds, Enums.Error> {
       
       let leagueOddsCache = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, 
           func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
@@ -77,9 +83,9 @@ module {
     public func recalculate(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, leagueStatus: FootballTypes.LeagueStatus) : async () {
       
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-        getBettableFixtures : shared query (leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) -> async Result.Result<[FootballDTOs.FixtureDTO], T.Error>;
-        getPlayers : shared query (leagueId: FootballIds.LeagueId) -> async Result.Result<[FootballDTOs.PlayerDTO], T.Error>;
-        getLeagueTable : shared query (leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) -> async Result.Result<FootballTypes.LeagueTable, T.Error>;
+        getBettableFixtures : shared query (leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) -> async Result.Result<[FixtureQueries.Fixture], Enums.Error>;
+        getPlayers : shared query (leagueId: FootballIds.LeagueId) -> async Result.Result<[PlayerQueries.Player], Enums.Error>;
+        getLeagueTable : shared query (leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) -> async Result.Result<FootballTypes.LeagueTable, Enums.Error>;
       };
       let fixturesResult = await data_canister.getBettableFixtures(leagueId, seasonId);
       let playersResult = await data_canister.getPlayers(leagueId);
@@ -98,7 +104,7 @@ module {
           
           switch(fixturesResult){
             case (#ok fixtures){
-              let futureFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(fixtureEntry: FootballDTOs.FixtureDTO){
+              let futureFixtures = Array.filter<FixtureQueries.Fixture>(fixtures, func(fixtureEntry: FixtureQueries.Fixture){
                 fixtureEntry.status == #Unplayed and fixtureEntry.kickOff > Time.now();
               }); 
               switch(playersResult){
@@ -108,7 +114,7 @@ module {
 
                     let stats: BettingTypes.Stats = buildBettingStats(priorSeasonTable, fixtures, fixture, leagueStatus.totalGameweeks);
                     
-                    let fixturePlayers = Array.filter<FootballDTOs.PlayerDTO>(players, func(player: FootballDTOs.PlayerDTO){
+                    let fixturePlayers = Array.filter<PlayerQueries.Player>(players, func(player: PlayerQueries.Player){
                       player.clubId == fixture.homeClubId or player.clubId == fixture.awayClubId
                     });
                     
@@ -229,34 +235,34 @@ module {
       };   
     };
 
-    private func buildBettingStats(priorSeasonTable: FootballTypes.LeagueTable, fixtures: [FootballDTOs.FixtureDTO], fixture: FootballDTOs.FixtureDTO, totalGameweeks: Nat8) : BettingTypes.Stats {
-      let finalisedHomeClubFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
+    private func buildBettingStats(priorSeasonTable: FootballTypes.LeagueTable, fixtures: [FixtureQueries.Fixture], fixture: FixtureQueries.Fixture, totalGameweeks: Nat8) : BettingTypes.Stats {
+      let finalisedHomeClubFixtures = Array.filter<FixtureQueries.Fixture>(fixtures, func(entry: FixtureQueries.Fixture){
         entry.status == #Finalised and
         (entry.homeClubId == fixture.homeClubId or entry.awayClubId == fixture.homeClubId)
       });
 
-      let homeWins = Array.filter<FootballDTOs.FixtureDTO>(finalisedHomeClubFixtures, func(homeEntry: FootballDTOs.FixtureDTO){
+      let homeWins = Array.filter<FixtureQueries.Fixture>(finalisedHomeClubFixtures, func(homeEntry: FixtureQueries.Fixture){
         (homeEntry.homeGoals > homeEntry.awayGoals and homeEntry.homeClubId == fixture.homeClubId) or
         (homeEntry.homeGoals < homeEntry.awayGoals and homeEntry.awayClubId == fixture.homeClubId);
       });
 
-      let homeClubDraws = Array.filter<FootballDTOs.FixtureDTO>(finalisedHomeClubFixtures, func(homeEntry: FootballDTOs.FixtureDTO){
+      let homeClubDraws = Array.filter<FixtureQueries.Fixture>(finalisedHomeClubFixtures, func(homeEntry: FixtureQueries.Fixture){
         (homeEntry.homeGoals == homeEntry.awayGoals and homeEntry.homeClubId == fixture.homeClubId) or
         (homeEntry.homeGoals == homeEntry.awayGoals and homeEntry.awayClubId == fixture.homeClubId);
       });
 
-      let finalisedAwayClubFixtures = Array.filter<FootballDTOs.FixtureDTO>(fixtures, func(entry: FootballDTOs.FixtureDTO){
+      let finalisedAwayClubFixtures = Array.filter<FixtureQueries.Fixture>(fixtures, func(entry: FixtureQueries.Fixture){
         entry.status == #Finalised and
         (entry.homeClubId == fixture.awayClubId or entry.awayClubId == fixture.awayClubId)
       });
 
 
-      let awayWins = Array.filter<FootballDTOs.FixtureDTO>(finalisedAwayClubFixtures, func(awayEntry: FootballDTOs.FixtureDTO){
+      let awayWins = Array.filter<FixtureQueries.Fixture>(finalisedAwayClubFixtures, func(awayEntry: FixtureQueries.Fixture){
         (awayEntry.homeGoals > awayEntry.awayGoals and awayEntry.homeClubId == fixture.awayClubId) or
         (awayEntry.homeGoals < awayEntry.awayGoals and awayEntry.awayClubId == fixture.awayClubId);
       });
 
-      let awayDraws = Array.filter<FootballDTOs.FixtureDTO>(finalisedAwayClubFixtures, func(awayEntry: FootballDTOs.FixtureDTO){
+      let awayDraws = Array.filter<FixtureQueries.Fixture>(finalisedAwayClubFixtures, func(awayEntry: FixtureQueries.Fixture){
         (awayEntry.homeGoals == awayEntry.awayGoals and awayEntry.homeClubId == fixture.awayClubId) or
         (awayEntry.homeGoals == awayEntry.awayGoals and awayEntry.awayClubId == fixture.awayClubId);
       });
@@ -430,7 +436,7 @@ module {
       }
     };
     
-    public func getDataHashes() : Result.Result<[AppDTOs.DataHashDTO], T.Error> {
+    public func getDataHashes() : Result.Result<[MopsAppQueries.DataHash], Enums.Error> {
       return #ok(dataHashes)
     };
 

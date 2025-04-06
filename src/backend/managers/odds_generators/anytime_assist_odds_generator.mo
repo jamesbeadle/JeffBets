@@ -1,11 +1,13 @@
 import Float "mo:base/Float";
+import FootballQueries "mo:waterway-mops/queries/football-queries/FootballQueries";
+import PlayerQueries "mo:waterway-mops/queries/football-queries/PlayerQueries";
 import BettingTypes "../../types/betting_types";
 
 module {
 
   public class AnytimeAssistOddsGenerator() {
     
-    public func getOnFormHomeFavouriteOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getOnFormHomeFavouriteOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       
       let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
       let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
@@ -52,7 +54,7 @@ module {
       return 0;
     };
 
-    public func getOffFormHomeFavouriteOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getOffFormHomeFavouriteOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       
       let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
       let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
@@ -99,7 +101,7 @@ module {
       return 0;
     };
 
-    public func getOffFormAwayFavouriteOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getOffFormAwayFavouriteOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       
       let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
       let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;
@@ -146,7 +148,7 @@ module {
       return 0;
     };
 
-    public func getOnFormAwayFavouriteOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getOnFormAwayFavouriteOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       
       let homeTeamGood = stats.homeTeamPriorSeasonFinish <= 4;
       let homeTeamAverage = stats.homeTeamPriorSeasonFinish > 4 and stats.homeTeamPriorSeasonFinish < 13;

@@ -2,6 +2,7 @@ import FootballIds "mo:waterway-mops/football/FootballIds";
 import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
 import Ids "mo:waterway-mops/Ids";
 import FootballTypes "mo:waterway-mops/football/FootballTypes";
+import FixtureQueries "mo:waterway-mops/queries/football-queries/FixtureQueries";
 import BettingEnums "../enums/betting_enums";
 
 module BettingTypes {
@@ -248,8 +249,8 @@ module BettingTypes {
     };
 
     public type Stats = {
-        currentSeasonFixtures: [FootballTypes.Fixture];
-        bettingFixture: FootballTypes.Fixture;
+        currentSeasonFixtures: [FixtureQueries.Fixture];
+        bettingFixture: FixtureQueries.Fixture;
         priorSeasonTable: FootballTypes.LeagueTable;
         homeTeamPriorSeasonFinish: Nat;
         awayTeamPriorSeasonFinish: Nat;

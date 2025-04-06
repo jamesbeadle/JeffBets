@@ -1,6 +1,7 @@
 import BettingTypes "../types/betting_types";
 import Float "mo:base/Float";
 import Debug "mo:base/Debug";
+import PlayerQueries "mo:waterway-mops/queries/football-queries/PlayerQueries";
 import CorrectResultOddsGenerator "odds_generators/correct_result_odds_generator";
 import FirstAssistOddsGenerator "odds_generators/first_assist_odds_generator";
 import AnytimeAssistOddsGenerator "odds_generators/anytime_assist_odds_generator";
@@ -67,7 +68,7 @@ module {
       return correctResultOddsGenerator.getOnFormAwayFavouriteOdds(stats);
     };
     
-    public func getFirstAssistOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getFirstAssistOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -86,7 +87,7 @@ module {
       return firstAssistOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getAnytimeAssistOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getAnytimeAssistOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -105,7 +106,7 @@ module {
       return anytimeAssistOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getLastAssistOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getLastAssistOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -124,7 +125,7 @@ module {
       return lastAssistOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getFirstGoalscorerOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getFirstGoalscorerOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -143,7 +144,7 @@ module {
       return firstScorerOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
 
-    public func getAnytimeScorerOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getAnytimeScorerOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -162,7 +163,7 @@ module {
       return anytimeScorerOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getLastScorerOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getLastScorerOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -181,7 +182,7 @@ module {
       return lastScorerOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getScoresBraceOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getScoresBraceOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -200,7 +201,7 @@ module {
       return scoreBraceOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getScoreHatrickOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getScoreHatrickOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -219,7 +220,7 @@ module {
       return scoreHattrickOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getPlayerPenaltyMissOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getPlayerPenaltyMissOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -257,7 +258,7 @@ module {
       return teamPenaltyMissOddsGenerator.getOnFormAwayFavouriteOdds(stats);
     };
     
-    public func getYellowCardOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getYellowCardOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 
@@ -276,7 +277,7 @@ module {
       return yellowCardOddsGenerator.getOnFormAwayFavouriteOdds(stats, player);
     };
     
-    public func getRedCardOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+    public func getRedCardOdds(stats: BettingTypes.Stats, player: PlayerQueries.Player) : Float{
       let homeFavourite = stats.homeTeamPriorSeasonFinish < stats.awayTeamPriorSeasonFinish;
       let homeFormBetter = stats.totalHomeClubPoints > stats.totalAwayClubPoints;
 

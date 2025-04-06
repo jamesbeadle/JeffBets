@@ -3,12 +3,14 @@ import Principal "mo:base/Principal";
 import Buffer "mo:base/Buffer";
 import Nat8 "mo:base/Nat8";
 import Blob "mo:base/Blob";
+import Account "mo:waterway-mops/Account";
+import IcfcLedger "interfaces/ICFCLedger";
 
 module {
 
-  public class FPLLedger() {
+  public class IcfcLedgerManager() {
 
-    private let ledger : FPLLedgerInterface.Interface = actor (FPLLedgerInterface.CANISTER_ID);
+    private let ledger : IcfcLedger.Interface = actor (IcfcLedger.CANISTER_ID);
     
     public func getPotBalance(owner : Principal) : async Nat64 {
       let balance = await ledger.icrc1_balance_of({owner; subaccount = ?Account.defaultSubaccount()});

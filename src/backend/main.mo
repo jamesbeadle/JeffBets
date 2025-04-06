@@ -23,18 +23,15 @@ import ProfileCanister "canister_definitions/profile-canister";
 
 
 /* ----- Queries ----- */
-
-import AppDTOs "dtos/app_dtos"; //TODO 
-import FootballDTOs "dtos/football_dtos";
-import BettingQueries "cqrs/queries/betting_queries";
-import AuditQueries "cqrs/queries/audit_queries";
+import BettingQueries "queries/betting_queries";
+import AuditQueries "queries/audit_queries";
 
 
 /* ----- Commands ----- */
 
-import AppCommands "cqrs/commands/app_commands";
-import UserCommands "cqrs/commands/user_commands";
-import BettingCommands "cqrs/commands/betting_commands";
+import AppCommands "commands/app_commands";
+import UserCommands "commands/user_commands";
+import BettingCommands "commands/betting_commands";
 
 
 /* ----- Managers ----- */
@@ -44,6 +41,7 @@ import OddsManager "managers/odds_manager";
 import KYCManager "managers/kyc_manager";
 
 
+import MopsAppQueries "./mops/app_queries";
 
 
 //ONLY STABLE TYPEs
@@ -52,11 +50,22 @@ import Ids "mo:waterway-mops/Ids";
 import Management "mo:waterway-mops/Management";
 import FootballIds "mo:waterway-mops/football/FootballIds";
 import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
+import Enums "mo:waterway-mops/Enums";
+import ClubQueries "mo:waterway-mops/queries/football-queries/ClubQueries";
+import BaseQueries "mo:waterway-mops/queries/BaseQueries";
+import SeasonQueries "mo:waterway-mops/queries/football-queries/SeasonQueries";
+import PlayerQueries "mo:waterway-mops/queries/football-queries/PlayerQueries";
+import LeagueQueries "mo:waterway-mops/queries/football-queries/LeagueQueries";
+import FixtureQueries "mo:waterway-mops/queries/football-queries/FixtureQueries";
+import FootballTypes "mo:waterway-mops/football/FootballTypes";
+import CanisterIds "mo:waterway-mops/CanisterIds";
 import T "types/app_types";
 import BettingTypes "types/betting_types";
 import AppTypes "types/app_types";
 import ShuftiTypes "types/shufti_types";
-
+import AppQueries "queries/app_queries";
+import IcfcLedgerManager "mops/icfc_ledger_manager";
+import UserQueries "queries/user_queries";
 
 actor Self {
   
@@ -65,11 +74,11 @@ actor Self {
     version = "0.0.1";
   };  
   
-  public shared query func getAppStatus() : async Result.Result<AppDTOs.AppStatusDTO, T.Error> {
+  public shared query func getAppStatus() : async Result.Result<AppQueries.AppStatus, Enums.Error> {
     return #ok(appStatus);
   };
 
-  private let ledger = FPLLedger.FPLLedger();
+  private let ledger = IcfcLedgerManager.IcfcLedgerManager();
   private let userManager = UserManager.UserManager(); 
   private let oddsManager = OddsManager.OddsManager(); 
   private let kycManager = KYCManager.KYCManager();
@@ -82,13 +91,13 @@ actor Self {
 
   /* Application functions */
 
-  public shared query func getDataHashes(): async Result.Result<[AppDTOs.DataHashDTO], T.Error> {
+  public shared query func getDataHashes(): async Result.Result<[MopsAppQueries.DataHash], Enums.Error> {
     return oddsManager.getDataHashes();
   };
 
   /* User management functions */
 
-  public shared ({ caller }) func getProfile() : async Result.Result<FootballDTOs.ProfileDTO, T.Error> {
+  public shared ({ caller }) func getProfile() : async Result.Result<UserQueries.Profile, Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     let kycProfile = kycManager.getKYCProfile(principalId);
@@ -96,48 +105,48 @@ actor Self {
     return await userManager.getProfile(principalId, kycProfile);
   };
 
-  public shared ({ caller }) func agreeTerms() : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func agreeTerms() : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     return await userManager.agreeTerms(principalId);
   };
 
-  public shared ({ caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.updateUsername(dto);
   };
 
-  public shared ({ caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.updateProfilePicture(dto);
   };
 
-  public shared ({ caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.updateWithdrawalAddress(dto);
   };
 
-  public shared ({ caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.pauseAccount(dto);
   };
 
-  public shared ({ caller }) func setDailyBetLimit(dto: UserCommands.SetDailyBetLimit) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func setDailyBetLimit(dto: UserCommands.SetDailyBetLimit) : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
     return await userManager.setDailyBetLimit(dto);
   };
 
-  public shared ({ caller }) func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), Enums.Error> {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
@@ -146,15 +155,15 @@ actor Self {
 
   /* Betting functions */
 
-  public shared query func getBettableHomepageFixtures(leagueId: FootballIds.LeagueId) : async Result.Result<[AppDTOs.HomePageFixtureDTO], T.Error> {
+  public shared query func getBettableHomepageFixtures(leagueId: FootballIds.LeagueId) : async Result.Result<[BettingQueries.HomePageFixture], Enums.Error> {
     return #ok(oddsManager.getHomepageLeagueFixtures(leagueId));
   };
 
-  public shared query func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : async Result.Result<AppDTOs.MatchOddsDTO, T.Error> {
+  public shared query func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : async Result.Result<BettingQueries.MatchOdds, Enums.Error> {
     return oddsManager.getMatchOdds(leagueId, fixtureId);
   };
   
-  public shared ({ caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, T.Error>{
+  public shared ({ caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, Enums.Error>{
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
@@ -196,7 +205,7 @@ actor Self {
     }
   };
 
-  public shared ({ caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, T.Error>{
+  public shared ({ caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, Enums.Error>{
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
@@ -217,16 +226,6 @@ actor Self {
 
 
   /* ----- Data Canister Calls -----  */
-
-  public shared ({ caller }) func getDataHashes(dto: AppQueries.GetDataHashes) : async Result.Result<AppQueries.DataHashes, Enums.Error> {
-    assert not Principal.isAnonymous(caller);
-    // TODO: Check caller is a member
-
-    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
-      getDataHashes : (dto: AppQueries.GetDataHashes) -> async Result.Result<AppQueries.DataHashes, Enums.Error>;
-    };
-    return await data_canister.getDataHashes(dto);
-  };
 
   public shared ({ caller }) func getClubs(dto: ClubQueries.GetClubs) : async Result.Result<ClubQueries.Clubs, Enums.Error> {
     assert not Principal.isAnonymous(caller);
@@ -289,16 +288,6 @@ actor Self {
     return result;
   };
 
-  public shared ({ caller }) func getLeagueStatus(dto: LeagueQueries.GetLeagueStatus) : async Result.Result<LeagueQueries.LeagueStatus, Enums.Error> {
-    assert not Principal.isAnonymous(caller);
-    // TODO: Check caller is a member
-
-    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
-      getLeagueStatus : (dto: LeagueQueries.GetLeagueStatus) -> async Result.Result<LeagueQueries.LeagueStatus, Enums.Error>;
-    };
-    return await data_canister.getLeagueStatus(dto);
-  };
-
   public shared ({ caller }) func getFixtures(dto: FixtureQueries.GetFixtures) : async Result.Result<FixtureQueries.Fixtures, Enums.Error> {
     assert not Principal.isAnonymous(caller);
     // TODO: Check caller is a member
@@ -307,16 +296,6 @@ actor Self {
       getFixtures : (dto: FixtureQueries.GetFixtures) -> async Result.Result<FixtureQueries.Fixtures, Enums.Error>;
     };
     return await data_canister.getFixtures(dto);
-  };
-
-  public shared ({ caller }) func getClubValueLeaderboard(dto: ClubQueries.GetClubValueLeaderboard) : async Result.Result<ClubQueries.ClubValueLeaderboard, Enums.Error> {
-    assert not Principal.isAnonymous(caller);
-    // TODO: Check caller is a member
-
-    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
-      getClubValueLeaderboard : (dto: ClubQueries.GetClubValueLeaderboard) -> async Result.Result<ClubQueries.ClubValueLeaderboard, Enums.Error>;
-    };
-    return await data_canister.getClubValueLeaderboard(dto);
   };
 
 
@@ -429,7 +408,7 @@ actor Self {
   /* Stable variable backup for managers */
 
   //User Manager
-  private stable var stable_profile_canister_ids: [(Ids.PrincipalId, Base.CanisterId)] = [];
+  private stable var stable_profile_canister_ids: [(Ids.PrincipalId, Ids.CanisterId)] = [];
   private stable var stable_unique_profile_canister_ids: [Ids.CanisterId] = [];
   private stable var stable_active_profile_canister_id: Text = "";
   private stable var stable_usernames: [(Ids.PrincipalId, Text)] = [];
@@ -494,11 +473,11 @@ actor Self {
 
   //Audit functions
   
-  public shared ({ caller }) func isAuditor() : async Result.Result<Bool, T.Error> {
+  public shared ({ caller }) func isAuditor() : async Result.Result<Bool, Enums.Error> {
     return #ok(checkAuditor(Principal.toText(caller)));
   };
 
-  public shared ({ caller }) func getUserAudit(dto: AuditQueries.GetUserAudit) : async Result.Result<AuditQueries.UserAuditList, T.Error> {
+  public shared ({ caller }) func getUserAudit(dto: AuditQueries.GetUserAudit) : async Result.Result<AuditQueries.UserAuditList, Enums.Error> {
     assert checkAuditor(Principal.toText(caller));
     return #err(#NotFound);
 
@@ -519,7 +498,7 @@ actor Self {
 
   //Todo this should be called by the notification callback functions
   
-  public shared ({ caller }) func updateBettingOdds(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func updateBettingOdds(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     await oddsManager.recalculate(leagueId, seasonId);
     return #ok();
@@ -532,7 +511,7 @@ actor Self {
     kycManager.storeKYCReference(kycReference, principalId);
   };
 
-  public shared func kycVerificationCallback(response: ShuftiTypes.ShuftiResponse) : async Result.Result<(), T.Error> {
+  public shared func kycVerificationCallback(response: ShuftiTypes.ShuftiResponse) : async Result.Result<(), Enums.Error> {
     let principalResult = kycManager.storeVerificationResponse(response);
 
     switch(principalResult){
@@ -547,13 +526,13 @@ actor Self {
 
   //Data canister notification callback functions
 
-  public shared ({ caller }) func notifyAppsOfLoan(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfLoan(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfLoanExpired(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfLoanExpired(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     
     //TODO
@@ -561,13 +540,13 @@ actor Self {
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfTransfer(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfTransfer(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfRetirement(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfRetirement(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
 
     //TODO
@@ -575,19 +554,19 @@ actor Self {
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfPositionChange(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfPositionChange(leagueId: FootballIds.LeagueId, playerId: FootballIds.PlayerId) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfGameweekStarting(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfGameweekStarting(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     //TODO
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfFixtureComplete(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfFixtureComplete(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), Enums.Error> {
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     let leagueStatusResult = await getLeagueStatus(leagueId);
     switch (leagueStatusResult) {
@@ -602,7 +581,7 @@ actor Self {
     return #ok();
   };
 
-  public shared ({ caller }) func notifyAppsOfFixtureFinalised(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfFixtureFinalised(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId, gameweek: FootballDefinitions.GameweekNumber) : async Result.Result<(), Enums.Error> {
     
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
 
@@ -621,7 +600,7 @@ actor Self {
   };
 
 
-  public shared ({ caller }) func notifyAppsOfSeasonComplete(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) : async Result.Result<(), T.Error> {
+  public shared ({ caller }) func notifyAppsOfSeasonComplete(leagueId: FootballIds.LeagueId, seasonId: FootballIds.SeasonId) : async Result.Result<(), Enums.Error> {
     
     assert Principal.toText(caller) == Environment.DATA_CANISTER_ID;
     
@@ -630,9 +609,9 @@ actor Self {
     return #ok();
   };
 
-  private func getLeagueStatus(leagueId: FootballIds.LeagueId) : async Result.Result<FootballTypes.LeagueStatus, T.Error> {
+  private func getLeagueStatus(leagueId: FootballIds.LeagueId) : async Result.Result<LeagueQueries.LeagueStatus, Enums.Error> {
     let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
-      getLeagueStatus : shared query (leagueId : FootballIds.LeagueId) -> async Result.Result<FootballTypes.LeagueStatus, T.Error>;
+      getLeagueStatus : shared query (leagueId : FootballIds.LeagueId) -> async Result.Result<LeagueQueries.LeagueStatus, Enums.Error>;
     };
     return await data_canister.getLeagueStatus(leagueId);
   };

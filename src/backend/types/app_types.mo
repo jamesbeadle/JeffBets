@@ -5,17 +5,6 @@ import BaseDefinitions "mo:waterway-mops/BaseDefinitions";
 import ShuftiTypes "shufti_types";
 module AppTypes {
 
-    public type Error = {
-        #NotFound;
-        #AlreadyExists;
-        #NotAuthorized;
-        #NotAllowed;
-        #DecodeError;
-        #CanisterCreateError;
-        #CanisterFull;
-        #InvalidData;
-    };
-
     public type Profile = {
         principalId : Ids.PrincipalId;
         termsAcceptedDate: Int;

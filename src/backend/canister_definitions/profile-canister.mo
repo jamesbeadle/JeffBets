@@ -10,15 +10,19 @@ import Time "mo:base/Time";
 import T "../types/app_types";
 import BaseDefinitions "mo:waterway-mops/BaseDefinitions";
 import Ids "mo:waterway-mops/Ids";
+import Enums "mo:waterway-mops/Enums";
 import BettingTypes "../types/betting_types";
 import Environment "../environment";
 
 import ICFCLedger "../mops/interfaces/ICFCLedger";
 import Utilities "../utilities/utilities";
-import AppCommands "../cqrs/commands/app_commands";
-import BettingCommands "../cqrs/commands/betting_commands";
-import UserCommands "../cqrs/commands/user_commands";
-import BettingQueries "../cqrs/queries/betting_queries";
+import AppCommands "../commands/app_commands";
+import BettingCommands "../commands/betting_commands";
+import UserCommands "../commands/user_commands";
+import BettingQueries "../queries/betting_queries";
+import AppQueries "../queries/app_queries";
+import UserQueries "../queries/user_queries";
+import AuditQueries "../queries/audit_queries";
 
 actor class _ProfileCanister() {
   
@@ -82,17 +86,17 @@ actor class _ProfileCanister() {
   private stable var activeProfileGroup: Nat = 1;
   private stable var profileGroupDictionary: [(Ids.PrincipalId, Nat)] = [];
   
-  public shared ({caller }) func createProfile(principalId: Text) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func createProfile(principalId: Text) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     if(profileCount >= MAX_PROFILES_PER_CANISTER){
-      return #err(#CanisterFull);
+      return #err(#MaxDataExceeded);
     };
     if(getGroupTotal(activeProfileGroup) >= MAX_PROFILES_PER_GROUP){
       activeProfileGroup += 1;
     };
 
     if(activeProfileGroup > MAX_PROFILE_GROUPS){
-      return #err(#CanisterFull);
+      return #err(#MaxDataExceeded);
     };
 
     let newProfile: T.Profile = buildEmptyProfile(principalId);
@@ -100,7 +104,7 @@ actor class _ProfileCanister() {
     return #ok();
   };
 
-  public shared ({caller }) func getProfile(userPrincipalId: Ids.PrincipalId) : async Result.Result<AppDTOs.ProfileDTO, T.Error>{
+  public shared ({caller }) func getProfile(userPrincipalId: Ids.PrincipalId) : async Result.Result<UserQueries.Profile, Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -141,7 +145,7 @@ actor class _ProfileCanister() {
             };
             
             var accountBalance: Nat64 = Nat64.fromNat(tokens);
-            let response: AppDTOs.ProfileDTO = {
+            let response: UserQueries.Profile = {
               accountBalance = accountBalance;
               accountOnPause = profile.accountOnPause;
               maxBetLimit = profile.maxBetLimit;
@@ -172,7 +176,7 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({ caller }) func acceptTerms(principalId: Ids.PrincipalId) : async Result.Result<(), T.Error>{
+  public shared ({ caller }) func acceptTerms(principalId: Ids.PrincipalId) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -219,7 +223,7 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({ caller }) func verifyBettingAccount(principalId: Ids.PrincipalId) : async Result.Result<(), T.Error>{
+  public shared ({ caller }) func verifyBettingAccount(principalId: Ids.PrincipalId) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -266,7 +270,7 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -314,7 +318,7 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -362,7 +366,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -410,7 +414,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -462,7 +466,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), T.Error>{
+  public shared ({caller }) func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
@@ -514,7 +518,7 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, T.Error>{
+  public shared ({caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     //TODO
     //private function to update monthly bet totals should be added when a bet is placed
@@ -523,7 +527,7 @@ actor class _ProfileCanister() {
     return #err(#NotFound);
   };
   
-  public shared ({caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, T.Error>{
+  public shared ({caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     //todo
     
@@ -1565,9 +1569,9 @@ actor class _ProfileCanister() {
 
 
 
-  public shared ({caller }) func getUserAuditList () : async [AuditDTOs.AuditRecordDTO] {
+  public shared ({caller }) func getUserAuditList () : async [AuditQueries.AuditRecord] {
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let allProfilesBuffer = Buffer.fromArray<AuditDTOs.AuditRecordDTO>([]);
+    let allProfilesBuffer = Buffer.fromArray<AuditQueries.AuditRecord>([]);
 
     /*for(i in Iter.range(1,50)){
       var currentProfiles: [T.Profile] = [];

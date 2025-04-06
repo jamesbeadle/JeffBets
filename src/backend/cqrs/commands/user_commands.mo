@@ -1,35 +1,35 @@
-import Base "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
 
 module UserQueries {
 
   public type UpdateProfilePicture = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     profilePicture: Blob;
     profilePictureExtension: Text;
   };
 
   public type UpdateWithdrawalAddress = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     withdrawalAddress: Text;
   };
 
   public type PauseAccount = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     pauseDays: Nat;
   };
 
   public type SetDailyBetLimit = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     maxBetLimit: Nat64;
   };
 
   public type SetMonthlyBetLimit = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     monthlyBetLimit: Nat64;
   };
 
   public type Withdraw = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     amount: Nat64;
   };
 };

@@ -1,5 +1,4 @@
 import T "../types/app_types";
-import FootballTypes "mo:waterway-mops/FootballTypes";
 import BettingTypes "../types/betting_types";
 import Base "mo:waterway-mops/BaseTypes";
 import Result "mo:base/Result";

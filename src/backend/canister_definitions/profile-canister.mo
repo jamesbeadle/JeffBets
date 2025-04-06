@@ -8,7 +8,8 @@ import Nat64 "mo:base/Nat64";
 import Time "mo:base/Time";
 
 import T "../types/app_types";
-import Base "mo:waterway-mops/BaseTypes";
+import BaseDefinitions "mo:waterway-mops/BaseDefinitions";
+import Ids "mo:waterway-mops/Ids";
 import BettingTypes "../types/betting_types";
 import Environment "../environment";
 
@@ -81,7 +82,7 @@ actor class _ProfileCanister() {
   private stable var profileGroup50: [T.Profile] = [];
 
   private stable var activeProfileGroup: Nat = 1;
-  private stable var profileGroupDictionary: [(Base.PrincipalId, Nat)] = [];
+  private stable var profileGroupDictionary: [(Ids.PrincipalId, Nat)] = [];
   
   public shared ({caller }) func createProfile(principalId: Text) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
@@ -101,10 +102,10 @@ actor class _ProfileCanister() {
     return #ok();
   };
 
-  public shared ({caller }) func getProfile(userPrincipalId: Base.PrincipalId) : async Result.Result<AppDTOs.ProfileDTO, T.Error>{
+  public shared ({caller }) func getProfile(userPrincipalId: Ids.PrincipalId) : async Result.Result<AppDTOs.ProfileDTO, T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == userPrincipalId;
     });
     switch(profileGroupEntry){
@@ -118,9 +119,9 @@ actor class _ProfileCanister() {
             let currentYear = Utilities.getCurrentYear();
             let currentMonth = Utilities.getCurrentMonth();
 
-            let currentYearMonthlyTotals = Array.find<(Nat16, [(Base.CalendarMonth, Nat64)])>(
+            let currentYearMonthlyTotals = Array.find<(Nat16, [(BaseDefinitions.CalendarMonth, Nat64)])>(
               profile.monthlyBetTotals,
-              func(yearEntry: (Nat16, [(Base.CalendarMonth, Nat64)])) : Bool {
+              func(yearEntry: (Nat16, [(BaseDefinitions.CalendarMonth, Nat64)])) : Bool {
                 yearEntry.0 == currentYear;
               }
             ); 
@@ -128,7 +129,7 @@ actor class _ProfileCanister() {
             var currentMonthBetTotal: Nat64 = 0;
             switch(currentYearMonthlyTotals){
               case (?foundYearTotals){
-                let currentMonthTotal = Array.find<(Base.CalendarMonth, Nat64)>(foundYearTotals.1, func(entry: (Base.CalendarMonth, Nat64)) : Bool {
+                let currentMonthTotal = Array.find<(BaseDefinitions.CalendarMonth, Nat64)>(foundYearTotals.1, func(entry: (BaseDefinitions.CalendarMonth, Nat64)) : Bool {
                   entry.0 == currentMonth;
                 });
                 switch(currentMonthTotal){
@@ -173,10 +174,10 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({ caller }) func acceptTerms(principalId: Base.PrincipalId) : async Result.Result<(), T.Error>{
+  public shared ({ caller }) func acceptTerms(principalId: Ids.PrincipalId) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == principalId;
     });
     switch(profileGroupEntry){
@@ -220,10 +221,10 @@ actor class _ProfileCanister() {
     };
   };
 
-  public shared ({ caller }) func verifyBettingAccount(principalId: Base.PrincipalId) : async Result.Result<(), T.Error>{
+  public shared ({ caller }) func verifyBettingAccount(principalId: Ids.PrincipalId) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == principalId;
     });
     switch(profileGroupEntry){
@@ -269,8 +270,8 @@ actor class _ProfileCanister() {
 
   public shared ({caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == dto.principalId;
     });
     switch(profileGroupEntry){
@@ -317,8 +318,8 @@ actor class _ProfileCanister() {
 
   public shared ({caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == dto.principalId;
     });
     switch(profileGroupEntry){
@@ -365,8 +366,8 @@ actor class _ProfileCanister() {
   
   public shared ({caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == dto.principalId;
     });
     switch(profileGroupEntry){
@@ -413,8 +414,8 @@ actor class _ProfileCanister() {
   
   public shared ({caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == dto.principalId;
     });
     switch(profileGroupEntry){
@@ -465,8 +466,8 @@ actor class _ProfileCanister() {
   
   public shared ({caller }) func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), T.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let profileGroupEntry = Array.find<(Base.PrincipalId, Nat)>(profileGroupDictionary, 
-      func(groupEntry: (Base.PrincipalId, Nat)) : Bool {
+    let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
+      func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
         groupEntry.0 == dto.principalId;
     });
     switch(profileGroupEntry){
@@ -531,7 +532,7 @@ actor class _ProfileCanister() {
     return #err(#NotFound);
   };
   
-  public shared ({caller }) func updateSettledBet(principalId: Base.PrincipalId, betslip: BettingTypes.BetSlip) : async (){
+  public shared ({caller }) func updateSettledBet(principalId: Ids.PrincipalId, betslip: BettingTypes.BetSlip) : async (){
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     
     //Update the users totals for months etc
@@ -547,7 +548,7 @@ actor class _ProfileCanister() {
     
   };
 
-  private func getProfileFromGroup(principalId: Base.PrincipalId, groupNumber: Nat) : ?T.Profile {
+  private func getProfileFromGroup(principalId: Ids.PrincipalId, groupNumber: Nat) : ?T.Profile {
     var groupProfiles: [T.Profile] = [];
     
     switch(groupNumber){
@@ -869,7 +870,7 @@ actor class _ProfileCanister() {
     return Array.size(groupProfiles);
   };
 
-  private func buildEmptyProfile(principalId: Base.PrincipalId) : T.Profile {
+  private func buildEmptyProfile(principalId: Ids.PrincipalId) : T.Profile {
     return {
       accountOnPause = false;
       bets = [];
@@ -1209,7 +1210,7 @@ actor class _ProfileCanister() {
       case (_) {}
     };
 
-    let profileGroupDictionaryBuffer = Buffer.fromArray<(Base.PrincipalId, Nat)>(profileGroupDictionary);
+    let profileGroupDictionaryBuffer = Buffer.fromArray<(Ids.PrincipalId, Nat)>(profileGroupDictionary);
     profileGroupDictionaryBuffer.add(profile.principalId, activeProfileGroup);
     profileGroupDictionary := Buffer.toArray(profileGroupDictionaryBuffer);
     profileCount += 1;

@@ -1,19 +1,24 @@
-import Base "mo:waterway-mops/BaseTypes";
-import FootballTypes "mo:waterway-mops/FootballTypes";
+import FootballIds "mo:waterway-mops/football/FootballIds";
+import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
+import Ids "mo:waterway-mops/Ids";
+import FootballEnums "mo:waterway-mops/football/FootballEnums";
+import FootballTypes "mo:waterway-mops/football/FootballTypes";
+import Enums "mo:waterway-mops/Enums";
+
 
 module DTOs {
 
   public type LeagueStatusDTO = {
-    leagueId: FootballTypes.LeagueId;
-    activeSeasonId: FootballTypes.SeasonId;
-    activeGameweek: FootballTypes.GameweekNumber;
-    lastConfirmedGameweek: FootballTypes.GameweekNumber;
+    leagueId: FootballIds.LeagueId;
+    activeSeasonId: FootballIds.SeasonId;
+    activeGameweek: FootballDefinitions.GameweekNumber;
+    lastConfirmedGameweek: FootballDefinitions.GameweekNumber;
     transferWindowActive: Bool;
     seasonActive : Bool;
   };
 
   public type ProfileDTO = {
-    principalId : Base.PrincipalId;
+    principalId : Ids.PrincipalId;
     joinedDate: Int;
     termsAcceptedDate: Int;
     username : Text; 
@@ -33,61 +38,61 @@ module DTOs {
 
   public type PlayerDTO = {
     id : Nat16;
-    clubId : FootballTypes.ClubId;
-    position : FootballTypes.PlayerPosition;
+    clubId : FootballIds.ClubId;
+    position : FootballEnums.PlayerPosition;
     firstName : Text;
     lastName : Text;
     shirtNumber : Nat8;
     valueQuarterMillions : Nat16;
     dateOfBirth : Int;
-    nationality : Base.CountryId;
-    status : FootballTypes.PlayerStatus;
-    leagueId: FootballTypes.LeagueId;
-    parentLeagueId: FootballTypes.LeagueId;
-    parentClubId: FootballTypes.ClubId;
+    nationality : Ids.CountryId;
+    status : FootballEnums.PlayerStatus;
+    leagueId: FootballIds.LeagueId;
+    parentLeagueId: FootballIds.LeagueId;
+    parentClubId: FootballIds.ClubId;
     currentLoanEndDate: Int;
   };
 
   public type LoanedPlayerDTO = {
     id : Nat16;
-    clubId : FootballTypes.ClubId;
-    position : FootballTypes.PlayerPosition;
+    clubId : FootballIds.ClubId;
+    position : FootballEnums.PlayerPosition;
     firstName : Text;
     lastName : Text;
     shirtNumber : Nat8;
     valueQuarterMillions : Nat16;
     dateOfBirth : Int;
-    nationality : Base.CountryId;
-    status : FootballTypes.PlayerStatus;
+    nationality : Ids.CountryId;
+    status : FootballEnums.PlayerStatus;
     currentLoanEndDate: Int;
-    parentClubId: FootballTypes.ClubId;
-    parentLeagueId: FootballTypes.LeagueId;
-    leagueId: FootballTypes.LeagueId;
+    parentClubId: FootballIds.ClubId;
+    parentLeagueId: FootballIds.LeagueId;
+    leagueId: FootballIds.LeagueId;
   };
 
   public type SnapshotPlayerDTO = {
-    leagueId: FootballTypes.LeagueId;
+    leagueId: FootballIds.LeagueId;
     id : Nat16;
-    clubId : FootballTypes.ClubId;
-    position : FootballTypes.PlayerPosition;
+    clubId : FootballIds.ClubId;
+    position : FootballEnums.PlayerPosition;
     firstName : Text;
     lastName : Text;
     shirtNumber : Nat8;
     valueQuarterMillions : Nat16;
     dateOfBirth : Int;
-    nationality : Base.CountryId;
-    status : FootballTypes.PlayerStatus;
+    nationality : Ids.CountryId;
+    status : FootballEnums.PlayerStatus;
     totalPoints: Int;
   };
 
   public type PlayerScoreDTO = {
     id : Nat16;
     points : Int16;
-    clubId : FootballTypes.ClubId;
+    clubId : FootballIds.ClubId;
     goalsScored : Int16;
     goalsConceded : Int16;
-    position : FootballTypes.PlayerPosition;
-    nationality : Base.CountryId;
+    position : FootballEnums.PlayerPosition;
+    nationality : Ids.CountryId;
     dateOfBirth : Int;
     saves : Int16;
     assists : Int16;
@@ -96,28 +101,28 @@ module DTOs {
 
   public type PlayerPointsDTO = {
     id : Nat16;
-    gameweek : FootballTypes.GameweekNumber;
+    gameweek : FootballDefinitions.GameweekNumber;
     points : Int16;
-    clubId : FootballTypes.ClubId;
-    position : FootballTypes.PlayerPosition;
+    clubId : FootballIds.ClubId;
+    position : FootballEnums.PlayerPosition;
     events : [FootballTypes.PlayerEventData];
   };
 
   public type PlayerDetailDTO = {
-    id : FootballTypes.PlayerId;
-    clubId : FootballTypes.ClubId;
-    position : FootballTypes.PlayerPosition;
+    id : FootballIds.PlayerId;
+    clubId : FootballIds.ClubId;
+    position : FootballEnums.PlayerPosition;
     firstName : Text;
     lastName : Text;
     shirtNumber : Nat8;
     valueQuarterMillions : Nat16;
     dateOfBirth : Int;
-    nationality : Base.CountryId;
-    seasonId : FootballTypes.SeasonId;
+    nationality : Ids.CountryId;
+    seasonId : FootballIds.SeasonId;
     gameweeks : [PlayerGameweekDTO];
     valueHistory : [FootballTypes.ValueHistory];
-    status : FootballTypes.PlayerStatus;
-    parentClubId : FootballTypes.ClubId;
+    status : FootballEnums.PlayerStatus;
+    parentClubId : FootballIds.ClubId;
     latestInjuryEndDate : Int;
     injuryHistory : [FootballTypes.InjuryHistory];
     retirementDate : Int;
@@ -127,50 +132,50 @@ module DTOs {
     number : Nat8;
     events : [FootballTypes.PlayerEventData];
     points : Int16;
-    fixtureId : FootballTypes.FixtureId;
+    fixtureId : FootballIds.FixtureId;
   };
 
   public type SeasonDTO = {
-    id : FootballTypes.SeasonId;
+    id : FootballIds.SeasonId;
     name : Text;
     year : Nat16;
   };
 
   public type FixtureDTO = {
     id : Nat32;
-    seasonId : FootballTypes.SeasonId;
-    gameweek : FootballTypes.GameweekNumber;
+    seasonId : FootballIds.SeasonId;
+    gameweek : FootballDefinitions.GameweekNumber;
     kickOff : Int;
-    homeClubId : FootballTypes.ClubId;
-    awayClubId : FootballTypes.ClubId;
+    homeClubId : FootballIds.ClubId;
+    awayClubId : FootballIds.ClubId;
     homeGoals : Nat8;
     awayGoals : Nat8;
-    status : FootballTypes.FixtureStatusType;
+    status : FootballEnums.FixtureStatusType;
     highestScoringPlayerId : Nat16;
     events : [FootballTypes.PlayerEventData];
   };
 
   public type LeagueDTO = {
-    id: FootballTypes.LeagueId;
+    id: FootballIds.LeagueId;
     name: Text;
     abbreviation: Text;
     teamCount: Nat8;
-    relatedGender: Base.Gender;
+    relatedGender: Enums.Gender;
     governingBody: Text;
     formed: Int;
-    countryId: Base.CountryId;
+    countryId: Ids.CountryId;
     logo: Blob;
   };
 
   public type ClubDTO = {
-    id : FootballTypes.ClubId;
+    id : FootballIds.ClubId;
     name : Text;
     friendlyName : Text;
     primaryColourHex : Text;
     secondaryColourHex : Text;
     thirdColourHex : Text;
     abbreviatedName : Text;
-    shirtType : FootballTypes.ShirtType;
+    shirtType : FootballEnums.ShirtType;
   };
   
 };

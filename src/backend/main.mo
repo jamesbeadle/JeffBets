@@ -1,38 +1,61 @@
+// TODO: Should these be pulled mops or from defintions?
+import Environment "environment";
+import Utilities "utilities/utilities";
+import Management "utilities/Management";
+import FPLLedger "managers/fpl_ledger_manager";
+
+/* ----- Mops Packages ----- */
 import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
+import Float "mo:base/Float";
 import Int "mo:base/Int";
+import Iter "mo:base/Iter";
+import Nat64 "mo:base/Nat64";
 import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Timer "mo:base/Timer";
-import Nat64 "mo:base/Nat64";
-import Buffer "mo:base/Buffer";
-import Float "mo:base/Float";
-import Iter "mo:base/Iter";
 import Time "mo:base/Time";
 
-import T "types/app_types";
-import Base "mo:waterway-mops/BaseTypes";
-import FootballTypes "mo:waterway-mops/FootballTypes";
-import Environment "environment";
 
-import FPLLedger "managers/fpl_ledger_manager";
-import UserManager "managers/user_manager";
-import OddsManager "managers/odds_manager";
-import BettingTypes "types/betting_types";
-import Utilities "utilities/utilities";
-import Management "utilities/Management";
+/* ----- Canister Definition Files ----- */
+
 import ProfileCanister "canister_definitions/profile-canister";
-import AppTypes "types/app_types";
-import KYCManager "managers/kyc_manager";
-import ShuftiTypes "types/shufti_types";
-import AppDTOs "dtos/app_dtos";
+
+
+/* ----- Queries ----- */
+
+import AppDTOs "dtos/app_dtos"; //TODO 
 import FootballDTOs "dtos/football_dtos";
+import BettingQueries "cqrs/queries/betting_queries";
+import AuditQueries "cqrs/queries/audit_queries";
+
+
+/* ----- Commands ----- */
+
 import AppCommands "cqrs/commands/app_commands";
 import UserCommands "cqrs/commands/user_commands";
-import BettingQueries "cqrs/queries/betting_queries";
 import BettingCommands "cqrs/commands/betting_commands";
-import AuditQueries "cqrs/queries/audit_queries";
+
+
+/* ----- Managers ----- */
+
+import UserManager "managers/user_manager";
+import OddsManager "managers/odds_manager";
+import KYCManager "managers/kyc_manager";
+
+
+
+
+//ONLY STABLE TYPEs
+import Base "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
+import T "types/app_types";
+import BettingTypes "types/betting_types";
+import AppTypes "types/app_types";
+import ShuftiTypes "types/shufti_types";
+
 
 actor Self {
   
@@ -298,11 +321,11 @@ actor Self {
   /* Stable variable backup for managers */
 
   //User Manager
-  private stable var stable_profile_canister_ids: [(Base.PrincipalId, Base.CanisterId)] = [];
-  private stable var stable_unique_profile_canister_ids: [Base.CanisterId] = [];
+  private stable var stable_profile_canister_ids: [(Ids.PrincipalId, Base.CanisterId)] = [];
+  private stable var stable_unique_profile_canister_ids: [Ids.CanisterId] = [];
   private stable var stable_active_profile_canister_id: Text = "";
-  private stable var stable_usernames: [(Base.PrincipalId, Text)] = [];
-  private stable var stable_kyc_profiles: [(Base.PrincipalId, AppTypes.KYCProfile)] = [];
+  private stable var stable_usernames: [(Ids.PrincipalId, Text)] = [];
+  private stable var stable_kyc_profiles: [(Ids.PrincipalId, AppTypes.KYCProfile)] = [];
 
   //Odds Manager
   private stable var stable_match_odds_cache: [(FootballTypes.LeagueId, [(FootballTypes.FixtureId, BettingTypes.MatchOdds)])] = [];
@@ -375,7 +398,7 @@ actor Self {
   };
   
   private func checkAuditor(principalId: Text) : Bool {
-    return Option.isSome(Array.find<Base.PrincipalId>(Environment.AUDITOR_PRINCIPALS, func(dataAdmin: Base.PrincipalId) : Bool{
+    return Option.isSome(Array.find<Ids.PrincipalId>(Environment.AUDITOR_PRINCIPALS, func(dataAdmin: Ids.PrincipalId) : Bool{
       dataAdmin == principalId;
     }));
   };

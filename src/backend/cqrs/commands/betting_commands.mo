@@ -1,29 +1,30 @@
-import FootballTypes "mo:waterway-mops/FootballTypes";
-import Base "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
+import FootballIds "mo:waterway-mops/football/FootballIds";
+import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
 
 module BettingCommands {
 
   public type SubmitBetslip = {
-    principalId: Base.PrincipalId;
-    leagueId: FootballTypes.LeagueId;
-    seasonId: FootballTypes.SeasonId;
+    principalId: Ids.PrincipalId;
+    leagueId: FootballIds.LeagueId;
+    seasonId: FootballIds.SeasonId;
     totalStake: Nat64;
     expectedReturn: Nat64;
   };
 
   public type RequestFixtures = {
-    leagueId: FootballTypes.LeagueId;
-    seasonId: FootballTypes.SeasonId;
+    leagueId: FootballIds.LeagueId;
+    seasonId: FootballIds.SeasonId;
   };
 
   public type GetSnapshotPlayers = {
-    seasonId: FootballTypes.SeasonId;
-    leagueId: FootballTypes.LeagueId;
-    gameweek: FootballTypes.GameweekNumber;
+    seasonId: FootballIds.SeasonId;
+    leagueId: FootballIds.LeagueId;
+    gameweek: FootballDefinitions.GameweekNumber;
   };
 
   public type UpdateRewardPools = {
-    seasonId : FootballTypes.SeasonId;
+    seasonId : FootballIds.SeasonId;
     seasonLeaderboardPool : Nat64;
     monthlyLeaderboardPool : Nat64;
     weeklyLeaderboardPool : Nat64;
@@ -35,12 +36,12 @@ module BettingCommands {
   };
 
   public type GetPlayerDetails = {
-    playerId : FootballTypes.ClubId;
-    seasonId : FootballTypes.SeasonId;
+    playerId : FootballIds.ClubId;
+    seasonId : FootballIds.SeasonId;
   };
 
   public type GameweekFilters = {
-    seasonId : FootballTypes.SeasonId;
-    gameweek : FootballTypes.GameweekNumber;
+    seasonId : FootballIds.SeasonId;
+    gameweek : FootballDefinitions.GameweekNumber;
   };
 };

@@ -16,7 +16,9 @@ import Nat16 "mo:base/Nat16";
 import Int16 "mo:base/Int16";
 import Management "./Management";
 import Base "mo:waterway-mops/BaseTypes";
-import FootballTypes "mo:waterway-mops/FootballTypes";
+import BaseDefinitions "mo:waterway-mops/BaseDefinitions";
+import FootballTypes "mo:waterway-mops/football/FootballTypes";
+import FootballEnums "mo:waterway-mops/football/FootballEnums";
 
 module {
 
@@ -86,7 +88,7 @@ module {
       return 0;
     };
 
-    public func getCurrentMonth() : Base.CalendarMonth {
+    public func getCurrentMonth() : BaseDefinitions.CalendarMonth {
       return 0;
     };
 
@@ -230,7 +232,7 @@ module {
     return Nat8.fromNat(month);
   };
 
-  public func calculateAggregatePlayerEvents(events : [FootballTypes.PlayerEventData], playerPosition : FootballTypes.PlayerPosition) : Int16 {
+  public func calculateAggregatePlayerEvents(events : [FootballTypes.PlayerEventData], playerPosition : FootballEnums.PlayerPosition) : Int16 {
     var totalScore : Int16 = 0;
 
     if (playerPosition == #Goalkeeper or playerPosition == #Defender) {
@@ -261,7 +263,7 @@ module {
     return totalScore;
   };
 
-  public func calculateIndividualScoreForEvent(event : FootballTypes.PlayerEventData, playerPosition : FootballTypes.PlayerPosition) : Int16 {
+  public func calculateIndividualScoreForEvent(event : FootballTypes.PlayerEventData, playerPosition : FootballEnums.PlayerPosition) : Int16 {
     switch (event.eventType) {
       case (#Appearance) { return 5 };
       case (#Goal) {

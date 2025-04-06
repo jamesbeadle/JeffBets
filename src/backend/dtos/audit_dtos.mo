@@ -1,8 +1,8 @@
-import Base "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
 
 module AuditDTOs {
   public type AuditRecordDTO = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     joinedDate: Int;
     termsAcceptedDate: Int;
     kycComplete: Bool;

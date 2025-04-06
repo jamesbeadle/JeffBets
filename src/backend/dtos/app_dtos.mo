@@ -1,5 +1,7 @@
-import FootballTypes "mo:waterway-mops/FootballTypes";
 import Base "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
+import FootballIds "mo:waterway-mops/football/FootballIds";
+import FootballDefinitions "mo:waterway-mops/football/FootballDefinitions";
 import BettingTypes "../types/betting_types";
 
 module DTOs {
@@ -10,7 +12,7 @@ module DTOs {
   };
 
   public type ProfileDTO = {
-    principalId : Base.PrincipalId;
+    principalId : Ids.PrincipalId;
     joinedDate: Int;
     termsAcceptedDate: Int;
     username : Text; 
@@ -29,8 +31,8 @@ module DTOs {
   };
   
   public type MatchOddsDTO = {
-    leagueId: FootballTypes.LeagueId;
-    fixtureId: FootballTypes.FixtureId;
+    leagueId: FootballIds.LeagueId;
+    fixtureId: FootballIds.FixtureId;
     correctResults: BettingTypes.TeamSelectionOdds;
     correctScores: [BettingTypes.ScoreSelectionOdds];
     halfTimeScores: [BettingTypes.ScoreSelectionOdds];
@@ -53,16 +55,16 @@ module DTOs {
   };
 
   public type HomePageFixtureDTO = {
-    leagueId: FootballTypes.LeagueId;
-    gameweek: FootballTypes.GameweekNumber;
-    fixtureId: FootballTypes.FixtureId;
+    leagueId: FootballIds.LeagueId;
+    gameweek: FootballDefinitions.GameweekNumber;
+    fixtureId: FootballIds.FixtureId;
     homeOdds: Float;
     drawOdds: Float;
     awayOdds: Float;
   };
 
   public type CountryDTO = {
-    id : Base.CountryId;
+    id : Ids.CountryId;
     name : Text;
     code : Text;
   };

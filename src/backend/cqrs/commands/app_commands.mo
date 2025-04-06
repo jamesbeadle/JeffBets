@@ -1,20 +1,20 @@
-import Base "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
 
 module AppCommands {
 
   public type UpdateUsername = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     username: Text;
   };
 
   public type UpdateProfilePicture = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     profilePicture: Blob;
     profilePictureExtension: Text;
   };
 
   public type UpdateWithdrawalAddress = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
     withdrawalAddress: Text;
   };
   

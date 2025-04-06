@@ -1,31 +1,27 @@
-import Base "mo:waterway-mops/BaseTypes";
-import App "../types/app_types";
+import Ids "mo:waterway-mops/Ids";
 import Buffer "mo:base/Buffer";
-import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
-import Debug "mo:base/Debug";
 import ShuftiTypes "../types/shufti_types";
-import T "../types/app_types";
 import AppTypes "../types/app_types";
 
 module {
 
   public class KYCManager() {
 
-    private var kycProfiles: [(Base.PrincipalId, AppTypes.KYCProfile)] = []; 
+    private var kycProfiles: [(Ids.PrincipalId, AppTypes.KYCProfile)] = []; 
 
-    public func getStableKYCProfiles() : [(Base.PrincipalId, AppTypes.KYCProfile)]{
+    public func getStableKYCProfiles() : [(Ids.PrincipalId, AppTypes.KYCProfile)]{
         return kycProfiles;
     };
 
-    public func setStableKYCProfiles(stable_kyc_profiles: [(Base.PrincipalId, AppTypes.KYCProfile)]){
+    public func setStableKYCProfiles(stable_kyc_profiles: [(Ids.PrincipalId, AppTypes.KYCProfile)]){
         kycProfiles := stable_kyc_profiles;
     };
 
-    public func getKYCProfile(principalId: Base.PrincipalId) : ?AppTypes.KYCProfile {
-      let profileResult = Array.find<(Base.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, func(entry: (Base.PrincipalId, AppTypes.KYCProfile)) : Bool {
+    public func getKYCProfile(principalId: Ids.PrincipalId) : ?AppTypes.KYCProfile {
+      let profileResult = Array.find<(Ids.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, func(entry: (Ids.PrincipalId, AppTypes.KYCProfile)) : Bool {
         return entry.0 == principalId;
       });
       switch(profileResult) {
@@ -35,7 +31,7 @@ module {
     };
 
     public func storeKYCReference(reference: Text, principalId: Text){
-      let profileBuffer = Buffer.fromArray<(Base.PrincipalId, AppTypes.KYCProfile)>(kycProfiles);
+      let profileBuffer = Buffer.fromArray<(Ids.PrincipalId, AppTypes.KYCProfile)>(kycProfiles);
       profileBuffer.add((principalId, {
         kycApprovalDate = 0;
         kycSubmissionDate = Time.now();
@@ -46,19 +42,19 @@ module {
       kycProfiles := Buffer.toArray(profileBuffer);
     };
 
-    public func storeVerificationResponse(response: ShuftiTypes.ShuftiResponse) : ?Base.PrincipalId {
+    public func storeVerificationResponse(response: ShuftiTypes.ShuftiResponse) : ?Ids.PrincipalId {
       
       switch(response){
         case (#ShuftiAcceptedResponse accepted){
           let reference = extractReference(accepted.reference);
-          let profileResult = Array.find<(Base.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, 
-            func(entry: (Base.PrincipalId, AppTypes.KYCProfile)) : Bool {
+          let profileResult = Array.find<(Ids.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, 
+            func(entry: (Ids.PrincipalId, AppTypes.KYCProfile)) : Bool {
               entry.1.reference == reference;
           });          
       
           switch(profileResult){
             case (?kycProfile){
-              kycProfiles := Array.map<(Base.PrincipalId, AppTypes.KYCProfile), (Base.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, func(entry: (Base.PrincipalId, AppTypes.KYCProfile)) {
+              kycProfiles := Array.map<(Ids.PrincipalId, AppTypes.KYCProfile), (Ids.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, func(entry: (Ids.PrincipalId, AppTypes.KYCProfile)) {
                 if(entry.0 == kycProfile.0 and entry.1.reference == reference){
                   return (kycProfile.0, {
                     kycApprovalDate = Time.now();
@@ -78,14 +74,14 @@ module {
         case (#ShuftiRejectedResponse rejected){
           let reference = extractReference(rejected.reference);
 
-          let profileResult = Array.find<(Base.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, 
-            func(entry: (Base.PrincipalId, AppTypes.KYCProfile)) : Bool {
+          let profileResult = Array.find<(Ids.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, 
+            func(entry: (Ids.PrincipalId, AppTypes.KYCProfile)) : Bool {
             entry.1.reference == reference;
           });          
 
           switch(profileResult){
             case (?kycProfile){
-              kycProfiles := Array.map<(Base.PrincipalId, AppTypes.KYCProfile), (Base.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, func(entry: (Base.PrincipalId, AppTypes.KYCProfile)) {
+              kycProfiles := Array.map<(Ids.PrincipalId, AppTypes.KYCProfile), (Ids.PrincipalId, AppTypes.KYCProfile)>(kycProfiles, func(entry: (Ids.PrincipalId, AppTypes.KYCProfile)) {
                 if(entry.0 == kycProfile.0 and entry.1.reference == reference){
                   return (kycProfile.0, {
                     kycApprovalDate = 0;

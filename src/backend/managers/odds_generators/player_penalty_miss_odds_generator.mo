@@ -6,6 +6,13 @@ module {
 
   public class PlayerPenaltyMissOddsGenerator() {
     public func getOnFormHomeFavouriteOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{
+
+      
+
+      if(player.position == #Forward){
+        return 0.5;
+      };
+
       return 1;
     };
     public func getOffFormHomeFavouriteOdds(stats: BettingTypes.Stats, player: FootballDTOs.PlayerDTO) : Float{

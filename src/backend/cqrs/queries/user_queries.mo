@@ -1,9 +1,9 @@
-import Base "../../types/base_types";
+import Ids "mo:waterway-mops/Ids";
 
 module UserQueries {
 
   public type GetPublicProfile = {
-    principalId: Base.PrincipalId;
+    principalId: Ids.PrincipalId;
   };
   
 };

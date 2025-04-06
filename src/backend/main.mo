@@ -153,17 +153,27 @@ actor Self {
     return await userManager.setMonthlyBetLimit(dto);
   };
 
-  /* Betting functions */
+  /* ----- Betting Queries ----- */
 
-  public shared query func getBettableHomepageFixtures(leagueId: FootballIds.LeagueId) : async Result.Result<[BettingQueries.HomePageFixture], Enums.Error> {
-    return #ok(oddsManager.getHomepageLeagueFixtures(leagueId));
+  public shared query func getBettableHomepageFixtures(dto: BettingQueries.GetBettableHomepageFixtures) : async Result.Result<BettingQueries.BettableHomepageFixtures, Enums.Error> {
+    return #ok(oddsManager.getHomepageLeagueFixtures(dto));
   };
 
-  public shared query func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : async Result.Result<BettingQueries.MatchOdds, Enums.Error> {
-    return oddsManager.getMatchOdds(leagueId, fixtureId);
+  public shared query func getMatchOdds(dto: BettingQueries.GetMatchOdds) : async Result.Result<BettingQueries.MatchOdds, Enums.Error> {
+    return oddsManager.getMatchOdds(dto);
   };
-  
-  public shared ({ caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, Enums.Error>{
+
+  public shared ({ caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBets, Enums.Error>{
+    assert not Principal.isAnonymous(caller);
+    let principalId = Principal.toText(caller);
+    assert dto.principalId == principalId;
+    return await userManager.getUserBets(dto);
+  };
+
+
+  /* ----- Betting Commands ----- */
+
+  public shared ({ caller }) func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<(), Enums.Error>{
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     assert dto.principalId == principalId;
@@ -197,31 +207,12 @@ actor Self {
 
         totalBetsStaked := calculateTotalStaked();
         totalPotentialPayout := calculateTotalPotentialPayout();
-        return #ok(betslip);
+        return #ok();
       };
       case (#err error){
         return #err(error);
       }
     }
-  };
-
-  public shared ({ caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, Enums.Error>{
-    assert not Principal.isAnonymous(caller);
-    let principalId = Principal.toText(caller);
-    assert dto.principalId == principalId;
-    return await userManager.getUserBets(dto);
-  };
-
-  private func validateBetslip(dto: BettingCommands.SubmitBetslip) : Bool {
-
-    //for the accumulator type
-      //calculate the expected returns of each row and ensure what they expect from each users submission
-
-      //get the object the frontend has to do the comparison
-
-      //game is unplayed
-
-    return false;
   };
 
 
@@ -300,6 +291,18 @@ actor Self {
 
 
   /* ----- Private Functions ----- */
+
+  private func validateBetslip(dto: BettingCommands.SubmitBetslip) : Bool {
+
+    //for the accumulator type
+      //calculate the expected returns of each row and ensure what they expect from each users submission
+
+      //get the object the frontend has to do the comparison
+
+      //game is unplayed
+
+    return false;
+  };
 
   private func calculateTotalPotentialPayout() : Nat64 {
     return Array.foldLeft<BettingTypes.BetSlip, Nat64>(

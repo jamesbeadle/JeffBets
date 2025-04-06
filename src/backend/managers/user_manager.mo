@@ -291,7 +291,7 @@ module {
       };
     };
 
-    public func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, Enums.Error>{
+    public func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBets, Enums.Error>{
       await checkOrCreateProfile(dto.principalId);
       let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
@@ -300,7 +300,7 @@ module {
       switch(userProfileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            getUserBets : (dto: BettingQueries.GetUserBets) -> async Result.Result<BettingQueries.UserBetsList, Enums.Error>;
+            getUserBets : (dto: BettingQueries.GetUserBets) -> async Result.Result<BettingQueries.UserBets, Enums.Error>;
           };
           return await profile_canister.getUserBets(dto);
         };

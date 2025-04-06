@@ -56,17 +56,17 @@ module {
       };
     };
     
-    public func getMatchOdds(leagueId: FootballIds.LeagueId, fixtureId: FootballIds.FixtureId) : Result.Result<BettingQueries.MatchOdds, Enums.Error> {
+    public func getMatchOdds(dto: BettingQueries.GetMatchOdds) : Result.Result<BettingQueries.MatchOdds, Enums.Error> {
       
       let leagueOddsCache = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, 
           func(entry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
-            entry.0 == leagueId;
+            entry.0 == dto.leagueId;
       });
 
       switch(leagueOddsCache){
         case (?foundLeagueOdds){
           let fixtureOddsResult = Array.find<(FootballIds.FixtureId, BettingTypes.MatchOdds)>(foundLeagueOdds.1, func(entry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) : Bool {
-            entry.0 == fixtureId;
+            entry.0 == dto.fixtureId;
           });
           switch(fixtureOddsResult){
             case (?foundFixtureOdds){

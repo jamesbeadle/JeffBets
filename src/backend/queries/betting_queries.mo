@@ -10,7 +10,7 @@ module BettingQueries {
     principalId: Ids.PrincipalId;
   };
 
-  public type UserBetsList = {
+  public type UserBets = {
     bets: [BetSlip];
   };
 
@@ -44,6 +44,11 @@ module BettingQueries {
   public type GetBetslipFixtures = {
     selections: [BettingTypes.Selection];
   };
+
+  public type GetMatchOdds = {
+    leagueId: FootballIds.LeagueId;
+    fixtureId: FootballIds.FixtureId;
+  };
   
   public type MatchOdds = {
     leagueId: FootballIds.LeagueId;
@@ -67,6 +72,14 @@ module BettingQueries {
     bothTeamsToScore: BettingTypes.YesNoSelectionOdds;
     halfTimeFullTimeResult: [BettingTypes.HalfTimeFullTimeOdds];
     bothTeamsToScoreAndWinner: [BettingTypes.ResultAndYesNoSelectionOdds];
+  };
+
+  public type GetBettableHomepageFixtures = {
+    leagueId: FootballIds.LeagueId;
+  };
+
+  public type BettableHomepageFixtures = {
+    fixtures: [HomePageFixture]
   };
 
   public type HomePageFixture = {

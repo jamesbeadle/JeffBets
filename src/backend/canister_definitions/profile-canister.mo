@@ -527,7 +527,7 @@ actor class _ProfileCanister() {
     return #err(#NotFound);
   };
   
-  public shared ({caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, Enums.Error>{
+  public shared ({caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBets, Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     //todo
     

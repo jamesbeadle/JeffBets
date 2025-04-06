@@ -1,5 +1,5 @@
-import FootballTypes "mo:waterway-mops/FootballTypes";
-import BaseTypes "mo:waterway-mops/BaseTypes";
+import Ids "mo:waterway-mops/Ids";
+import FootballIds "mo:waterway-mops/football/FootballIds";
 import DTOs "../../dtos/football_dtos";
 import FootballDTOs "../../dtos/football_dtos";
 
@@ -8,20 +8,20 @@ module FootballQueries {
   public type GetLeagues = {
     page: Nat;
     searchTerm: Text;
-    countryId: BaseTypes.CountryId;
+    countryId: Ids.CountryId;
   };
 
   public type LeaguesList = {
     page: Nat;
     searchTerm: Text;
-    countryId: BaseTypes.CountryId;
+    countryId: Ids.CountryId;
     entries : [DTOs.LeagueDTO];
     totalEntries: Nat;
   };
 
   public type GetFixtures = {
-    leagueId: FootballTypes.LeagueId;
-    seasonId: FootballTypes.SeasonId;
+    leagueId: FootballIds.LeagueId;
+    seasonId: FootballIds.SeasonId;
   };
 
   public type FixturesList = {
@@ -29,7 +29,7 @@ module FootballQueries {
   };
 
   public type GetPlayers = {
-    leagueId: FootballTypes.LeagueId;
+    leagueId: FootballIds.LeagueId;
   };
 
   public type PlayersList = {

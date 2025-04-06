@@ -1,14 +1,4 @@
 import { writable } from "svelte/store";
-import type {
-  PlayerDTO,
-  CreatePlayerDTO,
-  LeagueId,
-  LoanPlayerDTO,
-  SetFreeAgentDTO,
-  TransferPlayerDTO,
-  UpdatePlayerDTO,
-  RecallPlayerDTO,
-} from "../../../../declarations/data_canister/data_canister.did";
 import { PlayerService } from "../services/player-service";
 import { DataHashService } from "../services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";

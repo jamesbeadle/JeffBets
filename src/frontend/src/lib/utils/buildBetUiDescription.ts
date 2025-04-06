@@ -6,10 +6,6 @@ import type {
   ScoreDetail,
   SelectionDetail,
 } from "../../../../declarations/backend/backend.did";
-import type {
-  PlayerDTO,
-  ClubDTO,
-} from "../../../../declarations/data_canister/data_canister.did";
 
 function lookupPlayer(
   playerId: number,

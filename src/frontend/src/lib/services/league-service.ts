@@ -1,19 +1,15 @@
 import { authStore } from "../stores/auth-store";
 import { ActorFactory } from "../utils/ActorFactory";
 import { isError } from "../utils/helpers";
-import type {
-  FootballLeagueDTO,
-  LeagueStatus,
-} from "../../../../declarations/data_canister/data_canister.did";
 
 export class LeagueService {
   constructor() {}
 
   async getLeagues(): Promise<FootballLeagueDTO[]> {
     const identityActor: any =
-      await ActorFactory.createDataCanisterIdentityActor(
+      await ActorFactory.createIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_ID ?? "",
+        process.env.BACKEND_CANISTER_ID ?? "",
       );
     const result = await identityActor.getLeagues();
     if (isError(result)) throw new Error("Failed to fetch leagues");
@@ -22,9 +18,9 @@ export class LeagueService {
 
   async getBettableLeagues(): Promise<FootballLeagueDTO[]> {
     const identityActor: any =
-      await ActorFactory.createDataCanisterIdentityActor(
+      await ActorFactory.createIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_ID ?? "",
+        process.env.BACKEND_CANISTER_ID ?? "",
       );
     const result = await identityActor.getUpToDateLeagues();
     if (isError(result)) throw new Error("Failed to fetch leagues");
@@ -33,9 +29,9 @@ export class LeagueService {
 
   async getLeagueStatus(leagueId: number): Promise<LeagueStatus> {
     const identityActor: any =
-      await ActorFactory.createDataCanisterIdentityActor(
+      await ActorFactory.createIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_ID ?? "",
+        process.env.BACKEND_CANISTER_ID ?? "",
       );
     const result = await identityActor.getLeagueStatus(leagueId);
     if (isError(result)) throw new Error("Failed to fetch league status");

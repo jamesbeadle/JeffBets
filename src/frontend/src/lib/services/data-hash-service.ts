@@ -1,9 +1,5 @@
 import { ActorFactory } from "../utils/ActorFactory";
 import { isError } from "../utils/helpers";
-import type {
-  DataHashDTO,
-  LeagueId,
-} from "../../../../declarations/data_canister/data_canister.did";
 import { authStore } from "$lib/stores/auth-store";
 
 export class DataHashService {
@@ -11,9 +7,9 @@ export class DataHashService {
 
   async getDataHashes(leagueId: LeagueId): Promise<DataHashDTO[]> {
     const identityActor: any =
-      await ActorFactory.createDataCanisterIdentityActor(
+      await ActorFactory.createIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_ID ?? "",
+        process.env.BACKEND_CANISTER_ID ?? "",
       );
     const result = await identityActor.getDataHashes(leagueId);
     if (isError(result)) throw new Error("Failed to fetch data hashes");

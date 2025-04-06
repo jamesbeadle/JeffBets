@@ -168,13 +168,9 @@ export default defineConfig((): UserConfig => {
       "process.env": {
         ...readCanisterIds({}),
         DFX_NETWORK: network,
-        DATA_CANISTER_ID: "52fzd-2aaaa-aaaal-qmzsa-cai",
       },
       VITE_APP_VERSION: JSON.stringify(version),
       VITE_DFX_NETWORK: JSON.stringify(network),
-      "process.env.CANISTER_ID_BACKEND": JSON.stringify(
-        process.env.CANISTER_ID_BACKEND,
-      ),
     },
   };
 });

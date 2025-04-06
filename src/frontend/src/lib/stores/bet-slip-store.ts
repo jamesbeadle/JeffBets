@@ -6,11 +6,6 @@ import { leagueStore } from "./league-store";
 import { fixtureStore } from "./fixture-store";
 
 import type { ExtendedSelection } from "$lib/types/extended-selection";
-import type {
-  Category,
-  SelectionDetail,
-} from "../../../../declarations/backend/backend.did";
-import type { ClubDTO } from "../../../../declarations/data_canister/data_canister.did";
 
 export interface BetSlipState {
   bets: ExtendedSelection[];

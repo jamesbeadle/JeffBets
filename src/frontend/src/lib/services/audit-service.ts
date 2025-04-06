@@ -10,7 +10,7 @@ export class AuditService {
   constructor() {}
 
   async getUserAudit(dto: GetUserAudit): Promise<UserAuditList | undefined> {
-    const identityActor: any = await ActorFactory.createBackendIdentityActor(
+    const identityActor: any = await ActorFactory.createIdentityActor(
       authStore,
       process.env.BACKEND_CANISTER_ID ?? "",
     );

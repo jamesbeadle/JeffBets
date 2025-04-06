@@ -16,9 +16,9 @@ import Time "mo:base/Time";
 import List "mo:base/List";
 
 import T "../types/app_types";
-import Base "mo:waterway-mops/BaseTypes";
 import BettingTypes "../types/betting_types";
 import Ids "mo:waterway-mops/Ids";
+import FootballTypes "mo:waterway-mops/football/FootballTypes";
 import ProfileCanister "../canister_definitions/profile-canister";
 
 import BettingUtilities "../utilities/betting_utilities";
@@ -40,14 +40,14 @@ module {
 
   public class UserManager() {
 
-    private var profileCanisterIds: [(Ids.PrincipalId, Base.CanisterId)] = [];
-    private var uniqueProfileCanisterIds: [Base.CanisterId] = [];
+    private var profileCanisterIds: [(Ids.PrincipalId, Ids.CanisterId)] = [];
+    private var uniqueProfileCanisterIds: [Ids.CanisterId] = [];
     private var activeProfileCanisterId = "";
     private var usernames: [(Ids.PrincipalId, Text)] = [];
     
     public func getProfile(principalId : Text, kycProfile: ?AppTypes.KYCProfile) : async Result.Result<AppDTOs.ProfileDTO, T.Error> {
       await checkOrCreateProfile(principalId);
-      let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         profileCanisterEntry.0 == principalId;
       });
 
@@ -122,7 +122,7 @@ module {
       
       await checkOrCreateProfile(principalId);
       
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == principalId;
       });
 
@@ -150,7 +150,7 @@ module {
         return #err(#NotAllowed);
       };
 
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -172,7 +172,7 @@ module {
       if(not Utilities.validProfilePicture(dto.profilePicture)){
         return #err(#NotAllowed);
       };
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -194,7 +194,7 @@ module {
       if(not validWithdrawalAddress(dto.withdrawalAddress)){
         return #err(#NotAllowed);
       };
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -213,7 +213,7 @@ module {
 
     public func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -232,7 +232,7 @@ module {
 
     public func setDailyBetLimit(dto: UserCommands.SetDailyBetLimit) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -251,7 +251,7 @@ module {
 
     public func setMonthlyBetLimit(dto: UserCommands.SetMonthlyBetLimit) : async Result.Result<(), T.Error> {
       await checkOrCreateProfile(dto.principalId);
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -270,7 +270,7 @@ module {
 
     public func placeBet(dto: BettingCommands.SubmitBetslip) : async Result.Result<BettingTypes.BetSlip, T.Error> {
       await checkOrCreateProfile(dto.principalId);
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -289,7 +289,7 @@ module {
 
     public func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBetsList, T.Error>{
       await checkOrCreateProfile(dto.principalId);
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == dto.principalId;
       });
 
@@ -950,7 +950,7 @@ module {
             settledOn = Time.now();
           };
 
-          let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+          let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
             profileCanisterEntry.0 == betslip.placedBy;
           });
 
@@ -974,7 +974,7 @@ module {
         await createProfile(principalId);
       };
 
-      let foundProfileCanisterId = Array.find<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let foundProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         entry.0 == principalId;
       });
 
@@ -997,7 +997,7 @@ module {
       let canister_principal = Principal.fromActor(canister);
       let canisterId = Principal.toText(canister_principal);
       activeProfileCanisterId := canisterId;
-      let uniqueProfileCanisterIdsBuffer = Buffer.fromArray<Base.CanisterId>(uniqueProfileCanisterIds);
+      let uniqueProfileCanisterIdsBuffer = Buffer.fromArray<Ids.CanisterId>(uniqueProfileCanisterIds);
       uniqueProfileCanisterIdsBuffer.add(canisterId);
       uniqueProfileCanisterIds := Buffer.toArray(uniqueProfileCanisterIdsBuffer);
       
@@ -1006,7 +1006,7 @@ module {
     };
 
     private func createProfile(principalId: Ids.PrincipalId) : async () {
-      let profileCanisterIdsBuffer = Buffer.fromArray<(Ids.PrincipalId, Base.CanisterId)>(profileCanisterIds);
+      let profileCanisterIdsBuffer = Buffer.fromArray<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds);
       
       let profile_canister = actor (activeProfileCanisterId) : actor {
         createProfile : (principalId : Text) -> async Result.Result<(), T.Error>;
@@ -1057,7 +1057,7 @@ module {
     };
     
     private func voidBet(betslip: BettingTypes.BetSlip) : async (){
-      let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         profileCanisterEntry.0 == betslip.placedBy;
       });
 
@@ -1089,27 +1089,27 @@ module {
 
     //Stable storage functions
 
-    public func getStableProfileCanisterIds() : [(Ids.PrincipalId, Base.CanisterId)] {
+    public func getStableProfileCanisterIds() : [(Ids.PrincipalId, Ids.CanisterId)] {
       return profileCanisterIds;
     };
 
-    public func setStableProfileCanisterIds(stable_profile_canister_ids: [(Ids.PrincipalId, Base.CanisterId)]) {
+    public func setStableProfileCanisterIds(stable_profile_canister_ids: [(Ids.PrincipalId, Ids.CanisterId)]) {
       profileCanisterIds := stable_profile_canister_ids;
     };
 
-    public func getStableUniqueProfileCanisterIds () : [Base.CanisterId] {
+    public func getStableUniqueProfileCanisterIds () : [Ids.CanisterId] {
       return uniqueProfileCanisterIds;
     };
 
-    public func setStableUniqueProfileCanisterIds(stable_unique_profile_canister_ids: [Base.CanisterId]){
+    public func setStableUniqueProfileCanisterIds(stable_unique_profile_canister_ids: [Ids.CanisterId]){
       uniqueProfileCanisterIds := stable_unique_profile_canister_ids;
     };
 
-    public func getStableActiveProfileCanisterId() : Base.CanisterId {
+    public func getStableActiveProfileCanisterId() : Ids.CanisterId {
       return activeProfileCanisterId;
     };
 
-    public func setStableActiveProfileCanisterId(stable_active_profile_canister_id: Base.CanisterId) {
+    public func setStableActiveProfileCanisterId(stable_active_profile_canister_id: Ids.CanisterId) {
       activeProfileCanisterId := stable_active_profile_canister_id;
     };
 
@@ -1136,7 +1136,7 @@ module {
     };
 
     public func verifyBettingAccount(principalId: Ids.PrincipalId) : async (){
-      let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Base.CanisterId)) : Bool {
+      let profileCanisterId = Array.find(profileCanisterIds, func(profileCanisterEntry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
         profileCanisterEntry.0 == principalId;
       });
 

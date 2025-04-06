@@ -13,7 +13,7 @@ import Ids "mo:waterway-mops/Ids";
 import BettingTypes "../types/betting_types";
 import Environment "../environment";
 
-import FPLLedger "../utilities/ledger";
+import ICFCLedger "../mops/interfaces/ICFCLedger";
 import Utilities "../utilities/utilities";
 import AppDTOs "../dtos/app_dtos";
 import AuditDTOs "../dtos/audit_dtos";
@@ -24,7 +24,7 @@ import BettingQueries "../cqrs/queries/betting_queries";
 
 actor class _ProfileCanister() {
   
-  private let ledger : FPLLedger.Interface = actor (FPLLedger.CANISTER_ID);
+  private let ledger : ICFCLedger.Interface = actor (ICFCLedger.CANISTER_ID);
   private let MAX_PROFILES_PER_CANISTER: Nat = 500;
   private let MAX_PROFILES_PER_GROUP: Nat = 10;
   private let MAX_PROFILE_GROUPS: Nat = 50;

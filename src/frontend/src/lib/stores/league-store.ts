@@ -3,12 +3,6 @@ import { LeagueService } from "../services/league-service";
 import { DataHashService } from "$lib/services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
-import type {
-  CreateLeagueDTO,
-  FootballLeagueDTO,
-  LeagueStatus,
-  UpdateLeagueDTO,
-} from "../../../../declarations/data_canister/data_canister.did";
 
 function createLeagueStore() {
   const { subscribe, update } = writable<Record<number, FootballLeagueDTO>>({});

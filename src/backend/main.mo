@@ -1,8 +1,6 @@
 // TODO: Should these be pulled mops or from defintions?
 import Environment "environment";
 import Utilities "utilities/utilities";
-import Management "utilities/Management";
-import FPLLedger "managers/fpl_ledger_manager";
 
 /* ----- Mops Packages ----- */
 import Array "mo:base/Array";
@@ -51,6 +49,7 @@ import KYCManager "managers/kyc_manager";
 //ONLY STABLE TYPEs
 import Base "mo:waterway-mops/BaseTypes";
 import Ids "mo:waterway-mops/Ids";
+import Management "mo:waterway-mops/Management";
 import T "types/app_types";
 import BettingTypes "types/betting_types";
 import AppTypes "types/app_types";
@@ -213,6 +212,113 @@ actor Self {
 
     return false;
   };
+
+
+  /* ----- Data Canister Calls -----  */
+
+  public shared ({ caller }) func getDataHashes(dto: AppQueries.GetDataHashes) : async Result.Result<AppQueries.DataHashes, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getDataHashes : (dto: AppQueries.GetDataHashes) -> async Result.Result<AppQueries.DataHashes, Enums.Error>;
+    };
+    return await data_canister.getDataHashes(dto);
+  };
+
+  public shared ({ caller }) func getClubs(dto: ClubQueries.GetClubs) : async Result.Result<ClubQueries.Clubs, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getClubs : (dto: ClubQueries.GetClubs) -> async Result.Result<ClubQueries.Clubs, Enums.Error>;
+    };
+    return await data_canister.getClubs(dto);
+  };
+
+  public shared ({ caller }) func getCountries(dto: BaseQueries.GetCountries) : async Result.Result<BaseQueries.Countries, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getCountries : (dto: BaseQueries.GetCountries) -> async Result.Result<BaseQueries.Countries, Enums.Error>;
+    };
+    return await data_canister.getCountries(dto);
+  };
+
+  public shared ({ caller }) func getSeasons(dto: SeasonQueries.GetSeasons) : async Result.Result<SeasonQueries.Seasons, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getSeasons : (dto: SeasonQueries.GetSeasons) -> async Result.Result<SeasonQueries.Seasons, Enums.Error>;
+    };
+    return await data_canister.getSeasons(dto);
+  };
+
+  public shared ({ caller }) func getLoanedPlayers(dto: PlayerQueries.GetLoanedPlayers) : async Result.Result<PlayerQueries.LoanedPlayers, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getLoanedPlayers : (dto: PlayerQueries.GetLoanedPlayers) -> async Result.Result<PlayerQueries.LoanedPlayers, Enums.Error>;
+    };
+    return await data_canister.getLoanedPlayers(dto);
+  };
+
+  public shared ({ caller }) func getPlayers(dto: PlayerQueries.GetPlayers) : async Result.Result<PlayerQueries.Players, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getPlayers : (dto: PlayerQueries.GetPlayers) -> async Result.Result<PlayerQueries.Players, Enums.Error>;
+    };
+    return await data_canister.getPlayers(dto);
+  };
+
+  public shared ({ caller }) func getLeagues(dto: LeagueQueries.GetLeagues) : async Result.Result<LeagueQueries.Leagues, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getLeagues : (dto: LeagueQueries.GetLeagues) -> async Result.Result<LeagueQueries.Leagues, Enums.Error>;
+    };
+    let result = await data_canister.getLeagues(dto);
+    return result;
+  };
+
+  public shared ({ caller }) func getLeagueStatus(dto: LeagueQueries.GetLeagueStatus) : async Result.Result<LeagueQueries.LeagueStatus, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getLeagueStatus : (dto: LeagueQueries.GetLeagueStatus) -> async Result.Result<LeagueQueries.LeagueStatus, Enums.Error>;
+    };
+    return await data_canister.getLeagueStatus(dto);
+  };
+
+  public shared ({ caller }) func getFixtures(dto: FixtureQueries.GetFixtures) : async Result.Result<FixtureQueries.Fixtures, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getFixtures : (dto: FixtureQueries.GetFixtures) -> async Result.Result<FixtureQueries.Fixtures, Enums.Error>;
+    };
+    return await data_canister.getFixtures(dto);
+  };
+
+  public shared ({ caller }) func getClubValueLeaderboard(dto: ClubQueries.GetClubValueLeaderboard) : async Result.Result<ClubQueries.ClubValueLeaderboard, Enums.Error> {
+    assert not Principal.isAnonymous(caller);
+    // TODO: Check caller is a member
+
+    let data_canister = actor (CanisterIds.ICFC_DATA_CANISTER_ID) : actor {
+      getClubValueLeaderboard : (dto: ClubQueries.GetClubValueLeaderboard) -> async Result.Result<ClubQueries.ClubValueLeaderboard, Enums.Error>;
+    };
+    return await data_canister.getClubValueLeaderboard(dto);
+  };
+
+
+  /* ----- Private Functions ----- */
 
   private func calculateTotalPotentialPayout() : Nat64 {
     return Array.foldLeft<BettingTypes.BetSlip, Nat64>(

@@ -1,11 +1,6 @@
 import { get, writable } from "svelte/store";
 import { clubStore } from "$lib/stores/club-store";
 import { playerStore } from "$lib/stores/player-store";
-import type {
-  ClubDTO,
-  LeagueId,
-  PlayerDTO,
-} from "../../../../declarations/data_canister/data_canister.did";
 
 interface LeagueData {
   clubs: Record<number, ClubDTO>;

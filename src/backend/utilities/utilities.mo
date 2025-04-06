@@ -14,11 +14,10 @@ import Nat32 "mo:base/Nat32";
 import Nat8 "mo:base/Nat8";
 import Nat16 "mo:base/Nat16";
 import Int16 "mo:base/Int16";
-import Management "./Management";
-import Base "mo:waterway-mops/BaseTypes";
 import BaseDefinitions "mo:waterway-mops/BaseDefinitions";
 import FootballTypes "mo:waterway-mops/football/FootballTypes";
 import FootballEnums "mo:waterway-mops/football/FootballEnums";
+import Management "mo:waterway-mops/Management";
 
 module {
 

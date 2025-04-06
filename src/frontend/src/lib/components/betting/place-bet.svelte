@@ -3,7 +3,6 @@
     import EmptyBetSlipIcon from "$lib/icons/EmptyBetSlipIcon.svelte";
     import OpenFplIcon from "$lib/icons/OpenFPLIcon.svelte";
     import { betSlipStore } from "$lib/stores/bet-slip-store";
-    import type { ClubDTO, FixtureDTO, FootballLeagueDTO } from "../../../../../declarations/data_canister/data_canister.did";
     import Modal from "../shared/modal.svelte";
   
     interface ExtendedFixtureDTO extends FixtureDTO {

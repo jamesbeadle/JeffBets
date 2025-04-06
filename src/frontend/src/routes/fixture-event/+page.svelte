@@ -38,7 +38,6 @@
 
   import { betSlipDataStore } from "$lib/stores/bet-slip-data-store";
   import { buildBetUiDescription } from "$lib/utils/buildBetUiDescription";
-  import type { ClubDTO, ClubId, FixtureDTO, PlayerDTO, FootballLeagueDTO } from "../../../../declarations/data_canister/data_canister.did";
 
   $: leagueId = Number($page.url.searchParams.get("leagueId"));
   $: fixtureId = Number($page.url.searchParams.get("fixtureId"));

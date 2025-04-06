@@ -1,8 +1,4 @@
 import { writable } from "svelte/store";
-import type {
-  PlayerDetailDTO,
-  PlayerPointsDTO,
-} from "../../../../declarations/data_canister/data_canister.did";
 import { PlayerEventsService } from "../services/player-events-service";
 
 function createPlayerEventsStore() {

@@ -1,6 +1,5 @@
 import { ActorFactory } from "../utils/ActorFactory";
 import { isError } from "../utils/helpers";
-import type { CountryDTO } from "../../../../declarations/data_canister/data_canister.did";
 import { authStore } from "$lib/stores/auth-store";
 
 export class CountryService {
@@ -8,9 +7,9 @@ export class CountryService {
 
   async getCountries(): Promise<CountryDTO[]> {
     const identityActor: any =
-      await ActorFactory.createDataCanisterIdentityActor(
+      await ActorFactory.createIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_ID ?? "",
+        process.env.BACKEND_CANISTER_ID ?? "",
       );
     const result = await identityActor.getCountries();
     if (isError(result)) throw new Error("Failed to fetch countries");

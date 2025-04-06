@@ -1,12 +1,5 @@
-import { idlFactory } from "../../../../declarations/backend";
 import { ActorFactory } from "$lib/utils/ActorFactory";
 import { isError } from "$lib/utils/helpers";
-import type {
-  PlayerPointsDTO,
-  PlayerDetailDTO,
-  GetPlayerDetailsDTO,
-  GameweekFiltersDTO,
-} from "../../../../declarations/data_canister/data_canister.did";
 import { authStore } from "$lib/stores/auth-store";
 
 export class PlayerEventsService {
@@ -22,9 +15,9 @@ export class PlayerEventsService {
         seasonId: seasonId,
       };
       const identityActor: any =
-        await ActorFactory.createDataCanisterIdentityActor(
+        await ActorFactory.createIdentityActor(
           authStore,
-          process.env.DATA_CANISTER_ID ?? "",
+          process.env.BACKEND_CANISTER_ID ?? "",
         );
       const result = await identityActor.getPlayerDetails(dto);
 
@@ -51,9 +44,9 @@ export class PlayerEventsService {
       gameweek,
     };
     const identityActor: any =
-      await ActorFactory.createDataCanisterIdentityActor(
+      await ActorFactory.createIdentityActor(
         authStore,
-        process.env.DATA_CANISTER_ID ?? "",
+        process.env.BACKEND_CANISTER_ID ?? "",
       );
     const result = await identityActor.getPlayerDetailsForGameweek(
       leagueId,
@@ -76,9 +69,9 @@ export class PlayerEventsService {
         gameweek,
       };
       const identityActor: any =
-        await ActorFactory.createDataCanisterIdentityActor(
+        await ActorFactory.createIdentityActor(
           authStore,
-          process.env.DATA_CANISTER_ID ?? "",
+          process.env.BACKEND_CANISTER_ID ?? "",
         );
       const result = await identityActor.getPlayerDetailsForGameweek(dto);
 

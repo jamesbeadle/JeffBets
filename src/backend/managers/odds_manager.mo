@@ -30,28 +30,30 @@ module {
     private var matchOddsCache: [(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])] = [];
     private let oddsGenerator = OddsGenerator.OddsGenerator();
   
-    public func getHomepageLeagueFixtures(leagueId: FootballIds.LeagueId) : [BettingQueries.HomePageFixture] {
+    public func getHomepageLeagueFixtures(dto: BettingQueries.GetBettableHomepageFixtures) : BettingQueries.BettableHomepageFixtures {
  
       let matchOddsResult = Array.find<(FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])>(matchOddsCache, func(matchOddsCacheEntry: (FootballIds.LeagueId, [(FootballIds.FixtureId, BettingTypes.MatchOdds)])) : Bool {
-        matchOddsCacheEntry.0 == leagueId;
+        matchOddsCacheEntry.0 == dto.leagueId;
       });
 
       switch(matchOddsResult){
         case (?foundMatchOdds){
           return Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), BettingQueries.HomePageFixture>(foundMatchOdds.1, func (oddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) {
             let matchOdds = oddsEntry.1;
-            return {
-              leagueId = matchOdds.leagueId;
-              gameweek = matchOdds.gameweek;
-              fixtureId = matchOdds.fixtureId;
-              homeOdds = matchOdds.correctResults.homeOdds;
-              drawOdds = matchOdds.correctResults.drawOdds;
-              awayOdds = matchOdds.correctResults.awayOdds;
+            return { 
+              fixtures = {
+                leagueId = matchOdds.leagueId;
+                gameweek = matchOdds.gameweek;
+                fixtureId = matchOdds.fixtureId;
+                homeOdds = matchOdds.correctResults.homeOdds;
+                drawOdds = matchOdds.correctResults.drawOdds;
+                awayOdds = matchOdds.correctResults.awayOdds;
+              }
             };
           });
         };
         case (null){
-          return [];
+          return {fixtures = []};
         }
       };
     };

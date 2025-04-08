@@ -30,7 +30,6 @@ import BettingUtilities "../utilities/betting_utilities";
 import Environment "../environment";
 import Utilities "../utilities/utilities";
 import AppTypes "../types/app_types";
-import AppCommands "../commands/app_commands";
 import BettingCommands "../commands/betting_commands";
 import UserCommands "../commands/user_commands";
 import BettingQueries "../queries/betting_queries";
@@ -144,76 +143,6 @@ module {
           return #err(#NotFound);
         }
       };
-    };
-      
-    public func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), Enums.Error> {
-      await checkOrCreateProfile(dto.principalId);
-      if(not Utilities.validUsername(dto.username)){
-        return #err(#NotAllowed);
-      };
-      if(not usernameAvailable(dto.username, dto.principalId)){
-        return #err(#NotAllowed);
-      };
-
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
-        entry.0 == dto.principalId;
-      });
-
-      switch(userProfileCanisterId){
-        case (?foundCanisterId){
-          let profile_canister = actor (foundCanisterId.1) : actor {
-            updateUsername : (dto: AppCommands.UpdateUsername) -> async Result.Result<(), Enums.Error>;
-          };
-          return await profile_canister.updateUsername(dto);
-        };
-        case (null){
-          return #err(#NotFound);
-        }
-      };
-    };
-
-    public func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), Enums.Error> {
-      await checkOrCreateProfile(dto.principalId);
-      if(not Utilities.validProfilePicture(dto.profilePicture)){
-        return #err(#NotAllowed);
-      };
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
-        entry.0 == dto.principalId;
-      });
-
-      switch(userProfileCanisterId){
-        case (?foundCanisterId){
-          let profile_canister = actor (foundCanisterId.1) : actor {
-            updateProfilePicture : (dto: AppCommands.UpdateProfilePicture) -> async Result.Result<(), Enums.Error>;
-          };
-          return await profile_canister.updateProfilePicture(dto);
-        };
-        case (null){
-          return #err(#NotFound);
-        }
-      };
-    };
-
-    public func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), Enums.Error> {
-      await checkOrCreateProfile(dto.principalId);
-      if(not validWithdrawalAddress(dto.withdrawalAddress)){
-        return #err(#NotAllowed);
-      };
-      let userProfileCanisterId = Array.find<(Ids.PrincipalId, Ids.CanisterId)>(profileCanisterIds, func(entry: (Ids.PrincipalId, Ids.CanisterId)) : Bool {
-        entry.0 == dto.principalId;
-      });
-
-      switch(userProfileCanisterId){
-        case (?foundCanisterId){
-          let profile_canister = actor (foundCanisterId.1) : actor {
-            updateWithdrawalAddress : (dto: AppCommands.UpdateWithdrawalAddress) -> async Result.Result<(), Enums.Error>;
-          };
-          return await profile_canister.updateWithdrawalAddress(dto);
-        };
-        case (null){
-          return #err(#NotFound);
-        }
-      }
     };
 
     public func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), Enums.Error> {

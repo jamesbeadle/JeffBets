@@ -29,7 +29,6 @@ import AuditQueries "queries/audit_queries";
 
 /* ----- Commands ----- */
 
-import AppCommands "commands/app_commands";
 import UserCommands "commands/user_commands";
 import BettingCommands "commands/betting_commands";
 
@@ -109,27 +108,6 @@ actor Self {
     assert not Principal.isAnonymous(caller);
     let principalId = Principal.toText(caller);
     return await userManager.agreeTerms(principalId);
-  };
-
-  public shared ({ caller }) func updateUsername(dto: AppCommands.UpdateUsername) : async Result.Result<(), Enums.Error> {
-    assert not Principal.isAnonymous(caller);
-    let principalId = Principal.toText(caller);
-    assert dto.principalId == principalId;
-    return await userManager.updateUsername(dto);
-  };
-
-  public shared ({ caller }) func updateProfilePicture(dto: AppCommands.UpdateProfilePicture) : async Result.Result<(), Enums.Error> {
-    assert not Principal.isAnonymous(caller);
-    let principalId = Principal.toText(caller);
-    assert dto.principalId == principalId;
-    return await userManager.updateProfilePicture(dto);
-  };
-
-  public shared ({ caller }) func updateWithdrawalAddress(dto: AppCommands.UpdateWithdrawalAddress) : async Result.Result<(), Enums.Error> {
-    assert not Principal.isAnonymous(caller);
-    let principalId = Principal.toText(caller);
-    assert dto.principalId == principalId;
-    return await userManager.updateWithdrawalAddress(dto);
   };
 
   public shared ({ caller }) func pauseAccount(dto: UserCommands.PauseAccount) : async Result.Result<(), Enums.Error> {

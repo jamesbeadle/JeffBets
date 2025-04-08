@@ -22,13 +22,8 @@ import ProfileCanisterCommands "../commands/profile_canister_commands";
 /* ----- Query Imports ----- */
 import ProfileCanisterQueries "../queries/profile_canister_queries";
 
-
-/* ----- Mops Refactoring ----- */
-import ICFCLedger "../mops/interfaces/ICFCLedger";
-
 actor class _ProfileCanister() {
   
-  private let ledger : ICFCLedger.Interface = actor (ICFCLedger.CANISTER_ID);
   private let MAX_PROFILES_PER_CANISTER: Nat = 500;
   private let MAX_PROFILES_PER_GROUP: Nat = 10;
   private let MAX_PROFILE_GROUPS: Nat = 50;
@@ -102,8 +97,6 @@ actor class _ProfileCanister() {
         let profileResult = getProfileFromGroup(dto.principalId, profileGroup.1);
         switch(profileResult){
           case (?profile){
-
-            let tokens = await ledger.icrc1_balance_of({owner = Principal.fromText(profile.principalId); subaccount = null}); 
             
             let currentYear = Utilities.getCurrentYear();
             let currentMonth = Utilities.getCurrentMonth();
@@ -131,7 +124,6 @@ actor class _ProfileCanister() {
               case (null){ };
             };
             
-            var accountBalance: Nat64 = Nat64.fromNat(tokens);
             let response: ProfileCanisterQueries.Profile = {
               accountOnPause = profile.accountOnPause;
               maxBetLimit = profile.maxBetLimit;

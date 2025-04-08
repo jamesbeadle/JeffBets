@@ -11,24 +11,20 @@ import Enums "mo:waterway-mops/Enums";
 import Ids "mo:waterway-mops/Ids";
 
 import T "../types/app_types";
-import BettingTypes "../types/betting_types";
 import Environment "../environment";
 import Utilities "../utilities/utilities";
 
+
 /* ----- Command Imports ----- */
-import BettingCommands "../commands/betting_commands";
-import UserCommands "../commands/user_commands";
+import ProfileCanisterCommands "../commands/profile_canister_commands";
 
 
 /* ----- Query Imports ----- */
-import AuditQueries "../queries/audit_queries";
-import BettingQueries "../queries/betting_queries";
-import UserQueries "../queries/user_queries";
+import ProfileCanisterQueries "../queries/profile_canister_queries";
 
 
 /* ----- Mops Refactoring ----- */
 import ICFCLedger "../mops/interfaces/ICFCLedger";
-import ProfileCanisterCommands "../commands/profile_canister_commands";
 
 actor class _ProfileCanister() {
   
@@ -95,15 +91,15 @@ actor class _ProfileCanister() {
 
   /* ----- Queries ----- */
 
-  public shared ({caller }) func getProfile(userPrincipalId: Ids.PrincipalId) : async Result.Result<UserQueries.Profile, Enums.Error>{
+  public shared ({caller }) func getProfile(dto: ProfileCanisterQueries.GetProfile) : async Result.Result<ProfileCanisterQueries.Profile, Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let profileGroupEntry = Array.find<(Ids.PrincipalId, Nat)>(profileGroupDictionary, 
       func(groupEntry: (Ids.PrincipalId, Nat)) : Bool {
-        groupEntry.0 == userPrincipalId;
+        groupEntry.0 == dto.principalId;
     });
     switch(profileGroupEntry){
       case (?profileGroup){
-        let profileResult = getProfileFromGroup(userPrincipalId, profileGroup.1);
+        let profileResult = getProfileFromGroup(dto.principalId, profileGroup.1);
         switch(profileResult){
           case (?profile){
 
@@ -136,7 +132,7 @@ actor class _ProfileCanister() {
             };
             
             var accountBalance: Nat64 = Nat64.fromNat(tokens);
-            let response: UserQueries.Profile = {
+            let response: ProfileCanisterQueries.Profile = {
               accountOnPause = profile.accountOnPause;
               maxBetLimit = profile.maxBetLimit;
               monthlyBetLimit = profile.monthlyBetLimit;
@@ -165,16 +161,16 @@ actor class _ProfileCanister() {
     };
   };
   
-  public shared ({caller }) func getUserBets(dto: BettingQueries.GetUserBets) : async Result.Result<BettingQueries.UserBets, Enums.Error>{
+  public shared ({caller }) func getUserBets(dto: ProfileCanisterQueries.GetUserBets) : async Result.Result<ProfileCanisterQueries.UserBets, Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     //todo
     
     return #err(#NotFound);
   };
 
-  public shared ({caller }) func getUserAuditList () : async [AuditQueries.AuditRecord] {
+  public shared ({caller }) func getUserAuditList (dto: ProfileCanisterQueries.GetUserAuditList) : async Result.Result<ProfileCanisterQueries.UserAuditList, Enums.Error> {
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    let allProfilesBuffer = Buffer.fromArray<AuditQueries.AuditRecord>([]);
+    let allProfilesBuffer = Buffer.fromArray<ProfileCanisterQueries.AuditRecord>([]);
 
     /*for(i in Iter.range(1,50)){
       var currentProfiles: [T.Profile] = [];
@@ -201,7 +197,7 @@ actor class _ProfileCanister() {
     };
 
     return Buffer.toArray(allProfilesBuffer);*/
-    return [];
+    return #ok({});
   };
   
   public shared ({caller }) func canisterFull() : async Bool {

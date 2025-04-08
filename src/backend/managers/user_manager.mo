@@ -39,6 +39,7 @@ import AuditQueries "../queries/audit_queries";
 import IcfcLedger "../mops/interfaces/ICFCLedger";
 import BettingEnums "../enums/betting_enums";
 import AccountUtilities "../mops/account_utilities";
+import ProfileCanisterQueries "../queries/profile_canister_queries";
 
 module {
 
@@ -58,9 +59,9 @@ module {
       switch(profileCanisterId){
         case (?foundCanisterId){
           let profile_canister = actor (foundCanisterId.1) : actor {
-            getProfile : (principalId : Text) -> async Result.Result<UserQueries.Profile, Enums.Error>;
+            getProfile : (dto: ProfileCanisterQueries.GetProfile) -> async Result.Result<ProfileCanisterQueries.Profile, Enums.Error>;
           };
-          let profileResult = await profile_canister.getProfile(principalId);
+          let profileResult = await profile_canister.getProfile({principalId});
 
           var kycApprovalDate: Int = 0;
           var kycComplete = false;

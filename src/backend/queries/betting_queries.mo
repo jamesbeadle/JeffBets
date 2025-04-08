@@ -7,7 +7,6 @@ import BettingEnums "../enums/betting_enums";
 module BettingQueries {
 
   public type GetUserBets = {
-    principalId: Ids.PrincipalId;
   };
 
   public type UserBets = {

@@ -3,7 +3,7 @@ type YesNoSelectionOdds =
    noOdds: float64;
    yesOdds: float64;
  };
-type UserBetsList = record {bets: vec BetSlip__1;};
+type UserBets = record {bets: vec BetSlip;};
 type UserAuditList = 
  record {
    date: int;
@@ -70,19 +70,6 @@ type SetDailyBetLimit =
    maxBetLimit: nat64;
    principalId: PrincipalId;
  };
-type Selection__1 = 
- record {
-   expectedReturns: nat64;
-   fixtureId: FixtureId;
-   leagueId: LeagueId;
-   odds: float64;
-   result: BetResult;
-   selectionDetail: SelectionDetail;
-   selectionType: Category__1;
-   stake: nat64;
-   status: SelectionStatus;
-   winnings: float64;
- };
 type SelectionStatus = 
  variant {
    Settled;
@@ -145,82 +132,77 @@ type ScoreDetail =
 type Result_9 = 
  variant {
    err: Error;
-   ok: LoanedPlayers;
+   ok: Leagues;
  };
 type Result_8 = 
  variant {
    err: Error;
-   ok: MatchOdds;
+   ok: LoanedPlayers;
  };
 type Result_7 = 
  variant {
    err: Error;
-   ok: Players;
+   ok: MatchOdds;
  };
 type Result_6 = 
  variant {
    err: Error;
-   ok: Profile;
+   ok: Players;
  };
 type Result_5 = 
  variant {
    err: Error;
-   ok: Seasons;
+   ok: Profile;
  };
 type Result_4 = 
  variant {
    err: Error;
-   ok: UserAuditList;
+   ok: Seasons;
  };
 type Result_3 = 
  variant {
    err: Error;
-   ok: UserBetsList;
+   ok: UserAuditList;
  };
 type Result_2 = 
  variant {
    err: Error;
-   ok: bool;
- };
-type Result_16 = 
- variant {
-   err: Error;
-   ok: AppStatus;
+   ok: UserBets;
  };
 type Result_15 = 
  variant {
    err: Error;
-   ok: vec HomePageFixture;
+   ok: AppStatus;
  };
 type Result_14 = 
  variant {
    err: Error;
-   ok: Clubs;
+   ok: BettableHomepageFixtures;
  };
 type Result_13 = 
  variant {
    err: Error;
-   ok: Countries;
+   ok: Clubs;
  };
 type Result_12 = 
  variant {
    err: Error;
-   ok: vec DataHash;
+   ok: Countries;
  };
 type Result_11 = 
  variant {
    err: Error;
-   ok: Fixtures;
+   ok: vec DataHash;
  };
 type Result_10 = 
  variant {
    err: Error;
-   ok: Leagues;
+   ok: Fixtures;
  };
 type Result_1 = 
  variant {
    err: Error;
-   ok: BetSlip;
+   ok: bool;
  };
 type ResultAndYesNoSelectionOdds = 
  record {
@@ -418,6 +400,11 @@ type GetUserAudit =
  };
 type GetSeasons = record {leagueId: LeagueId;};
 type GetPlayers = record {leagueId: LeagueId;};
+type GetMatchOdds = 
+ record {
+   fixtureId: FixtureId;
+   leagueId: LeagueId;
+ };
 type GetLoanedPlayers = record {leagueId: LeagueId;};
 type GetLeagues = record {};
 type GetFixtures = 
@@ -427,6 +414,7 @@ type GetFixtures =
  };
 type GetCountries = record {};
 type GetClubs = record {leagueId: LeagueId;};
+type GetBettableHomepageFixtures = record {leagueId: LeagueId;};
 type Gender = 
  variant {
    Female;
@@ -518,27 +506,6 @@ type Club =
    shirtType: ShirtType;
    thirdColourHex: text;
  };
-type Category__1 = 
- variant {
-   AnytimeAssist;
-   AnytimeGoalscorer;
-   BothTeamsToScore;
-   BothTeamsToScoreAndWinner;
-   CorrectResult;
-   CorrectScore;
-   FirstAssist;
-   FirstGoalscorer;
-   HalfTimeFullTimeResult;
-   HalfTimeScore;
-   LastAssist;
-   LastGoalscorer;
-   MissPenalty;
-   PenaltyMissed;
-   RedCard;
-   ScoreBrace;
-   ScoreHatrick;
-   YellowCard;
- };
 type Category = 
  variant {
    AnytimeAssist;
@@ -566,29 +533,7 @@ type BothTeamsToScoreAndWinnerDetail =
    bothTeamsToScore: bool;
    matchResult: MatchResult;
  };
-type BetType__1 = 
- variant {
-   Canadian;
-   Double;
-   EightFold;
-   FiveFold;
-   FourFold;
-   Goliath;
-   Heinz;
-   Lucky15;
-   Lucky31;
-   Lucky63;
-   NineFold;
-   Patent;
-   SevenFold;
-   Single;
-   SixFold;
-   SuperHeinz;
-   TenFold;
-   Treble;
-   Trixie;
-   Yankee;
- };
+type BettableHomepageFixtures = record {fixtures: vec HomePageFixture;};
 type BetType = 
  variant {
    Canadian;
@@ -611,20 +556,6 @@ type BetType =
    Treble;
    Trixie;
    Yankee;
- };
-type BetSlip__1 = 
- record {
-   betType: BetType__1;
-   expectedReturns: nat64;
-   id: nat;
-   placedBy: PrincipalId;
-   placedOn: int;
-   result: BetResult;
-   selections: vec Selection__1;
-   settledOn: int;
-   status: SelectionStatus;
-   totalStake: nat64;
-   totalWinnings: nat64;
  };
 type BetSlip = 
  record {
@@ -654,21 +585,22 @@ type AppStatus =
  };
 service : {
   agreeTerms: () -> (Result);
-  getAppStatus: () -> (Result_16) query;
-  getBettableHomepageFixtures: (LeagueId) -> (Result_15) query;
-  getClubs: (GetClubs) -> (Result_14);
-  getCountries: (GetCountries) -> (Result_13);
-  getDataHashes: () -> (Result_12) query;
-  getFixtures: (GetFixtures) -> (Result_11);
-  getLeagues: (GetLeagues) -> (Result_10);
-  getLoanedPlayers: (GetLoanedPlayers) -> (Result_9);
-  getMatchOdds: (LeagueId, FixtureId) -> (Result_8) query;
-  getPlayers: (GetPlayers) -> (Result_7);
-  getProfile: () -> (Result_6);
-  getSeasons: (GetSeasons) -> (Result_5);
-  getUserAudit: (GetUserAudit) -> (Result_4);
-  getUserBets: (GetUserBets) -> (Result_3);
-  isAuditor: () -> (Result_2);
+  getAppStatus: () -> (Result_15) query;
+  getBettableHomepageFixtures: (GetBettableHomepageFixtures) ->
+   (Result_14) query;
+  getClubs: (GetClubs) -> (Result_13);
+  getCountries: (GetCountries) -> (Result_12);
+  getDataHashes: () -> (Result_11) query;
+  getFixtures: (GetFixtures) -> (Result_10);
+  getLeagues: (GetLeagues) -> (Result_9);
+  getLoanedPlayers: (GetLoanedPlayers) -> (Result_8);
+  getMatchOdds: (GetMatchOdds) -> (Result_7) query;
+  getPlayers: (GetPlayers) -> (Result_6);
+  getProfile: () -> (Result_5);
+  getSeasons: (GetSeasons) -> (Result_4);
+  getUserAudit: (GetUserAudit) -> (Result_3);
+  getUserBets: (GetUserBets) -> (Result_2);
+  isAuditor: () -> (Result_1);
   kycVerificationCallback: (ShuftiResponse) -> (Result);
   notifyAppsOfFixtureComplete: (LeagueId, SeasonId, GameweekNumber) ->
    (Result);
@@ -683,7 +615,7 @@ service : {
   notifyAppsOfSeasonComplete: (LeagueId, SeasonId) -> (Result);
   notifyAppsOfTransfer: (LeagueId, PlayerId) -> (Result);
   pauseAccount: (PauseAccount) -> (Result);
-  placeBet: (SubmitBetslip) -> (Result_1);
+  placeBet: (SubmitBetslip) -> (Result);
   setDailyBetLimit: (SetDailyBetLimit) -> (Result);
   setMonthlyBetLimit: (SetMonthlyBetLimit) -> (Result);
   storeKYCReference: (text) -> ();

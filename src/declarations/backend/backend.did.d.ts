@@ -21,19 +21,6 @@ export interface BetSlip {
   expectedReturns: bigint;
   settledOn: bigint;
 }
-export interface BetSlip__1 {
-  id: bigint;
-  status: SelectionStatus;
-  result: BetResult;
-  betType: BetType__1;
-  totalWinnings: bigint;
-  totalStake: bigint;
-  placedBy: PrincipalId;
-  placedOn: bigint;
-  selections: Array<Selection__1>;
-  expectedReturns: bigint;
-  settledOn: bigint;
-}
 export type BetType =
   | { SevenFold: null }
   | { Patent: null }
@@ -55,27 +42,9 @@ export type BetType =
   | { NineFold: null }
   | { Canadian: null }
   | { Single: null };
-export type BetType__1 =
-  | { SevenFold: null }
-  | { Patent: null }
-  | { FiveFold: null }
-  | { FourFold: null }
-  | { Goliath: null }
-  | { Double: null }
-  | { Lucky15: null }
-  | { Lucky31: null }
-  | { Lucky63: null }
-  | { SuperHeinz: null }
-  | { Treble: null }
-  | { Trixie: null }
-  | { TenFold: null }
-  | { EightFold: null }
-  | { Heinz: null }
-  | { Yankee: null }
-  | { SixFold: null }
-  | { NineFold: null }
-  | { Canadian: null }
-  | { Single: null };
+export interface BettableHomepageFixtures {
+  fixtures: Array<HomePageFixture>;
+}
 export interface BothTeamsToScoreAndWinnerDetail {
   bothTeamsToScore: boolean;
   matchResult: MatchResult;
@@ -84,25 +53,6 @@ export interface BothTeamsToScoreDetail {
   bothTeamsToScore: boolean;
 }
 export type Category =
-  | { MissPenalty: null }
-  | { LastAssist: null }
-  | { PenaltyMissed: null }
-  | { FirstAssist: null }
-  | { AnytimeGoalscorer: null }
-  | { CorrectResult: null }
-  | { HalfTimeScore: null }
-  | { BothTeamsToScore: null }
-  | { HalfTimeFullTimeResult: null }
-  | { LastGoalscorer: null }
-  | { RedCard: null }
-  | { ScoreHatrick: null }
-  | { CorrectScore: null }
-  | { AnytimeAssist: null }
-  | { YellowCard: null }
-  | { BothTeamsToScoreAndWinner: null }
-  | { FirstGoalscorer: null }
-  | { ScoreBrace: null };
-export type Category__1 =
   | { MissPenalty: null }
   | { LastAssist: null }
   | { PenaltyMissed: null }
@@ -204,6 +154,9 @@ export interface Fixtures {
 }
 export type GameweekNumber = number;
 export type Gender = { Male: null } | { Female: null };
+export interface GetBettableHomepageFixtures {
+  leagueId: LeagueId;
+}
 export interface GetClubs {
   leagueId: LeagueId;
 }
@@ -214,6 +167,10 @@ export interface GetFixtures {
 }
 export type GetLeagues = {};
 export interface GetLoanedPlayers {
+  leagueId: LeagueId;
+}
+export interface GetMatchOdds {
+  fixtureId: FixtureId;
   leagueId: LeagueId;
 }
 export interface GetPlayers {
@@ -395,22 +352,21 @@ export interface ResultAndYesNoSelectionOdds {
   odds: number;
   isYes: boolean;
 }
-export type Result_1 = { ok: BetSlip } | { err: Error };
-export type Result_10 = { ok: Leagues } | { err: Error };
-export type Result_11 = { ok: Fixtures } | { err: Error };
-export type Result_12 = { ok: Array<DataHash> } | { err: Error };
-export type Result_13 = { ok: Countries } | { err: Error };
-export type Result_14 = { ok: Clubs } | { err: Error };
-export type Result_15 = { ok: Array<HomePageFixture> } | { err: Error };
-export type Result_16 = { ok: AppStatus } | { err: Error };
-export type Result_2 = { ok: boolean } | { err: Error };
-export type Result_3 = { ok: UserBetsList } | { err: Error };
-export type Result_4 = { ok: UserAuditList } | { err: Error };
-export type Result_5 = { ok: Seasons } | { err: Error };
-export type Result_6 = { ok: Profile } | { err: Error };
-export type Result_7 = { ok: Players } | { err: Error };
-export type Result_8 = { ok: MatchOdds } | { err: Error };
-export type Result_9 = { ok: LoanedPlayers } | { err: Error };
+export type Result_1 = { ok: boolean } | { err: Error };
+export type Result_10 = { ok: Fixtures } | { err: Error };
+export type Result_11 = { ok: Array<DataHash> } | { err: Error };
+export type Result_12 = { ok: Countries } | { err: Error };
+export type Result_13 = { ok: Clubs } | { err: Error };
+export type Result_14 = { ok: BettableHomepageFixtures } | { err: Error };
+export type Result_15 = { ok: AppStatus } | { err: Error };
+export type Result_2 = { ok: UserBets } | { err: Error };
+export type Result_3 = { ok: UserAuditList } | { err: Error };
+export type Result_4 = { ok: Seasons } | { err: Error };
+export type Result_5 = { ok: Profile } | { err: Error };
+export type Result_6 = { ok: Players } | { err: Error };
+export type Result_7 = { ok: MatchOdds } | { err: Error };
+export type Result_8 = { ok: LoanedPlayers } | { err: Error };
+export type Result_9 = { ok: Leagues } | { err: Error };
 export interface ScoreDetail {
   homeGoals: number;
   awayGoals: number;
@@ -464,18 +420,6 @@ export type SelectionStatus =
   | { Void: null }
   | { Unsettled: null }
   | { Settled: null };
-export interface Selection__1 {
-  status: SelectionStatus;
-  result: BetResult;
-  fixtureId: FixtureId;
-  winnings: number;
-  odds: number;
-  stake: bigint;
-  expectedReturns: bigint;
-  selectionDetail: SelectionDetail;
-  leagueId: LeagueId;
-  selectionType: Category__1;
-}
 export interface SetDailyBetLimit {
   maxBetLimit: bigint;
   principalId: PrincipalId;
@@ -528,8 +472,8 @@ export interface UserAuditList {
   offset: bigint;
   users: Array<AuditRecord>;
 }
-export interface UserBetsList {
-  bets: Array<BetSlip__1>;
+export interface UserBets {
+  bets: Array<BetSlip>;
 }
 export interface YesNoSelectionOdds {
   noOdds: number;
@@ -537,21 +481,24 @@ export interface YesNoSelectionOdds {
 }
 export interface _SERVICE {
   agreeTerms: ActorMethod<[], Result>;
-  getAppStatus: ActorMethod<[], Result_16>;
-  getBettableHomepageFixtures: ActorMethod<[LeagueId], Result_15>;
-  getClubs: ActorMethod<[GetClubs], Result_14>;
-  getCountries: ActorMethod<[GetCountries], Result_13>;
-  getDataHashes: ActorMethod<[], Result_12>;
-  getFixtures: ActorMethod<[GetFixtures], Result_11>;
-  getLeagues: ActorMethod<[GetLeagues], Result_10>;
-  getLoanedPlayers: ActorMethod<[GetLoanedPlayers], Result_9>;
-  getMatchOdds: ActorMethod<[LeagueId, FixtureId], Result_8>;
-  getPlayers: ActorMethod<[GetPlayers], Result_7>;
-  getProfile: ActorMethod<[], Result_6>;
-  getSeasons: ActorMethod<[GetSeasons], Result_5>;
-  getUserAudit: ActorMethod<[GetUserAudit], Result_4>;
-  getUserBets: ActorMethod<[GetUserBets], Result_3>;
-  isAuditor: ActorMethod<[], Result_2>;
+  getAppStatus: ActorMethod<[], Result_15>;
+  getBettableHomepageFixtures: ActorMethod<
+    [GetBettableHomepageFixtures],
+    Result_14
+  >;
+  getClubs: ActorMethod<[GetClubs], Result_13>;
+  getCountries: ActorMethod<[GetCountries], Result_12>;
+  getDataHashes: ActorMethod<[], Result_11>;
+  getFixtures: ActorMethod<[GetFixtures], Result_10>;
+  getLeagues: ActorMethod<[GetLeagues], Result_9>;
+  getLoanedPlayers: ActorMethod<[GetLoanedPlayers], Result_8>;
+  getMatchOdds: ActorMethod<[GetMatchOdds], Result_7>;
+  getPlayers: ActorMethod<[GetPlayers], Result_6>;
+  getProfile: ActorMethod<[], Result_5>;
+  getSeasons: ActorMethod<[GetSeasons], Result_4>;
+  getUserAudit: ActorMethod<[GetUserAudit], Result_3>;
+  getUserBets: ActorMethod<[GetUserBets], Result_2>;
+  isAuditor: ActorMethod<[], Result_1>;
   kycVerificationCallback: ActorMethod<[ShuftiResponse], Result>;
   notifyAppsOfFixtureComplete: ActorMethod<
     [LeagueId, SeasonId, GameweekNumber],
@@ -572,7 +519,7 @@ export interface _SERVICE {
   notifyAppsOfSeasonComplete: ActorMethod<[LeagueId, SeasonId], Result>;
   notifyAppsOfTransfer: ActorMethod<[LeagueId, PlayerId], Result>;
   pauseAccount: ActorMethod<[PauseAccount], Result>;
-  placeBet: ActorMethod<[SubmitBetslip], Result_1>;
+  placeBet: ActorMethod<[SubmitBetslip], Result>;
   setDailyBetLimit: ActorMethod<[SetDailyBetLimit], Result>;
   setMonthlyBetLimit: ActorMethod<[SetMonthlyBetLimit], Result>;
   storeKYCReference: ActorMethod<[string], undefined>;

@@ -4,7 +4,11 @@ import { DataHashService } from "../services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";
 import { MAX_CACHED_LEAGUES } from "../constants/app.constants";
 import { leagueStore } from "./league-store";
-import type { Fixture, LeagueId, SeasonId } from "../../../../declarations/backend/backend.did";
+import type {
+  Fixture,
+  LeagueId,
+  SeasonId,
+} from "../../../../declarations/backend/backend.did";
 
 function createFixtureStore() {
   const { subscribe, update } = writable<Record<number, Fixture[]>>({});

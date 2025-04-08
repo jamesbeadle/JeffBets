@@ -6,7 +6,14 @@ import { leagueStore } from "./league-store";
 import { fixtureStore } from "./fixture-store";
 
 import type { ExtendedSelection } from "$lib/types/extended-selection";
-import type { Category, Club, FixtureId, LeagueId, SeasonId, SelectionDetail } from "../../../../declarations/backend/backend.did";
+import type {
+  Category,
+  Club,
+  FixtureId,
+  LeagueId,
+  SeasonId,
+  SelectionDetail,
+} from "../../../../declarations/backend/backend.did";
 
 export interface BetSlipState {
   bets: ExtendedSelection[];
@@ -17,7 +24,11 @@ export interface BetSlipState {
 
 const STORAGE_KEY = "global-bet-slip-state";
 
-async function loadFixtureData(leagueId: LeagueId, seasonId: SeasonId, fixtureId: FixtureId) {
+async function loadFixtureData(
+  leagueId: LeagueId,
+  seasonId: SeasonId,
+  fixtureId: FixtureId,
+) {
   try {
     const leagues = await leagueStore.getLeagues();
     let league = leagues.find((x) => x.id == leagueId);
@@ -65,7 +76,11 @@ function loadInitial(): BetSlipState {
     const state = JSON.parse(stored) as BetSlipState;
     state.bets.forEach(async (bet) => {
       try {
-        const fixtureData = await loadFixtureData(bet.leagueId, bet.seasonId, bet.fixtureId);
+        const fixtureData = await loadFixtureData(
+          bet.leagueId,
+          bet.seasonId,
+          bet.fixtureId,
+        );
         if (fixtureData) {
           bet.fixtureDetails = `${fixtureData.fixture.homeClub?.name} v ${fixtureData.fixture.awayClub?.name}`;
           bet.leagueName = fixtureData.league?.name;

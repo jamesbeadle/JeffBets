@@ -1,4 +1,5 @@
 import Ids "mo:waterway-mops/Ids";
+import MopsTypes "../mops/mops_types";
 
 module UserQueries {
 
@@ -7,21 +8,19 @@ module UserQueries {
 
   public type Profile = {
     principalId : Ids.PrincipalId;
-    joinedDate: Int;
     termsAcceptedDate: Int;
-    username : Text; 
-    profilePicture: ?Blob;
-    profilePictureExtension: Text;
-    withdrawalAddress: Text;
+    joinedDate: Int;
     accountOnPause: Bool;
+    pauseEndDate: Int;
     maxBetLimit: Nat64;
+    maxBetLimitSet: Int;
     monthlyBetLimit: Nat64;
-    monthlyBetTotal: Nat64;
-    accountBalance: Nat64;
+    monthlyBetLimitSet: Int;
     kycComplete: Bool;
     kycSubmissionDate: Int;
     kycApprovalDate: Int;
     kycRef: Text;
+    linkedEcosystemProfiles: [(MopsTypes.TokenEcosystem, Ids.PrincipalId)];
   };
   
 };

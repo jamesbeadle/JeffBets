@@ -1,5 +1,8 @@
 import { writable } from "svelte/store";
-import type { Club, LeagueId } from "../../../../declarations/backend/backend.did";
+import type {
+  Club,
+  LeagueId,
+} from "../../../../declarations/backend/backend.did";
 import { ClubService } from "../services/club-service";
 import { DataHashService } from "../services/data-hash-service";
 import { serializeData, deserializeData } from "../utils/helpers";

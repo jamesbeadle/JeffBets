@@ -1,7 +1,11 @@
 import { get, writable } from "svelte/store";
 import { clubStore } from "$lib/stores/club-store";
 import { playerStore } from "$lib/stores/player-store";
-import type { Club, LeagueId, Player } from "../../../../declarations/backend/backend.did";
+import type {
+  Club,
+  LeagueId,
+  Player,
+} from "../../../../declarations/backend/backend.did";
 
 interface LeagueData {
   clubs: Record<number, Club>;

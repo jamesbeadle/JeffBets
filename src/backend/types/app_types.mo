@@ -3,15 +3,12 @@ import Text "mo:base/Text";
 import Ids "mo:waterway-mops/Ids";
 import BaseDefinitions "mo:waterway-mops/BaseDefinitions";
 import ShuftiTypes "shufti_types";
+import MopsTypes "../mops/mops_types";
 module AppTypes {
 
     public type Profile = {
         principalId : Ids.PrincipalId;
         termsAcceptedDate: Int;
-        username : Text; 
-        profilePicture: ?Blob;
-        profilePictureExtension: Text;
-        withdrawalAddress: Text;
         joinedDate: Int;
         accountOnPause: Bool;
         pauseEndDate: Int;
@@ -26,6 +23,7 @@ module AppTypes {
         kycSubmissionDate: Int;
         kycApprovalDate: Int;
         kycRef: Text;
+        linkedEcosystemProfiles: [(MopsTypes.TokenEcosystem, Ids.PrincipalId)];
     };
 
     public type KYCProfile = {

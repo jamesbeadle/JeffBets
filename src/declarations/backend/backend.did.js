@@ -25,8 +25,9 @@ export const idlFactory = ({ IDL }) => {
   });
   const Result = IDL.Variant({ ok: IDL.Null, err: Error });
   const AppStatus = IDL.Record({ version: IDL.Text, onHold: IDL.Bool });
-  const Result_16 = IDL.Variant({ ok: AppStatus, err: Error });
+  const Result_15 = IDL.Variant({ ok: AppStatus, err: Error });
   const LeagueId = IDL.Nat16;
+  const GetBettableHomepageFixtures = IDL.Record({ leagueId: LeagueId });
   const FixtureId = IDL.Nat32;
   const GameweekNumber = IDL.Nat8;
   const HomePageFixture = IDL.Record({
@@ -37,8 +38,11 @@ export const idlFactory = ({ IDL }) => {
     gameweek: GameweekNumber,
     leagueId: LeagueId,
   });
-  const Result_15 = IDL.Variant({
-    ok: IDL.Vec(HomePageFixture),
+  const BettableHomepageFixtures = IDL.Record({
+    fixtures: IDL.Vec(HomePageFixture),
+  });
+  const Result_14 = IDL.Variant({
+    ok: BettableHomepageFixtures,
     err: Error,
   });
   const GetClubs = IDL.Record({ leagueId: LeagueId });
@@ -55,7 +59,7 @@ export const idlFactory = ({ IDL }) => {
     primaryColourHex: IDL.Text,
   });
   const Clubs = IDL.Record({ clubs: IDL.Vec(Club), leagueId: LeagueId });
-  const Result_14 = IDL.Variant({ ok: Clubs, err: Error });
+  const Result_13 = IDL.Variant({ ok: Clubs, err: Error });
   const GetCountries = IDL.Record({});
   const CountryId = IDL.Nat16;
   const Country = IDL.Record({
@@ -64,9 +68,9 @@ export const idlFactory = ({ IDL }) => {
     name: IDL.Text,
   });
   const Countries = IDL.Record({ countries: IDL.Vec(Country) });
-  const Result_13 = IDL.Variant({ ok: Countries, err: Error });
+  const Result_12 = IDL.Variant({ ok: Countries, err: Error });
   const DataHash = IDL.Record({ hash: IDL.Text, category: IDL.Text });
-  const Result_12 = IDL.Variant({ ok: IDL.Vec(DataHash), err: Error });
+  const Result_11 = IDL.Variant({ ok: IDL.Vec(DataHash), err: Error });
   const SeasonId = IDL.Nat16;
   const GetFixtures = IDL.Record({
     seasonId: SeasonId,
@@ -119,7 +123,7 @@ export const idlFactory = ({ IDL }) => {
     fixtures: IDL.Vec(Fixture),
     leagueId: LeagueId,
   });
-  const Result_11 = IDL.Variant({ ok: Fixtures, err: Error });
+  const Result_10 = IDL.Variant({ ok: Fixtures, err: Error });
   const GetLeagues = IDL.Record({});
   const Gender = IDL.Variant({ Male: IDL.Null, Female: IDL.Null });
   const League = IDL.Record({
@@ -134,7 +138,7 @@ export const idlFactory = ({ IDL }) => {
     formed: IDL.Int,
   });
   const Leagues = IDL.Record({ leagues: IDL.Vec(League) });
-  const Result_10 = IDL.Variant({ ok: Leagues, err: Error });
+  const Result_9 = IDL.Variant({ ok: Leagues, err: Error });
   const GetLoanedPlayers = IDL.Record({ leagueId: LeagueId });
   const PlayerStatus = IDL.Variant({
     OnLoan: IDL.Null,
@@ -165,7 +169,11 @@ export const idlFactory = ({ IDL }) => {
     firstName: IDL.Text,
   });
   const LoanedPlayers = IDL.Record({ players: IDL.Vec(Player) });
-  const Result_9 = IDL.Variant({ ok: LoanedPlayers, err: Error });
+  const Result_8 = IDL.Variant({ ok: LoanedPlayers, err: Error });
+  const GetMatchOdds = IDL.Record({
+    fixtureId: FixtureId,
+    leagueId: LeagueId,
+  });
   const PlayerSelectionOdds = IDL.Record({
     playerId: PlayerId,
     odds: IDL.Float64,
@@ -234,10 +242,10 @@ export const idlFactory = ({ IDL }) => {
     halfTimeFullTimeResult: IDL.Vec(HalfTimeFullTimeOdds),
     bothTeamsToScoreAndWinner: IDL.Vec(ResultAndYesNoSelectionOdds),
   });
-  const Result_8 = IDL.Variant({ ok: MatchOdds, err: Error });
+  const Result_7 = IDL.Variant({ ok: MatchOdds, err: Error });
   const GetPlayers = IDL.Record({ leagueId: LeagueId });
   const Players = IDL.Record({ players: IDL.Vec(Player) });
-  const Result_7 = IDL.Variant({ ok: Players, err: Error });
+  const Result_6 = IDL.Variant({ ok: Players, err: Error });
   const PrincipalId = IDL.Text;
   const Profile = IDL.Record({
     username: IDL.Text,
@@ -257,7 +265,7 @@ export const idlFactory = ({ IDL }) => {
     principalId: PrincipalId,
     monthlyBetTotal: IDL.Nat64,
   });
-  const Result_6 = IDL.Variant({ ok: Profile, err: Error });
+  const Result_5 = IDL.Variant({ ok: Profile, err: Error });
   const GetSeasons = IDL.Record({ leagueId: LeagueId });
   const Season = IDL.Record({
     id: IDL.Nat16,
@@ -265,7 +273,7 @@ export const idlFactory = ({ IDL }) => {
     year: IDL.Nat16,
   });
   const Seasons = IDL.Record({ seasons: IDL.Vec(Season) });
-  const Result_5 = IDL.Variant({ ok: Seasons, err: Error });
+  const Result_4 = IDL.Variant({ ok: Seasons, err: Error });
   const GetUserAudit = IDL.Record({
     page: IDL.Nat,
     principalId: IDL.Text,
@@ -276,7 +284,7 @@ export const idlFactory = ({ IDL }) => {
     offset: IDL.Nat,
     users: IDL.Vec(AuditRecord),
   });
-  const Result_4 = IDL.Variant({ ok: UserAuditList, err: Error });
+  const Result_3 = IDL.Variant({ ok: UserAuditList, err: Error });
   const GetUserBets = IDL.Record({ principalId: PrincipalId });
   const SelectionStatus = IDL.Variant({
     Void: IDL.Null,
@@ -288,7 +296,7 @@ export const idlFactory = ({ IDL }) => {
     Lost: IDL.Null,
     Open: IDL.Null,
   });
-  const BetType__1 = IDL.Variant({
+  const BetType = IDL.Variant({
     SevenFold: IDL.Null,
     Patent: IDL.Null,
     FiveFold: IDL.Null,
@@ -353,99 +361,6 @@ export const idlFactory = ({ IDL }) => {
     FirstGoalscorer: PlayerEventDetail,
     ScoreBrace: PlayerGroupEventDetail,
   });
-  const Category__1 = IDL.Variant({
-    MissPenalty: IDL.Null,
-    LastAssist: IDL.Null,
-    PenaltyMissed: IDL.Null,
-    FirstAssist: IDL.Null,
-    AnytimeGoalscorer: IDL.Null,
-    CorrectResult: IDL.Null,
-    HalfTimeScore: IDL.Null,
-    BothTeamsToScore: IDL.Null,
-    HalfTimeFullTimeResult: IDL.Null,
-    LastGoalscorer: IDL.Null,
-    RedCard: IDL.Null,
-    ScoreHatrick: IDL.Null,
-    CorrectScore: IDL.Null,
-    AnytimeAssist: IDL.Null,
-    YellowCard: IDL.Null,
-    BothTeamsToScoreAndWinner: IDL.Null,
-    FirstGoalscorer: IDL.Null,
-    ScoreBrace: IDL.Null,
-  });
-  const Selection__1 = IDL.Record({
-    status: SelectionStatus,
-    result: BetResult,
-    fixtureId: FixtureId,
-    winnings: IDL.Float64,
-    odds: IDL.Float64,
-    stake: IDL.Nat64,
-    expectedReturns: IDL.Nat64,
-    selectionDetail: SelectionDetail,
-    leagueId: LeagueId,
-    selectionType: Category__1,
-  });
-  const BetSlip__1 = IDL.Record({
-    id: IDL.Nat,
-    status: SelectionStatus,
-    result: BetResult,
-    betType: BetType__1,
-    totalWinnings: IDL.Nat64,
-    totalStake: IDL.Nat64,
-    placedBy: PrincipalId,
-    placedOn: IDL.Int,
-    selections: IDL.Vec(Selection__1),
-    expectedReturns: IDL.Nat64,
-    settledOn: IDL.Int,
-  });
-  const UserBetsList = IDL.Record({ bets: IDL.Vec(BetSlip__1) });
-  const Result_3 = IDL.Variant({ ok: UserBetsList, err: Error });
-  const Result_2 = IDL.Variant({ ok: IDL.Bool, err: Error });
-  const ShuftiAcceptedResponse = IDL.Record({
-    reference: IDL.Text,
-    event: IDL.Text,
-  });
-  const ShuftiRejectedResponse = IDL.Record({
-    reference: IDL.Text,
-    event: IDL.Text,
-  });
-  const ShuftiResponse = IDL.Variant({
-    ShuftiAcceptedResponse: ShuftiAcceptedResponse,
-    ShuftiRejectedResponse: ShuftiRejectedResponse,
-  });
-  const PauseAccount = IDL.Record({
-    pauseDays: IDL.Nat,
-    principalId: PrincipalId,
-  });
-  const SubmitBetslip = IDL.Record({
-    expectedReturn: IDL.Nat64,
-    seasonId: SeasonId,
-    totalStake: IDL.Nat64,
-    principalId: PrincipalId,
-    leagueId: LeagueId,
-  });
-  const BetType = IDL.Variant({
-    SevenFold: IDL.Null,
-    Patent: IDL.Null,
-    FiveFold: IDL.Null,
-    FourFold: IDL.Null,
-    Goliath: IDL.Null,
-    Double: IDL.Null,
-    Lucky15: IDL.Null,
-    Lucky31: IDL.Null,
-    Lucky63: IDL.Null,
-    SuperHeinz: IDL.Null,
-    Treble: IDL.Null,
-    Trixie: IDL.Null,
-    TenFold: IDL.Null,
-    EightFold: IDL.Null,
-    Heinz: IDL.Null,
-    Yankee: IDL.Null,
-    SixFold: IDL.Null,
-    NineFold: IDL.Null,
-    Canadian: IDL.Null,
-    Single: IDL.Null,
-  });
   const Category = IDL.Variant({
     MissPenalty: IDL.Null,
     LastAssist: IDL.Null,
@@ -491,7 +406,32 @@ export const idlFactory = ({ IDL }) => {
     expectedReturns: IDL.Nat64,
     settledOn: IDL.Int,
   });
-  const Result_1 = IDL.Variant({ ok: BetSlip, err: Error });
+  const UserBets = IDL.Record({ bets: IDL.Vec(BetSlip) });
+  const Result_2 = IDL.Variant({ ok: UserBets, err: Error });
+  const Result_1 = IDL.Variant({ ok: IDL.Bool, err: Error });
+  const ShuftiAcceptedResponse = IDL.Record({
+    reference: IDL.Text,
+    event: IDL.Text,
+  });
+  const ShuftiRejectedResponse = IDL.Record({
+    reference: IDL.Text,
+    event: IDL.Text,
+  });
+  const ShuftiResponse = IDL.Variant({
+    ShuftiAcceptedResponse: ShuftiAcceptedResponse,
+    ShuftiRejectedResponse: ShuftiRejectedResponse,
+  });
+  const PauseAccount = IDL.Record({
+    pauseDays: IDL.Nat,
+    principalId: PrincipalId,
+  });
+  const SubmitBetslip = IDL.Record({
+    expectedReturn: IDL.Nat64,
+    seasonId: SeasonId,
+    totalStake: IDL.Nat64,
+    principalId: PrincipalId,
+    leagueId: LeagueId,
+  });
   const SetDailyBetLimit = IDL.Record({
     maxBetLimit: IDL.Nat64,
     principalId: PrincipalId,
@@ -515,21 +455,25 @@ export const idlFactory = ({ IDL }) => {
   });
   return IDL.Service({
     agreeTerms: IDL.Func([], [Result], []),
-    getAppStatus: IDL.Func([], [Result_16], ["query"]),
-    getBettableHomepageFixtures: IDL.Func([LeagueId], [Result_15], ["query"]),
-    getClubs: IDL.Func([GetClubs], [Result_14], []),
-    getCountries: IDL.Func([GetCountries], [Result_13], []),
-    getDataHashes: IDL.Func([], [Result_12], ["query"]),
-    getFixtures: IDL.Func([GetFixtures], [Result_11], []),
-    getLeagues: IDL.Func([GetLeagues], [Result_10], []),
-    getLoanedPlayers: IDL.Func([GetLoanedPlayers], [Result_9], []),
-    getMatchOdds: IDL.Func([LeagueId, FixtureId], [Result_8], ["query"]),
-    getPlayers: IDL.Func([GetPlayers], [Result_7], []),
-    getProfile: IDL.Func([], [Result_6], []),
-    getSeasons: IDL.Func([GetSeasons], [Result_5], []),
-    getUserAudit: IDL.Func([GetUserAudit], [Result_4], []),
-    getUserBets: IDL.Func([GetUserBets], [Result_3], []),
-    isAuditor: IDL.Func([], [Result_2], []),
+    getAppStatus: IDL.Func([], [Result_15], ["query"]),
+    getBettableHomepageFixtures: IDL.Func(
+      [GetBettableHomepageFixtures],
+      [Result_14],
+      ["query"],
+    ),
+    getClubs: IDL.Func([GetClubs], [Result_13], []),
+    getCountries: IDL.Func([GetCountries], [Result_12], []),
+    getDataHashes: IDL.Func([], [Result_11], ["query"]),
+    getFixtures: IDL.Func([GetFixtures], [Result_10], []),
+    getLeagues: IDL.Func([GetLeagues], [Result_9], []),
+    getLoanedPlayers: IDL.Func([GetLoanedPlayers], [Result_8], []),
+    getMatchOdds: IDL.Func([GetMatchOdds], [Result_7], ["query"]),
+    getPlayers: IDL.Func([GetPlayers], [Result_6], []),
+    getProfile: IDL.Func([], [Result_5], []),
+    getSeasons: IDL.Func([GetSeasons], [Result_4], []),
+    getUserAudit: IDL.Func([GetUserAudit], [Result_3], []),
+    getUserBets: IDL.Func([GetUserBets], [Result_2], []),
+    isAuditor: IDL.Func([], [Result_1], []),
     kycVerificationCallback: IDL.Func([ShuftiResponse], [Result], []),
     notifyAppsOfFixtureComplete: IDL.Func(
       [LeagueId, SeasonId, GameweekNumber],
@@ -553,7 +497,7 @@ export const idlFactory = ({ IDL }) => {
     notifyAppsOfSeasonComplete: IDL.Func([LeagueId, SeasonId], [Result], []),
     notifyAppsOfTransfer: IDL.Func([LeagueId, PlayerId], [Result], []),
     pauseAccount: IDL.Func([PauseAccount], [Result], []),
-    placeBet: IDL.Func([SubmitBetslip], [Result_1], []),
+    placeBet: IDL.Func([SubmitBetslip], [Result], []),
     setDailyBetLimit: IDL.Func([SetDailyBetLimit], [Result], []),
     setMonthlyBetLimit: IDL.Func([SetMonthlyBetLimit], [Result], []),
     storeKYCReference: IDL.Func([IDL.Text], [], []),

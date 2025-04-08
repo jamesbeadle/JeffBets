@@ -38,19 +38,22 @@ module {
 
       switch(matchOddsResult){
         case (?foundMatchOdds){
-          return Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), BettingQueries.HomePageFixture>(foundMatchOdds.1, func (oddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) {
-            let matchOdds = oddsEntry.1;
-            return { 
-              fixtures = {
-                leagueId = matchOdds.leagueId;
-                gameweek = matchOdds.gameweek;
-                fixtureId = matchOdds.fixtureId;
-                homeOdds = matchOdds.correctResults.homeOdds;
-                drawOdds = matchOdds.correctResults.drawOdds;
-                awayOdds = matchOdds.correctResults.awayOdds;
+          let homepageFixtures: BettingQueries.BettableHomepageFixtures = { 
+            fixtures = Array.map<(FootballIds.FixtureId, BettingTypes.MatchOdds), BettingQueries.HomePageFixture>(foundMatchOdds.1, 
+              func (oddsEntry: (FootballIds.FixtureId, BettingTypes.MatchOdds)) {
+                let matchOdds = oddsEntry.1;
+                return {
+                  leagueId = matchOdds.leagueId;
+                  gameweek = matchOdds.gameweek;
+                  fixtureId = matchOdds.fixtureId;
+                  homeOdds = matchOdds.correctResults.homeOdds;
+                  drawOdds = matchOdds.correctResults.drawOdds;
+                  awayOdds = matchOdds.correctResults.awayOdds;
+                };
               }
-            };
-          });
+            );
+          };
+          return homepageFixtures;
         };
         case (null){
           return {fixtures = []};

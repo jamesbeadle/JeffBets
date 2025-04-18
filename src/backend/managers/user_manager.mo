@@ -241,7 +241,7 @@ module {
       };
     };
 
-    public func settleBet(dto: NotificationCommands.SettleBet) : async () {
+    public func settleBet(dto: MopsLeagueNotificationCommands.CompleteFixtureNotification) : async () {
       
       let data_canister = actor (Environment.DATA_CANISTER_ID) : actor {
         getBetslipFixtures : shared query (dto: BettingQueries.GetBetslipFixtures) -> async Result.Result<[FixtureQueries.Fixture], Enums.Error>;

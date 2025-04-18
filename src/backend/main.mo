@@ -570,7 +570,7 @@ actor Self {
     switch (leagueStatusResult) {
       case (#ok leagueStatus) {
         await oddsManager.recalculate(leagueId, seasonId,leagueStatus);
-        //settleBets();
+        settleBets();
         return #ok();
       };
       case (#err error) {

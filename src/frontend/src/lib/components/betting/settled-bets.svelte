@@ -85,7 +85,7 @@
                 ? 'bg-BrandBase'
                 : 'bg-[#3CA1FF]'
           } ${!expandedBets.has(bet.id) ? 'rounded-t-lg' : 'rounded-t-lg'}`}
-          on:click={() => toggleBet(bet.id)}
+          onclick={() => toggleBet(bet.id)}
         >
           <div class="flex items-center justify-between">
             <span class="text-sm font-medium text-white">{bet.selections[0].pick}</span>
@@ -93,9 +93,9 @@
               <span class="text-sm font-medium text-white">@ {bet.selections[0].odds}</span>
               <span class="text-white">
                 {#if expandedBets.has(bet.id)}
-                  <ArrowUp className="w-5 h-5 text-BrandGray" />
+                  <ArrowUp fill='black' className="w-5 h-5 text-BrandGray" />
                 {:else}
-                  <ArrowDown className="w-5 h-5 text-BrandGray" />
+                  <ArrowDown fill='black' className="w-5 h-5 text-BrandGray" />
                 {/if}
               </span>
             </div>
@@ -137,14 +137,14 @@
             <div>
               <p class="text-xs text-BrandGray">Stake</p>
               <span class="flex items-center text-sm font-medium">
-                <OpenFPLIcon className="w-3 h-3 mr-1" />
+                <OpenFPLIcon fill='black' className="w-3 h-3 mr-1" />
                 {bet.stake.toFixed(2)}
               </span>
             </div>
             <div class="text-right">
               <p class="text-xs text-BrandGray">Returns</p>
               <span class="flex items-center text-sm font-medium">
-                <OpenFPLIcon className="w-3 h-3 mr-1" />
+                <OpenFPLIcon fill='black' className="w-3 h-3 mr-1" />
                 {bet.returns.toFixed(2)}
               </span>
             </div>

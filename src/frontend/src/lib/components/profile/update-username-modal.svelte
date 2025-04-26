@@ -1,11 +1,17 @@
 <script lang="ts">
   import { userStore } from "$lib/stores/user-store";
-    import Modal from "../shared/modal.svelte";
+    import Modal from "../shared/global/modal.svelte";
 
-  export let visible: boolean;
-  export let closeModal: () => void;
-  export let cancelModal: () => void;
-  export let newUsername: string = "";
+    interface Props {
+      visible: boolean;
+      closeModal: () => void;
+      cancelModal: () => void;
+      newUsername: string;
+    }
+
+    let { visible, closeModal, cancelModal, newUsername } : Props = $props();
+
+    let isSubmitDisabled = $state(true);
 
   function isDisplayNameValid(displayName: string): boolean {
     if (!displayName) {
@@ -19,7 +25,9 @@
     return /^[a-zA-Z0-9 ]+$/.test(displayName);
   }
 
-  $: isSubmitDisabled = !isDisplayNameValid(newUsername);
+  $effect(() => {
+    isSubmitDisabled = !isDisplayNameValid(newUsername);
+  });
 
   async function updateUsername() {
     try {
@@ -37,9 +45,8 @@
   <div class="mx-4 p-4">
     <div class="flex justify-between items-center my-2">
       <h3 class="default-header">Update Display Name</h3>
-      <button class="times-button" on:click={cancelModal}>&times;</button>
+      <button class="times-button" onclick={cancelModal}>&times;</button>
     </div>
-    <form on:submit|preventDefault={updateUsername}>
       <div class="mt-4">
         <input
           type="text"
@@ -52,7 +59,7 @@
         <button
           class="px-4 py-2 brand-cancel-button"
           type="button"
-          on:click={cancelModal}
+          onclick={cancelModal}
         >
           Cancel
         </button>
@@ -60,12 +67,11 @@
           class={`px-4 py-2 ${
             isSubmitDisabled ? "brand-button-disabled" : "brand-button"
           } `}
-          type="submit"
+          onclick={updateUsername}
           disabled={isSubmitDisabled}
         >
           Update
         </button>
       </div>
-    </form>
   </div>
 </Modal>

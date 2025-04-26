@@ -67,7 +67,7 @@
                 ? 'bg-BrandBase'
                 : 'bg-[#3CA1FF]'
           } ${!expandedBets.has(bet.id) ? 'rounded-t-lg' : 'rounded-t-lg'}`}
-          on:click={() => toggleBet(bet.id)}
+          onclick={() => toggleBet(bet.id)}
         >
           <div class="flex items-center justify-between">
             <span class="text-sm font-medium text-white">{bet.selections[0].pick}</span>

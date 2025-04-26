@@ -1,13 +1,17 @@
 <script lang="ts">
   import OpenFplIcon from "$lib/icons/OpenFPLIcon.svelte";
-  import Modal from "../shared/modal.svelte";
+  import Modal from "../shared/global/modal.svelte";
 
-export let visible: boolean;
-export let closeModal: () => void;
+  interface Props {
+    visible: boolean;
+    closeModal: () => void;
+  }
 
-function cancelModal() {
-  closeModal();
-}
+  let { visible, closeModal } : Props = $props();
+
+  function cancelModal() {
+    closeModal();
+  }
 
 </script>
 
@@ -15,11 +19,11 @@ function cancelModal() {
 <div class="flex justify-between items-center my-2">
   <h3 class="default-header">
     <span class="flex flex-row items-center">
-      <OpenFplIcon className="w-8 h-8 mr-1" />
+      <OpenFplIcon fill='black' className="w-8 h-8 mr-1" />
       Coming Soon
     </span>
   </h3>
-  <button class="times-button" on:click={cancelModal}>&times;</button>
+  <button class="times-button" onclick={cancelModal}>&times;</button>
 </div>
 
 <div class="flex justify-start items-center w-full">

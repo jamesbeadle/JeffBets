@@ -3,8 +3,8 @@
   import { goto } from "$app/navigation";
 
   import Layout from "./Layout.svelte";
-  import LocalSpinner from "$lib/components/shared/local-spinner.svelte";
-  import FullScreenSpinner from "$lib/components/shared/full-screen-spinner.svelte";
+  import LocalSpinner from "$lib/components/shared/global/local-spinner.svelte";
+  import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
   import Betslip from "$lib/components/betting/betslip.svelte";
 
   import ArrowDown from "$lib/icons/ArrowDown.svelte";
@@ -238,7 +238,7 @@
                 <button
                   type="button"
                   class="page-panel-bar-button"
-                  on:click={() => toggleLeague(league.id)}
+                  onclick={() => toggleLeague(league.id)}
                 >
                   <p class="page-panel-bar-button-title">{league.name}</p>
                   {#if expandedLeagues[league.id]}
@@ -259,7 +259,7 @@
                         <div class="flex items-center justify-center w-5/12 py-2 md:py-3">
                           <button
                             class="text-BrandGray"
-                            on:click={() => priorGameweek(league.id)}
+                            onclick={() => priorGameweek(league.id)}
                           >
                             <ArrowLeft className="w-4" />
                           </button>
@@ -273,7 +273,7 @@
                           </div>
                           <button
                             class="text-BrandGray hover:text-BrandGray"
-                            on:click={() => nextGameweek(league.id)}
+                            onclick={() => nextGameweek(league.id)}
                           >
                             <ArrowRight className="w-4" />
                           </button>
@@ -347,7 +347,7 @@
                                         { 'CorrectResult': null },
                                         { 'CorrectResult': { matchResult: { 'HomeWin': null } } }
                                       ) ? 'bg-BrandGray/60' : ''}"
-                                    on:click={() => 
+                                    onclick={() => 
                                       selectCorrectResultHome(league.id, fixture.id, oddsObj.homeOdds || 0)
                                     }
                                   >
@@ -375,7 +375,7 @@
                                         { 'CorrectResult': null },
                                         { 'CorrectResult': { matchResult: { 'Draw': null } } }
                                       ) ? 'bg-BrandGray/60' : ''}"
-                                    on:click={() => 
+                                    onclick={() => 
                                       selectCorrectResultDraw(league.id, fixture.id, oddsObj.drawOdds || 0)
                                     }
                                   >
@@ -403,7 +403,7 @@
                                         { 'CorrectResult': null },
                                         { 'CorrectResult': { matchResult: { 'AwayWin': null } } }
                                       ) ? 'bg-BrandGray/60' : ''}"
-                                    on:click={() => 
+                                    onclick={() => 
                                       selectCorrectResultAway(league.id, fixture.id, oddsObj.awayOdds || 0)
                                     }
                                   >
@@ -424,7 +424,7 @@
                                   <button
                                     class="p-1 md:p-2"
                                     aria-label="View detailed odds"
-                                    on:click={() => loadFixtureEvent(league.id, fixture.id)}
+                                    onclick={() => loadFixtureEvent(league.id, fixture.id)}
                                   >
                                     <OddsIcon className="w-4 h-4 md:w-5 md:h-5" />
                                   </button>
@@ -468,7 +468,7 @@
         "
       >
         <div class="w-full p-4 bg-white rounded-2xl md:mx-0">
-          <button class="flex items-center w-full text-left" on:click={toggleBetSlip}>
+          <button class="flex items-center w-full text-left" onclick={toggleBetSlip}>
             <div class="flex items-center">
               <span class="flex items-center justify-center w-12 h-10 mr-3 text-xl font-medium text-white rounded-full bg-BrandBase">
                 Bets

@@ -8,7 +8,7 @@
   import { authStore, type AuthStoreData } from "$lib/stores/auth-store";
 
   import Dashboard from "$lib/components/shared/dashboard.svelte";
-  import FullScreenSpinner from "$lib/components/shared/full-screen-spinner.svelte";
+  import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
   import { toasts } from "$lib/stores/toasts-store";
   import Toasts from "$lib/components/toasts/toasts.svelte";
 

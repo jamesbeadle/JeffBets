@@ -4,65 +4,67 @@
     import OpenFplIcon from "$lib/icons/OpenFPLIcon.svelte";
     import { betSlipStore } from "$lib/stores/bet-slip-store";
     import type { Club, Fixture, League } from "../../../../../declarations/backend/backend.did";
-    import Modal from "../shared/modal.svelte";
+    import Modal from "../shared/global/modal.svelte";
   
     interface ExtendedFixtureDTO extends Fixture {
         leagueId: number;
     }
-    export let visible: boolean;
-    export let closeModal: () => void;
-    export let cancelModal: () => void;
-    export let leagueData: Record<number, League>;
-    export let fixtureData: Record<number, ExtendedFixtureDTO>;
-        export let clubsData: Record<number, Record<number, Club>>;
+
+    interface Props {
+        visible: boolean;
+        closeModal: () => void;
+        cancelModal: () => void;
+        leagueData: Record<number, League>;
+        fixtureData: Record<number, ExtendedFixtureDTO>;
+        clubsData: Record<number, Record<number, Club>>;
+    }
     
-    $: rawSlipState = $betSlipStore;
-    $: slipState = rawSlipState ?? {
-        bets: [],
-        isMultiple: false,
-        singleStakes: {},
-        multipleStakes: {}
-    };
-        
-    $: bets = Array.isArray(slipState.bets) ? slipState.bets : [];
-    $: isMultiple = slipState.isMultiple;
-    $: singleStakes = slipState.singleStakes;
-    $: multipleStakes = slipState.multipleStakes;
-    $: possibleMultiples = $availableMultiplesStore ?? [];
-    $: singleStakesTotal = Object.values(singleStakes).reduce((acc, v) => acc + (v || 0), 0);
-    $: multipleStakesTotal = Object.values(multipleStakes).reduce((acc, v) => acc + (v || 0), 0);
-    $: totalStakes = isMultiple
-    ? singleStakesTotal + multipleStakesTotal
-    : singleStakesTotal;
+    let { visible, closeModal, cancelModal, leagueData, fixtureData, clubsData } : Props = $props();
+    
+    $effect(() => {
+        slipState = rawSlipState ?? {
+            bets: [],
+            isMultiple: false,
+            singleStakes: {},
+            multipleStakes: {}
+        };
+
+        bets = Array.isArray(slipState.bets) ? slipState.bets : [];
+        isMultiple = slipState.isMultiple;
+        singleStakes = slipState.singleStakes;
+        multipleStakes = slipState.multipleStakes;
+        possibleMultiples = $availableMultiplesStore ?? [];
+        singleStakesTotal = Object.values(singleStakes).reduce((acc, v) => acc + (v || 0), 0);
+        multipleStakesTotal = Object.values(multipleStakes).reduce((acc, v) => acc + (v || 0), 0);
+        totalStakes = isMultiple ? singleStakesTotal + multipleStakesTotal : singleStakesTotal;
 
 
-    $: combinedOdds = calculateMultipleOdds(bets);
-    $: totalReturns = 0;
-    $: {
+        combinedOdds = calculateMultipleOdds(bets);
+        totalReturns = 0;
         let sum = 0;
         
         if (!isMultiple) {
-        if (Array.isArray(bets)) {
-            bets.forEach((bet, idx) => {
-            const st = singleStakes[idx] || 0;
-            sum += st * (1 + bet.odds);
-            });
-        }
-        } else {
-        if (Array.isArray(bets)) {
-            bets.forEach((bet, idx) => {
-            const st = singleStakes[idx] || 0;
-            sum += st * (1 + bet.odds);
-            });
-        }
-        for (const [mKey, stVal] of Object.entries(multipleStakes)) {
-            sum += (stVal || 0) * (1 + combinedOdds);
-        }
-        }
+            if (Array.isArray(bets)) {
+                bets.forEach((bet, idx) => {
+                const st = singleStakes[idx] || 0;
+                sum += st * (1 + bet.odds);
+                });
+            }
+            } else {
+            if (Array.isArray(bets)) {
+                bets.forEach((bet, idx) => {
+                const st = singleStakes[idx] || 0;
+                sum += st * (1 + bet.odds);
+                });
+            }
+            for (const [mKey, stVal] of Object.entries(multipleStakes)) {
+                sum += (stVal || 0) * (1 + combinedOdds);
+            }
 
-        totalReturns = sum;
-    }
-
+            totalReturns = sum;
+        }
+    });
+    
     function getClub(leagueId: number, clubId: number): Club | undefined {
         return clubsData[leagueId]?.[clubId];
     }
@@ -115,9 +117,8 @@
     <div class="mx-4 p-4">
       <div class="flex justify-between items-center my-2">
         <h3 class="default-header">Place Bet</h3>
-        <button class="times-button" on:click={cancelModal}>&times;</button>
+        <button class="times-button" onclick={cancelModal}>&times;</button>
       </div>
-      <form on:submit|preventDefault={placeBet}>
         
     <div class="flex items-center justify-between p-4 border-b border-BrandGray md:px-4 md:py-2 md:bg-BrandGray">
         <div class="flex items-center">
@@ -158,7 +159,7 @@
                         </div>
                         <button
                         class="text-BrandGray hover:text-red-500"
-                        on:click={() => removeSingleBet(index)}
+                        onclick={() => removeSingleBet(index)}
                         >
                         &times;
                         </button>
@@ -242,7 +243,7 @@
             <button
             class="brand-button"
             disabled={bets.length === 0 || totalStakes <= 0}
-            on:click={placeBet}
+            onclick={placeBet}
             >
             Place Bet
             </button>
@@ -253,17 +254,16 @@
           <button
             class="px-4 py-2 brand-cancel-button"
             type="button"
-            on:click={cancelModal}
+            onclick={cancelModal}
           >
             Cancel
           </button>
           <button
             class={`px-4 py-2 brand-button`}
-            type="submit"
+            onclick={placeBet}
           >
             Place Bet
           </button>
         </div>
-      </form>
     </div>
   </Modal>

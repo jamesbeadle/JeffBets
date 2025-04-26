@@ -14,39 +14,37 @@
     leagueId: number;
   }
 
-  export let isExpanded: boolean = false;
-  export let leagueData: Record<number, League>;
-  export let fixtureData: Record<number, ExtendedFixtureDTO>;
-  export let clubsData: Record<number, Record<number, Club>>;
+  interface Props {
+    isExpanded: boolean;
+    leagueData: Record<number, League>;
+    fixtureData: Record<number, ExtendedFixtureDTO>;
+    clubsData: Record<number, Record<number, Club>>;
+  }
+
+  let { isExpanded, leagueData, fixtureData, clubsData } : Props = $props();
   
   let showPlaceBet = false;
   let activeTab: 'betslip' | 'open' | 'settled' = 'betslip';
 
-  $: rawSlipState = $betSlipStore;
-  $: slipState = rawSlipState ?? {
-    bets: [],
-    isMultiple: false,
-    singleStakes: {},
-    multipleStakes: {}
-  };
-
-  $: bets = Array.isArray(slipState.bets) ? slipState.bets : [];
-  $: isMultiple = slipState.isMultiple;
-  $: singleStakes = slipState.singleStakes;
-  $: multipleStakes = slipState.multipleStakes;
-
-  $: possibleMultiples = $availableMultiplesStore ?? [];
-
-  $: combinedOdds = calculateMultipleOdds(bets);
-
-  $: singleStakesTotal = Object.values(singleStakes).reduce((acc, v) => acc + (v || 0), 0);
-  $: multipleStakesTotal = Object.values(multipleStakes).reduce((acc, v) => acc + (v || 0), 0);
-  $: totalStakes = isMultiple
+  $effect(() => {
+    slipState = rawSlipState ?? {
+      bets: [],
+      isMultiple: false,
+      singleStakes: {},
+      multipleStakes: {}
+    };
+    bets = Array.isArray(slipState.bets) ? slipState.bets : [];
+    isMultiple = slipState.isMultiple;
+    singleStakes = slipState.singleStakes;
+    multipleStakes = slipState.multipleStakes;
+    possibleMultiples = $availableMultiplesStore ?? [];
+    combinedOdds = calculateMultipleOdds(bets);
+    singleStakesTotal = Object.values(singleStakes).reduce((acc, v) => acc + (v || 0), 0);
+    multipleStakesTotal = Object.values(multipleStakes).reduce((acc, v) => acc + (v || 0), 0);
+    totalStakes = isMultiple
     ? singleStakesTotal + multipleStakesTotal
     : singleStakesTotal;
-
-  $: totalReturns = 0;
-  $: {
+    totalReturns = 0;
     let sum = 0;
     
     if (!isMultiple) {
@@ -69,7 +67,7 @@
     }
 
     totalReturns = sum;
-  }
+  });
 
   const {
     removeBet,
@@ -142,7 +140,7 @@
     {#if isExpanded}
       <button
         class="text-2xl text-BrandGray hover:text-BrandGray md:hidden"
-        on:click={() => (isExpanded = false)}
+        onclick={() => (isExpanded = false)}
       >
         ×
       </button>
@@ -152,19 +150,19 @@
   <div class="flex border-b border-BrandGray">
     <button 
       class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'betslip' ? 'text-BrandBase border-b-2 border-BrandBase' : 'text-BrandGray'}"
-      on:click={() => activeTab = 'betslip'}
+      onclick={() => activeTab = 'betslip'}
     >
       Bet Slip
     </button>
     <button 
       class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'open' ? 'text-BrandBase border-b-2 border-BrandBase' : 'text-BrandGray'}"
-      on:click={() => activeTab = 'open'}
+      onclick={() => activeTab = 'open'}
     >
       Open Bets
     </button>
     <button 
       class="flex-1 px-4 py-2 text-sm font-medium {activeTab === 'settled' ? 'text-BrandBase border-b-2 border-BrandBase' : 'text-BrandGray'}"
-      on:click={() => activeTab = 'settled'}
+      onclick={() => activeTab = 'settled'}
     >
       Settled Bets
     </button>
@@ -175,7 +173,7 @@
       {#if bets.length === 0}
         <div class="flex flex-col items-center justify-center flex-1 px-8 py-16 text-center">
           <div class="w-24 h-24 mb-4">
-            <EmptyBetSlipIcon className="w-24 h-24 fill-BrandBase" />
+            <EmptyBetSlipIcon fill='black' className="w-24 h-24 fill-BrandBase" />
           </div>
           <p class="text-lg text-BrandGray md:text-sm">
             There are no selections in<br />your bet slip.
@@ -201,7 +199,7 @@
                 </div>
                 <button
                   class="text-BrandGray hover:text-red-500"
-                  on:click={() => removeSingleBet(index)}
+                  onclick={() => removeSingleBet(index)}
                 >
                   &times;
                 </button>
@@ -214,7 +212,7 @@
                   placeholder="Stake"
                   class="stake-input"
                   bind:value={slipState.singleStakes[index]}
-                  on:input={(e) => 
+                  oninput={(e) => 
                     onSingleStakeInput(
                       index, 
                       (e.currentTarget as HTMLInputElement).value
@@ -300,7 +298,7 @@
         <div class="flex items-center justify-between mb-4">
           <span class="text-lg text-black md:text-sm">Bet Total:</span>
           <span class="flex items-center text-lg font-medium text-black md:text-sm">
-            <OpenFPLIcon className="w-3 h-3 mr-1" />
+            <OpenFPLIcon fill='black' className="w-3 h-3 mr-1" />
             {totalStakes.toFixed(2)}
           </span>
         </div>
@@ -308,7 +306,7 @@
         <div class="flex items-center justify-between mb-6 md:mb-4">
           <span class="text-lg text-black md:text-sm">Potential Returns:</span>
           <span class="flex items-center text-lg font-medium text-black md:text-sm">
-            <OpenFPLIcon className="w-3 h-3 mr-1" />
+            <OpenFPLIcon fill='black' className="w-3 h-3 mr-1" />
             {totalReturns.toFixed(2)}
           </span>
         </div>
@@ -316,7 +314,7 @@
         <button
           class="brand-button"
           disabled={bets.length === 0 || totalStakes <= 0}
-          on:click={placebet}
+          onclick={placebet}
         >
           Place Bet
         </button>

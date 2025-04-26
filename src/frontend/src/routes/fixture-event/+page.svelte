@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import Layout from "../Layout.svelte";
-  import FullScreenSpinner from "$lib/components/shared/full-screen-spinner.svelte";
+  import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
   import BadgeIcon from "$lib/icons/BadgeIcon.svelte";
   import TableIcon from "$lib/icons/TableIcon.svelte";
   import OddsIcon from "$lib/icons/OddsIcon.svelte";
@@ -689,7 +689,7 @@
                     ? 'fixture-event-tab-panel-button-active'
                     : 'fixture-event-tab-panel-button-inactive'}
                 "
-                on:click={() => setActiveTab(tab)}
+                onclick={() => setActiveTab(tab)}
               >
                 {tab}
               </button>
@@ -709,7 +709,7 @@
                 <button
                   type="button"
                   class="flex items-center justify-between w-full px-4 py-3 text-left bg-transparent border-0 cursor-pointer"
-                  on:click={() => toggleCategory(category)}
+                  onclick={() => toggleCategory(category)}
                 >
                   <h3 class="text-lg font-semibold">{formatCategoryName(category)}</h3>
                   {#if expandedCategories[category]}
@@ -732,7 +732,7 @@
                           {#each getScoresByResult(matchOdds[category], "home").sort(sortByLowestOdds) as score}
                             <button
                               class="flex items-center justify-between w-full p-4 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => addToBetslip(category, score)}
+                              onclick={() => addToBetslip(category, score)}
                             >
                               <span class="text-lg font-bold">{score.homeGoals}-{score.awayGoals}</span>
                               <div class="flex items-center space-x-2">
@@ -750,7 +750,7 @@
                           {#each getScoresByResult(matchOdds[category], "draw").sort(sortByLowestOdds) as score}
                             <button
                               class="flex items-center justify-between w-full p-4 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => addToBetslip(category, score)}
+                              onclick={() => addToBetslip(category, score)}
                             >
                               <span class="text-lg font-bold">{score.homeGoals}-{score.awayGoals}</span>
                               <div class="flex items-center space-x-2">
@@ -768,7 +768,7 @@
                           {#each getScoresByResult(matchOdds[category], "away").sort(sortByLowestOdds) as score}
                             <button
                               class="flex items-center justify-between w-full p-4 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => addToBetslip(category, score)}
+                              onclick={() => addToBetslip(category, score)}
                             >
                               <span class="text-lg font-bold">{score.homeGoals}-{score.awayGoals}</span>
                               <div class="flex items-center space-x-2">
@@ -805,7 +805,7 @@
                             </div>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white border-b border-r bg-BrandGray border-BrandOddsDivider hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 if (firstGoal) {
                                   toggleBetSelection(
                                     leagueId,
@@ -829,7 +829,7 @@
                             </button>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white border-b border-r bg-BrandGray border-BrandOddsDivider hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 if (lastGoal) {
                                   toggleBetSelection(
                                     leagueId,
@@ -853,7 +853,7 @@
                             </button>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white border-b border-r bg-BrandGray border-BrandOddsDivider hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 if (anytimeGoal) {
                                   toggleBetSelection(
                                     leagueId,
@@ -900,7 +900,7 @@
                             </div>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white border-b border-r bg-BrandGray border-BrandOddsDivider hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 if (firstAssist) {
                                   toggleBetSelection(
                                     leagueId,
@@ -924,7 +924,7 @@
                             </button>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white border-b border-r bg-BrandGray border-BrandOddsDivider hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 if (lastAssist) {
                                   toggleBetSelection(
                                     leagueId,
@@ -948,7 +948,7 @@
                             </button>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white border-b border-r bg-BrandGray border-BrandOddsDivider hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 if (anytimeAssist) {
                                   toggleBetSelection(
                                     leagueId,
@@ -989,7 +989,7 @@
                             </div>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 toggleBetSelection(
                                   leagueId,
                                   fixtureId,
@@ -1025,7 +1025,7 @@
                             </div>
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 toggleBetSelection(
                                   leagueId,
                                   fixtureId,
@@ -1059,7 +1059,7 @@
                           </div>
                           <button
                             class="flex items-center justify-center gap-2 p-4 text-lg text-white bg-BrandGray hover:bg-BrandGray/80"
-                            on:click={() => {
+                            onclick={() => {
                               toggleBetSelection(
                                 leagueId,
                                 fixtureId,
@@ -1083,7 +1083,7 @@
                           </div>
                           <button
                             class="flex items-center justify-center gap-2 p-4 text-lg text-white bg-BrandGray hover:bg-BrandGray/80"
-                            on:click={() => {
+                            onclick={() => {
                               toggleBetSelection(
                                 leagueId,
                                 fixtureId,
@@ -1119,7 +1119,7 @@
 
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 toggleBetSelection(
                                   leagueId,
                                   fixtureId,
@@ -1137,7 +1137,7 @@
 
                             <button
                               class="flex items-center justify-center gap-2 p-4 text-lg text-white bg-BrandGray hover:bg-BrandGray/80"
-                              on:click={() => {
+                              onclick={() => {
                                 const underObj = matchOdds.goalsOverUnder.underOdds.find((x) => x.margin === overItem.margin);
                                 if (underObj) {
                                   toggleBetSelection(
@@ -1174,7 +1174,7 @@
                       <div class="grid grid-cols-3 p-4">
                         <button
                           class="flex flex-col items-center justify-center p-4 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                          on:click={() => {
+                          onclick={() => {
                             toggleBetSelection(
                               leagueId,
                               fixtureId,
@@ -1196,7 +1196,7 @@
 
                         <button
                           class="flex flex-col items-center justify-center p-4 mx-2 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                          on:click={() => {
+                          onclick={() => {
                             toggleBetSelection(
                               leagueId,
                               fixtureId,
@@ -1218,7 +1218,7 @@
 
                         <button
                           class="flex flex-col items-center justify-center p-4 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                          on:click={() => {
+                          onclick={() => {
                             toggleBetSelection(
                               leagueId,
                               fixtureId,
@@ -1247,7 +1247,7 @@
                           <span class="text-white">{getOddDisplayText(odd)}</span>
                           <button
                             class="flex items-center justify-center gap-2 px-4 py-2 text-white rounded bg-BrandGray hover:bg-BrandGray/80"
-                            on:click={() => {
+                            onclick={() => {
                               toggleBetSelection(
                                 leagueId,
                                 fixtureId,
@@ -1301,7 +1301,7 @@
         "
       >
         <div class="w-full p-4 bg-white rounded-2xl md:mx-0">
-          <button class="flex items-center w-full text-left" on:click={toggleBetSlip}>
+          <button class="flex items-center w-full text-left" onclick={toggleBetSlip}>
             <div class="flex items-center">
               <span class="flex items-center justify-center w-12 h-10 mr-3 text-xl font-medium text-white rounded-full bg-BrandBase">
                 Bets

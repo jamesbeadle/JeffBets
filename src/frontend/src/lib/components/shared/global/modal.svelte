@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { onDestroy, afterUpdate } from "svelte";
+  import { onDestroy } from "svelte";
 
-  export let showModal: boolean;
-  export let onClose: () => void;
+  interface Props {
+    showModal: boolean;
+    onClose: () => void;
+  }
+
+  let { showModal, onClose } : Props = $props();
 
   let modalContainer: HTMLElement | null = null;
 
@@ -52,7 +56,7 @@
 {#if showModal}
 <div
   class="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto"
-  on:click={handleBackdropClick}
+  onclick={handleBackdropClick}
   aria-hidden={showModal ? "false" : "true"}
 >
 <div

@@ -1,8 +1,12 @@
 <script lang="ts">
     import { userStore } from "$lib/stores/user-store";
-    import FullScreenSpinner from "../shared/full-screen-spinner.svelte";
+    import FullScreenSpinner from "../shared/global/full-screen-spinner.svelte";
 
-    export let agreeTermsSaving: Boolean = false;
+    interface Props {
+      agreeTermsSaving: Boolean;
+    }
+
+    let { agreeTermsSaving } : Props = $props();
 
     async function agreeTerms() {
         agreeTermsSaving = true;
@@ -220,7 +224,7 @@
         to be bound by these Terms and Conditions.</strong>
       </p>
       <div class="flex flex-row items-center my-4">
-          <button class="brand-button" on:click={agreeTerms}>Agree Terms</button>
+          <button class="brand-button" onclick={agreeTerms}>Agree Terms</button>
       </div>
   </div>
 {/if}

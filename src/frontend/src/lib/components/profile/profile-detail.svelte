@@ -6,7 +6,7 @@
   import { writable } from "svelte/store";
   import WithdrawFplModal from "./withdraw-fpl-modal.svelte";
   import { authStore } from "$lib/stores/auth-store";
-  import FullScreenSpinner from "../shared/full-screen-spinner.svelte";
+  import FullScreenSpinner from "../shared/global/full-screen-spinner.svelte";
   import { SHUFTI_CLIENT_ID, SHUFTI_SECRET_KEY } from "$lib/environment/environment";
   import { kycStore } from "$lib/stores/kyc-store";
   import type { Profile } from "../../../../../declarations/backend/backend.did";
@@ -203,7 +203,7 @@
           </h2>
           <button
             class="brand-button"
-            on:click={displayUsernameModal}
+            onclick={displayUsernameModal}
           >
             Update
           </button>
@@ -212,7 +212,7 @@
           <div class="flex items-center">
             <button
               class="flex items-center text-left text-xxs break-all"
-              on:click={() => copyAndShowToast(principalId)}
+              onclick={() => copyAndShowToast(principalId)}
             >
               <span>{ principalId }</span>
               <CopyIcon className="w-7 xs:w-6 text-left" fill="#FFFFFF" />
@@ -246,7 +246,7 @@
                 <div class="flex items-center text-xs">
                   <button
                     class="flex items-center text-left break-all"
-                    on:click={() => copyAndShowToast(principalId)}
+                    onclick={() => copyAndShowToast(principalId)}
                   >
                     <span>{principalId}</span>
                     <CopyIcon className="w-7 xs:w-6 text-left" fill="#FFFFFF" />
@@ -258,7 +258,7 @@
                 <div class="flex items-center text-xs mt-2">
                   <button
                   class="brand-button"
-                    on:click={loadWithdrawFPLModal}
+                   onclick={loadWithdrawFPLModal}
                   >
                     Withdraw
                   </button>
@@ -273,7 +273,7 @@
                       <div class="flex items-center text-xs mt-2">
                         <button
                         class="brand-button"
-                          on:click={beginKYC}
+                          onclick={beginKYC}
                         >
                           KYC Verification
                         </button>

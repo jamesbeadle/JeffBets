@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
     import Layout from "../Layout.svelte";
-    import FullScreenSpinner from "$lib/components/shared/full-screen-spinner.svelte";
+    import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
   
     import { authStore } from "$lib/stores/auth-store";
     import { auditStore } from "$lib/stores/audit-store";

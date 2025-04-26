@@ -3,7 +3,7 @@
   import { authStore, type AuthSignInParams } from "$lib/stores/auth-store";
   import Layout from "../Layout.svelte";
   import ProfileDetail from "$lib/components/profile/profile-detail.svelte";
-  import FullScreenSpinner from "$lib/components/shared/full-screen-spinner.svelte";
+  import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
     import type { OptionIdentity } from "$lib/types/identity";
   
   let isLoading = true;
@@ -49,7 +49,7 @@
                 class={`p-2 ${
                   activeTab === "details" ? "text-white" : "BrandGray"
                 }`}
-                on:click={() => setActiveTab("details")}>Profile Detail</button
+                onclick={() => setActiveTab("details")}>Profile Detail</button
               >
             </li>
           </ul>
@@ -62,7 +62,7 @@
     {:else}
     <button
       class="brand-button"
-      on:click={handleLogin}
+      onclick={handleLogin}
   >
   Connect
   </button>

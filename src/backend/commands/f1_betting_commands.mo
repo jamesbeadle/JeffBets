@@ -4,7 +4,7 @@ module GolfBettingCommands {
 
   public type SubmitBetslip = {
     principalId: Ids.PrincipalId;
-    tournamentInstanceId: GolfIds.TournamentInstanceId;
+    tournamentInstanceId: F1Ids.RaceInstanceId;
     totalStake: Nat64;
     expectedReturn: Nat64;
   };

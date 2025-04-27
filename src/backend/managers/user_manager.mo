@@ -30,14 +30,12 @@ import BettingUtilities "../utilities/betting_utilities";
 import Environment "../environment";
 import Utilities "../utilities/utilities";
 import AppTypes "../types/app_types";
-import BettingCommands "../commands/betting_commands";
 import UserCommands "../commands/user_commands";
 import BettingQueries "../queries/betting_queries";
 import UserQueries "../queries/user_queries";
 import AuditQueries "../queries/audit_queries";
 import IcfcLedger "../mops/interfaces/ICFCLedger";
 import BettingEnums "../enums/betting_enums";
-import AccountUtilities "../mops/account_utilities";
 import ProfileCanisterQueries "../queries/profile_canister_queries";
 import ProfileCanisterCommands "../commands/profile_canister_commands";
 

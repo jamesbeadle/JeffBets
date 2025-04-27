@@ -25,20 +25,21 @@ module BettingQueries {
       expectedReturns: Nat64;
       totalWinnings: Nat64;
       settledOn: Int;
+      ecosystem: TokenisedEcosystem;
   };
 
-    public type Selection = {
-      leagueId: FootballIds.LeagueId;
-      selectionType: BettingEnums.Category;
-      selectionDetail: BettingTypes.SelectionDetail;
-      status: BettingEnums.SelectionStatus;
-      result: BettingEnums.BetResult;
-      odds: Float;
-      stake: Nat64;
-      fixtureId: FootballIds.FixtureId;
-      winnings: Float;
-      expectedReturns: Nat64;
-    };
+  public type Selection = {
+    leagueId: FootballIds.LeagueId;
+    selectionType: BettingEnums.Category;
+    selectionDetail: BettingTypes.SelectionDetail;
+    status: BettingEnums.SelectionStatus;
+    result: BettingEnums.BetResult;
+    odds: Float;
+    stake: Nat64;
+    fixtureId: FootballIds.FixtureId;
+    winnings: Float;
+    expectedReturns: Nat64;
+  };
 
   public type GetBetslipFixtures = {
     selections: [BettingTypes.Selection];

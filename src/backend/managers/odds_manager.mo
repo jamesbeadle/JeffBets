@@ -20,7 +20,6 @@ import Enums "mo:waterway-mops/Enums";
 import FixtureQueries "mo:waterway-mops/queries/football-queries/FixtureQueries";
 import PlayerQueries "mo:waterway-mops/queries/football-queries/PlayerQueries";
 import AppQueries "../queries/app_queries";
-import MopsAppQueries "../mops/app_queries";
 import BettingQueries "../queries/betting_queries";
 
 module {

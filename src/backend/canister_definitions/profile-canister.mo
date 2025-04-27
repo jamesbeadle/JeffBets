@@ -164,6 +164,11 @@ actor class _ProfileCanister() {
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
     let allProfilesBuffer = Buffer.fromArray<ProfileCanisterQueries.AuditRecord>([]);
 
+    /*
+      // TODO
+      Auditors will like to know that they can access some kind of list and begin looking at information as required
+    */
+
     /*for(i in Iter.range(1,50)){
       var currentProfiles: [T.Profile] = [];
       switch(i){
@@ -407,10 +412,13 @@ actor class _ProfileCanister() {
   
   public shared ({caller }) func submitBetslip(dto: ProfileCanisterCommands.SubmitBetslip) : async Result.Result<(), Enums.Error>{
     assert Principal.toText(caller) == Environment.BACKEND_CANISTER_ID;
-    //TODO
-    //private function to update monthly bet totals should be added when a bet is placed
-    //take the money
-    //ensure they have the money
+
+    // TODO
+    //validate bet within system limits
+    //validate bet selections 
+    //validate user is allowed to place bet 
+    //validate user has funds to place bet
+    //take funds and place bet
     return #err(#NotFound);
   };
 

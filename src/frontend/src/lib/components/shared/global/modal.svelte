@@ -8,7 +8,7 @@
 
   let { showModal, onClose } : Props = $props();
 
-  let modalContainer: HTMLElement | null = null;
+  let modalContainer: HTMLElement | null = $state(null);
 
   const handleKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && showModal) {

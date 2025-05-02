@@ -1,16 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { userStore } from "$lib/stores/user-store";
-  import UpdateUsernameModal from "$lib/components/profile/update-username-modal.svelte";
   import CopyIcon from "$lib/icons/CopyIcon.svelte";
   import { writable } from "svelte/store";
-  import WithdrawFplModal from "./withdraw-fpl-modal.svelte";
   import { authStore } from "$lib/stores/auth-store";
   import FullScreenSpinner from "../shared/global/full-screen-spinner.svelte";
   import { SHUFTI_CLIENT_ID, SHUFTI_SECRET_KEY } from "$lib/environment/environment";
   import { kycStore } from "$lib/stores/kyc-store";
   import type { Profile } from "../../../../../declarations/backend/backend.did";
   import { toasts } from "$lib/stores/toasts-store";
+  import WithdrawIcfcModal from "./withdraw-icfc-modal.svelte";
 
   let isLoading = true;
   let loadingBalances = true;
@@ -180,17 +179,10 @@
 {#if isLoading || loadingKYC}
   <FullScreenSpinner />
 {:else}
-  <UpdateUsernameModal
-    newUsername={$userStore ? $userStore.username : ""}
-    visible={showUsernameModal}
-    closeModal={closeUsernameModal}
-    cancelModal={cancelUsernameModal}
-  />
   {#if !loadingBalances}
-    <WithdrawFplModal
-      visible={showFPLModal}
+    <WithdrawIcfcModal
+      title="Withdraw ICFC"
       closeModal={closeWithdrawFPLModal}
-      cancelModal={closeWithdrawFPLModal}
     />
   {/if}
   <div class="container mt-4 mx-6">

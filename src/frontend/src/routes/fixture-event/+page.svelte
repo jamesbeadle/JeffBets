@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { onMount } from "svelte";
-  import Layout from "../Layout.svelte";
+  import Layout from "../+layout.svelte";
   import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
   import BadgeIcon from "$lib/icons/BadgeIcon.svelte";
   import TableIcon from "$lib/icons/TableIcon.svelte";

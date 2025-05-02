@@ -113,7 +113,7 @@
     }
   </script>
   
-  <Modal showModal={visible} onClose={closeModal}>
+  <Modal title="Place Bet" onClose={closeModal}>
     <div class="mx-4 p-4">
       <div class="flex justify-between items-center my-2">
         <h3 class="default-header">Place Bet</h3>

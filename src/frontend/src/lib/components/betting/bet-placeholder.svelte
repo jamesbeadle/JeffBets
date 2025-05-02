@@ -15,7 +15,7 @@
 
 </script>
 
-<Modal showModal={visible} onClose={closeModal}>
+<Modal title="Betting Not Allowed" onClose={closeModal}>
 <div class="flex justify-between items-center my-2">
   <h3 class="default-header">
     <span class="flex flex-row items-center">

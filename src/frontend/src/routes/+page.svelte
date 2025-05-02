@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
 
-  import Layout from "./Layout.svelte";
+  import Layout from "./+layout.svelte";
   import LocalSpinner from "$lib/components/shared/global/local-spinner.svelte";
   import FullScreenSpinner from "$lib/components/shared/global/full-screen-spinner.svelte";
   import Betslip from "$lib/components/betting/betslip.svelte";
